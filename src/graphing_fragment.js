@@ -23,20 +23,41 @@ vec4 color(vec2 position) {
     return vec4(red, green, blue, 1);
 }
 
-void main( void ) {
+vec2 getUV(vec2 fragCoord) {
     float scale = min(resolution.x, resolution.y);
 
+    
+    return ((fragCoord / scale) - 0.5) * 2.;
+}
+
+void main( void ) {
+    float scale = min(resolution.x, resolution.y);
+    float offset = (max(resolution.x, resolution.y) - min(resolution.x, resolution.y)) / 2.;
+
     const int step = 1;
+    
+    const float mul = 2.;
+    const float add = -0.5;
 
-    vec2 position1 = 2. * (u_matrix * vec3((-0.5 + (gl_FragCoord.xy + vec2(-step, -step)) / scale), 1)).xy;
-    vec2 position1_h = 2. * (u_matrix * vec3((-0.5 + (gl_FragCoord.xy + vec2(step, step)) / scale), 1)).xy;
+    vec2 uv = getUV(gl_FragCoord.xy); 
+    
+    // gl_FragColor = vec4(uv.y / 2. + 0.5, 0, 0, 1);
+    // return;
 
+    vec2 position1 = (u_matrix * vec3(uv + getUV(vec2(-step, -step)), 1)).xy;
+    vec2 position1_h = (u_matrix * vec3(uv + getUV(vec2(step, step)), 1)).xy;  
+
+    // vec4 diff1 = vec4(0, 0, 0, 0);
     vec4 diff1 = 1. - abs(color(position1) - color(position1_h));
 
-    vec2 position2 = 2. * (u_matrix * vec3((-0.5 + (gl_FragCoord.xy + vec2(step, -step)) / scale), 1)).xy;
-    vec2 position2_h = 2. * (u_matrix * vec3((-0.5 + (gl_FragCoord.xy + vec2(-step, step)) / scale), 1)).xy;
+
+    vec2 position2 = (u_matrix * vec3(uv + getUV(vec2(step, -step)), 1)).xy;
+    vec2 position2_h = (u_matrix * vec3(uv + getUV(vec2(-step, step)), 1)).xy;
+    // vec2 position2 = (u_matrix * (mul * vec3((add + (gl_FragCoord.xy + vec2(step, -step)) / scale), 1))).xy;
+    // vec2 position2_h = (u_matrix * (mul * vec3((add + (gl_FragCoord.xy + vec2(-step, step)) / scale), 1))).xy;
 
     vec4 diff2 = 1. - abs(color(position2) - color(position2_h));
+    // vec4 diff2 = vec4(0, 0, 0, 0);
 
     //vec4 diff = abs(color(position) - color(position_h));
 

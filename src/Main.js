@@ -5,9 +5,11 @@ import fragmentShader from "./graphing_fragment";
 import { createProgram } from "./webglHelper";
 import { getCameraMatrix } from "./cameraMath";
 import useDimensions from "./useDimensions";
+import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import PinchPanZoomListener from "./PinchPanZoomListener";
 
 const Main = () => {
-  const [camera, setCamera] = useState({ x: 0, y: 0, zoom: -2 });
+  const [camera, setCamera] = useState({ x: 0, y: 0, zoom: 0 });
 
   const graphRootRef = useRef(null);
   const { width, height } = useDimensions(graphRootRef);
@@ -49,6 +51,7 @@ const Main = () => {
     const currentProgram = createProgram(gl, vertexShader, fragmentShader);
     gl.useProgram(currentProgram);
     setCurrentProgram(currentProgram);
+    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
   }, [gl]);
 
   useEffect(() => {
@@ -64,13 +67,20 @@ const Main = () => {
     gl.uniform2f(resolutionLocation, parameters.width, parameters.height);
     gl.uniformMatrix3fv(uCameraMatrixLocation, false, getCameraMatrix(camera));
 
-    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(0);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
     gl.disableVertexAttribArray(0);
-  }, [currentProgram]);
+  }, [currentProgram, width, height, camera]);
 
-  return <canvas id={"graphRoot"} ref={graphRootRef} />;
+  const onPinchPanZoom = e => {
+    console.log(e.state);
+  };
+
+  return (
+    <PinchPanZoomListener onChange={setCamera} initialCamera={camera}>
+      <canvas id={"graphRoot"} ref={graphRootRef} />;
+    </PinchPanZoomListener>
+  );
 };
 
 export default Main;

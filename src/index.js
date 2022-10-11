@@ -1,11 +1,12 @@
 import React from "react";
-import { createRoot } from "react-dom/client";
+// import { createRoot } from "react-dom/client";
+import { render } from "react-dom";
 
 import Main from "./Main";
 
 import "./index.css";
 
-// render(<HelloWorld />, document.getElementById("root"));
-const root = createRoot(document.getElementById("root"));
-root.render(<Main />);
+render(<Main />, document.getElementById("root"));
+// const root = createRoot(document.getElementById("root"));
+// root.render(<Main />);
 // render();
