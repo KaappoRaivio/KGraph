@@ -41,25 +41,15 @@ void main( void ) {
 
     vec2 uv = getUV(gl_FragCoord.xy); 
     
-    // gl_FragColor = vec4(uv.y / 2. + 0.5, 0, 0, 1);
-    // return;
-
     vec2 position1 = (u_matrix * vec3(uv + getUV(vec2(-step, -step)), 1)).xy;
     vec2 position1_h = (u_matrix * vec3(uv + getUV(vec2(step, step)), 1)).xy;  
-
-    // vec4 diff1 = vec4(0, 0, 0, 0);
+    
     vec4 diff1 = 1. - abs(color(position1) - color(position1_h));
-
 
     vec2 position2 = (u_matrix * vec3(uv + getUV(vec2(step, -step)), 1)).xy;
     vec2 position2_h = (u_matrix * vec3(uv + getUV(vec2(-step, step)), 1)).xy;
-    // vec2 position2 = (u_matrix * (mul * vec3((add + (gl_FragCoord.xy + vec2(step, -step)) / scale), 1))).xy;
-    // vec2 position2_h = (u_matrix * (mul * vec3((add + (gl_FragCoord.xy + vec2(-step, step)) / scale), 1))).xy;
 
     vec4 diff2 = 1. - abs(color(position2) - color(position2_h));
-    // vec4 diff2 = vec4(0, 0, 0, 0);
-
-    //vec4 diff = abs(color(position) - color(position_h));
 
     float x = position1.x;
     float y = position1.y;
@@ -85,7 +75,7 @@ void main( void ) {
     }
 
     gl_FragColor = (diff1 + diff2) / 2.;
-    //gl_FragColor = vec4( red, green, blue, 1.0 );
+    // gl_FragColor = vec4( uv.x, uv.y - uv.x, uv.x + uv.y, 1.0 );
 
 }
 `;
