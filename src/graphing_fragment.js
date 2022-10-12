@@ -1,4 +1,4 @@
-export default `
+export default implicitFunction => `
 uniform mat3 u_matrix;
 uniform float time;
 uniform vec2 resolution;
@@ -10,7 +10,8 @@ vec4 color(vec2 position) {
 
     //float value = abs(sin(pow(x, 2.) + 2. * x * y)) - sin(x - 2. * y);
     //float value = sin(pow(x, 2.)) - y;
-    float value = exp(sin(x) + cos(y)) - sin(exp(x+y));
+    //float value = exp(sin(x) + cos(y)) - sin(exp(x+y));
+    float value = ${implicitFunction};
     //float value = pow(x, 2.) - y;
     //float value = pow(x, 2.) + pow(y, 2.) - 2.;
 

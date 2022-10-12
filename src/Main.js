@@ -10,6 +10,7 @@ import PinchPanZoomListener from "./PinchPanZoomListener";
 
 const Main = () => {
   const [camera, setCamera] = useState({ x: 0, y: 0, zoom: 0 });
+  const [input, setInput] = useState("");
 
   const graphRootRef = useRef(null);
   const { width, height } = useDimensions(graphRootRef);
@@ -48,11 +49,12 @@ const Main = () => {
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0]), gl.STATIC_DRAW);
 
-    const currentProgram = createProgram(gl, vertexShader, fragmentShader);
+    // const currentProgram = createProgram(gl, vertexShader, fragmentShader("exp(sin(x) + cos(y)) - sin(exp(x+y))"));
+    const currentProgram = createProgram(gl, vertexShader, fragmentShader(input));
     gl.useProgram(currentProgram);
     setCurrentProgram(currentProgram);
     gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
-  }, [gl]);
+  }, [gl, input]);
 
   useEffect(() => {
     if (!currentProgram) return;
@@ -77,9 +79,12 @@ const Main = () => {
   };
 
   return (
-    <PinchPanZoomListener onChange={setCamera} initialCamera={camera}>
-      <canvas id={"graphRoot"} ref={graphRootRef} />;
-    </PinchPanZoomListener>
+    <>
+      <input value={input} onChange={e => setInput(e.target.value)} />
+      <PinchPanZoomListener onChange={setCamera} initialCamera={camera}>
+        <canvas id={"graphRoot"} ref={graphRootRef} />;
+      </PinchPanZoomListener>
+    </>
   );
 };
 
