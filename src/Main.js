@@ -7,10 +7,37 @@ import { getCameraMatrix } from "./cameraMath";
 import useDimensions from "./useDimensions";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import PinchPanZoomListener from "./PinchPanZoomListener";
+import * as mathjs from "mathjs";
+import algebra from "algebra.js";
 
 const Main = () => {
   const [camera, setCamera] = useState({ x: 0, y: 0, zoom: 0 });
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState("x ^ 2 ^ 4 + y = x - y");
+  useEffect(() => {
+    try {
+      const equalToZero = `${algebra.parse(`${input.toLowerCase()} + P`).solveFor("P").toString()}`;
+
+      const parsed = mathjs.parse(equalToZero);
+
+      const transformed = parsed.map((node, path, parent) => {
+        // console.log(node);
+        if (node.type === "OperatorNode") {
+          // console.log(node);
+          if (node.op === "*") return new mathjs.OperatorNode("*", "multiply", node.args, false);
+          if (node.op === "^") return new mathjs.SymbolNode(`pow(${node.args[0]}, ${node.args[1]})`);
+        } else if (node.type === "ConstantNode") {
+          console.log("Constant: ", node);
+        }
+
+        return node;
+      });
+      console.log(equalToZero, ", ", parsed.toString(), ", ", transformed.toString());
+      // console.log(equalToZero);
+      // console.log(algebra.parse(input).solveFor(0));
+    } catch (err) {
+      console.error(err);
+    }
+  }, [input]);
 
   const graphRootRef = useRef(null);
   const { width, height } = useDimensions(graphRootRef);
