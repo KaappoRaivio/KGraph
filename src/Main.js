@@ -5,39 +5,74 @@ import fragmentShader from "./graphing_fragment";
 import { createProgram } from "./webglHelper";
 import { getCameraMatrix } from "./cameraMath";
 import useDimensions from "./useDimensions";
-import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import PinchPanZoomListener from "./PinchPanZoomListener";
 import * as mathjs from "mathjs";
 import algebra from "algebra.js";
 
+const toGLSLFriendly = parsed => {
+  let result = parsed.cloneDeep();
+
+  while (true) {
+    // console.log("transforming!", previous);
+    let transformed = mathjs.parse(result.toString()).transform((node, path, parent) => {
+      if (node.type === "OperatorNode") {
+        // console.log(node.op);
+        // if (node.op === "*") {
+        //   // console.log("multiplication");
+        //   return new mathjs.OperatorNode("*", "multiply", node.args, false);
+        // }
+        if (node.op === "^") {
+          // console.log("power");
+          return new mathjs.FunctionNode("pow", node.args);
+          // return new mathjs.SymbolNode(`pow(${node.args[0]}, ${node.args[1]})`);
+        }
+      } else if (node.type === "ConstantNode") {
+        console.log("Constant: ", node);
+        // return new mathjs.ConstantNode();
+        // return new mathjs.SymbolNode(`${node.value}.`);
+      }
+
+      return node;
+    });
+    console.log("Transformed:", result.toString(), "-->", transformed.toString());
+
+    if (transformed.toString() === result.toString()) break;
+    else {
+      // previous = transformed;
+      result = transformed;
+    }
+  }
+
+  return result.toString({ implicit: "show" }).replaceAll(/(?<![\d.])([0-9]+)(?![\d.])/g, "$1.");
+};
+const toGLSL = input => {
+  if (input.length && !input.includes("=")) {
+    input = `y = ${input.toLowerCase()} + P`;
+  } else {
+    input = `${input.toLowerCase()} + P`;
+  }
+
+  try {
+    console.log(input);
+    let parsed = algebra.parse(input).eval({ e: new algebra.Fraction(Math.floor(Math.exp(1) * Math.pow(10, 2)), Math.pow(10, 2)) });
+    console.log("Implicit", parsed.toString({ implicit: "show" }));
+    // console.log("---");
+    // console.log(parsed.toString());
+    const equalToZero = `${parsed.solveFor("P").toString()}`.replaceAll(/([a-z]{1})/g, "$1 ");
+
+    const reparsed = mathjs.parse(equalToZero, {});
+    console.log(reparsed);
+
+    return toGLSLFriendly(reparsed);
+  } catch (err) {
+    console.error(err);
+    return "1.";
+  }
+};
+
 const Main = () => {
   const [camera, setCamera] = useState({ x: 0, y: 0, zoom: 0 });
-  const [input, setInput] = useState("x ^ 2 ^ 4 + y = x - y");
-  useEffect(() => {
-    try {
-      const equalToZero = `${algebra.parse(`${input.toLowerCase()} + P`).solveFor("P").toString()}`;
-
-      const parsed = mathjs.parse(equalToZero);
-
-      const transformed = parsed.map((node, path, parent) => {
-        // console.log(node);
-        if (node.type === "OperatorNode") {
-          // console.log(node);
-          if (node.op === "*") return new mathjs.OperatorNode("*", "multiply", node.args, false);
-          if (node.op === "^") return new mathjs.SymbolNode(`pow(${node.args[0]}, ${node.args[1]})`);
-        } else if (node.type === "ConstantNode") {
-          console.log("Constant: ", node);
-        }
-
-        return node;
-      });
-      console.log(equalToZero, ", ", parsed.toString(), ", ", transformed.toString());
-      // console.log(equalToZero);
-      // console.log(algebra.parse(input).solveFor(0));
-    } catch (err) {
-      console.error(err);
-    }
-  }, [input]);
+  const [input, setInput] = useState("e");
 
   const graphRootRef = useRef(null);
   const { width, height } = useDimensions(graphRootRef);
@@ -69,6 +104,7 @@ const Main = () => {
     }
   }, [gl, width, height]);
 
+  useEffect(() => {}, [input]);
   useEffect(() => {
     if (!gl) return;
 
@@ -77,7 +113,7 @@ const Main = () => {
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0]), gl.STATIC_DRAW);
 
     // const currentProgram = createProgram(gl, vertexShader, fragmentShader("exp(sin(x) + cos(y)) - sin(exp(x+y))"));
-    const currentProgram = createProgram(gl, vertexShader, fragmentShader(input));
+    const currentProgram = createProgram(gl, vertexShader, fragmentShader(toGLSL(input)));
     gl.useProgram(currentProgram);
     setCurrentProgram(currentProgram);
     gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);

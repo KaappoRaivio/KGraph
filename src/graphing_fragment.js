@@ -75,7 +75,7 @@ void main( void ) {
         return;
     }
 
-    gl_FragColor = (diff1 + diff2) / 2.;
+    gl_FragColor = (diff1 + diff2) / 1.;
     // gl_FragColor = vec4( uv.x, uv.y - uv.x, uv.x + uv.y, 1.0 );
 
 }
