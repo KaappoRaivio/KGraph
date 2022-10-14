@@ -82,6 +82,21 @@ const Main = () => {
   const [input, setInput] = useState("(x ^ 2 + y ^ 2 - 1) ^ 3 - x ^ 2 y ^ 3 = 0");
   // const [input, setInput] = useState("0.5x^2+ 0.31x = 1 / 2 y ^ (3.2)");
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("input")) {
+      setInput(params.get("input"));
+    }
+  }, []);
+  useEffect(() => {
+    const params = new URLSearchParams();
+
+    if (input) {
+      params.set("input", input);
+    }
+    window.history.replaceState(null, "", `?${params.toString()}`);
+  }, [input]);
+
   const graphRootRef = useRef(null);
   const { width, height } = useDimensions(graphRootRef);
 
