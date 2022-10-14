@@ -18,3 +18,8 @@ canvas {
 .react-transform-component {
     transform: none !important;
 }
+
+input {
+    width: 100%;
+    font-size: 200%
+}
