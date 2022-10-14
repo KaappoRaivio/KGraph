@@ -4,7 +4,7 @@ uniform float time;
 uniform vec2 resolution;
 
 float ppow( float x, float y ) {
-  return x >= 0. ? pow(x, y) : (mod(y, 2.0) == 0. ? pow(-x, y) : pow(x, y)); 
+  return x >= 0. ? pow(x, y) : (mod(y, 2.0) == 0. ? pow(-x, y) : -pow(-x, y)); 
 }
 
 
