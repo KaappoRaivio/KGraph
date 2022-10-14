@@ -16,7 +16,7 @@ const PinchPanZoomListener = ({ children, onChange, initialCamera = { x: 0, y: 0
     onMouseMove: e => {
       if (panInProgress) {
         setTransform(oldPos => {
-          console.log(Math.pow(2, oldPos.zoom));
+          // console.log(Math.pow(2, oldPos.zoom));
           return {
             x: oldPos.x + e.movementX,
             y: oldPos.y + e.movementY,

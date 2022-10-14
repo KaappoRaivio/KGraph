@@ -7,7 +7,7 @@ export const getCameraMatrix = ({ x, y, zoom }) => {
 
   const scale = Math.min(window.innerHeight, window.innerWidth);
   const bigger = Math.max(window.innerHeight, window.innerWidth);
-  console.log(x.toFixed(2), zoom);
+  // console.log(x.toFixed(2), zoom);
 
   // mat3.translate(mat, mat, [x, 0]);
 

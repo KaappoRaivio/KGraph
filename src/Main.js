@@ -6,81 +6,25 @@ import { createProgram } from "./webglHelper";
 import { getCameraMatrix } from "./cameraMath";
 import useDimensions from "./useDimensions";
 import PinchPanZoomListener from "./PinchPanZoomListener";
-import * as mathjs from "mathjs";
-import algebrite from "algebrite";
-import algebra from "algebra.js";
 
-const toGLSLFriendly = parsed => {
-  let result = parsed.cloneDeep();
-
-  while (true) {
-    // console.log("transforming!", previous);
-    let transformed = mathjs.parse(result.toString()).transform((node, path, parent) => {
-      if (node.type === "OperatorNode") {
-        // console.log(node.op);
-        // if (node.op === "*") {
-        //   // console.log("multiplication");
-        //   return new mathjs.OperatorNode("*", "multiply", node.args, false);
-        // }
-        if (node.op === "^") {
-          // console.log("power");
-          return new mathjs.FunctionNode("ppow", node.args);
-          // return new mathjs.SymbolNode(`pow(${node.args[0]}, ${node.args[1]})`);
-        }
-      } else if (node.type === "ConstantNode") {
-        // console.log("Constant: ", node);
-        // return new mathjs.ConstantNode();
-        // return new mathjs.SymbolNode(`${node.value}.`);
-      }
-
-      return node;
-    });
-    // console.log("Transformed:", result.toString(), "-->", transformed.toString());
-
-    if (transformed.toString() === result.toString()) break;
-    else {
-      // previous = transformed;
-      result = transformed;
-    }
-  }
-
-  let transformed = result.toString({ implicit: "show", simplify: "false" });
-  let addedPoints = transformed.replaceAll(/(?<![\d.])([0-9]+)(?![\d.])/g, "$1.");
-  console.log("Transformed:", transformed);
-  console.log("With decimal points:", addedPoints);
-  return addedPoints;
-};
-
-const replaceWithFractions = input => {
-  console.log(input.replaceAll(/[\d]+\.\d*/g, x => `(${algebra.parse(String(x)).constants[0].toString()})`));
-  // console.log(...[...input.matchAll(/[\d]+\.\d*/g)].map(String).map(x => algebra.parse(x).constants[0].toString()));
-  return input.replaceAll(/[\d]+\.\d*/g, x => `(${algebra.parse(String(x)).constants[0].toString()})`);
-};
-
-const toGLSL = input => {
-  if (input.length && !input.includes("=")) {
-    if (input.includes("y")) throw Error("Y without equals sign!");
-    // input = `y = ${input.toLowerCase()} + P`;
-    input = `${input.toLowerCase()} - y = P`;
-  } else {
-    input = `${input.toLowerCase()} + P`;
-  }
-
-  input = replaceWithFractions(input);
-  console.log(input);
-
-  const equalToZero = algebrite.run(`roots(${input}, P)`);
-
-  const reparsed = mathjs.parse(equalToZero, { simplify: false });
-  console.log("Reparsed:", reparsed.toString());
-
-  return toGLSLFriendly(reparsed);
-};
+// const worker = new WorkerBuilder(glslConverterWorker);
+const worker = new Worker(new URL("./workers/glslConverter.worker.js", import.meta.url));
 
 const Main = () => {
   const [camera, setCamera] = useState({ x: 0, y: 512, zoom: -3 });
   const [input, setInput] = useState("");
   // const [input, setInput] = useState("0.5x^2+ 0.31x = 1 / 2 y ^ (3.2)");
+  const [output, setOutput] = useState("");
+
+  useEffect(() => {
+    worker.onmessage = message => {
+      if (message) {
+        if (message.data != null) {
+          setOutput(message.data);
+        }
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -95,6 +39,8 @@ const Main = () => {
       params.set("input", input);
     }
     window.history.replaceState(null, "", `?${params.toString()}`);
+
+    worker.postMessage(input);
   }, [input]);
 
   const graphRootRef = useRef(null);
@@ -127,7 +73,6 @@ const Main = () => {
     }
   }, [gl, width, height]);
 
-  useEffect(() => {}, [input]);
   useEffect(() => {
     if (!gl) return;
 
@@ -136,21 +81,28 @@ const Main = () => {
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0]), gl.STATIC_DRAW);
 
     // const currentProgram = createProgram(gl, vertexShader, fragmentShader("exp(sin(x) + cos(y)) - sin(exp(x+y))"));
-    let GLSLSource;
-    try {
-      GLSLSource = toGLSL(input);
-    } catch (err) {
-      // console.error(err);
-      return;
-    }
 
-    console.log("GLSLSource:", GLSLSource);
+    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+  }, [gl]);
 
-    const currentProgram = createProgram(gl, vertexShader, fragmentShader(GLSLSource));
+  useEffect(() => {
+    if (!gl) return;
+
+    // let GLSLSource;
+    // try {
+    //   GLSLSource = toGLSL(output);
+    // } catch (err) {
+    //   // console.error(err);
+    //   return;
+    // }
+    // console.timeEnd("Expression to GLSL");
+    // console.log("GLSLSource:", GLSLSource);
+
+    gl.deleteProgram(null);
+    const currentProgram = createProgram(gl, vertexShader, fragmentShader(output));
     gl.useProgram(currentProgram);
     setCurrentProgram(currentProgram);
-    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
-  }, [gl, input]);
+  }, [gl, output]);
 
   useEffect(() => {
     if (!currentProgram) return;
@@ -169,10 +121,6 @@ const Main = () => {
     gl.drawArrays(gl.TRIANGLES, 0, 6);
     gl.disableVertexAttribArray(0);
   }, [currentProgram, width, height, camera]);
-
-  const onPinchPanZoom = e => {
-    console.log(e.state);
-  };
 
   return (
     <>
