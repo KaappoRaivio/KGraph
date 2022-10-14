@@ -1,15 +1,17 @@
-const path = require('path');
-const HtmlWebPackPlugin = require('html-webpack-plugin');
+const path = require("path");
+const HtmlWebPackPlugin = require("html-webpack-plugin");
+const webpack = require("webpack");
 
 module.exports = {
   output: {
-    path: path.resolve(__dirname, 'build'),
-    filename: 'bundle.js',
+    path: path.resolve(__dirname, "build"),
+    filename: "[name]-[chunkhash].bundle.js",
+    chunkFilename: "[name]-[chunkhash].js",
   },
   resolve: {
-    modules: [path.join(__dirname, 'src'), 'node_modules'],
+    modules: [path.join(__dirname, "src"), "node_modules"],
     alias: {
-      react: path.join(__dirname, 'node_modules', 'react'),
+      react: path.join(__dirname, "node_modules", "react"),
     },
   },
   module: {
@@ -18,25 +20,39 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
         },
       },
       {
         test: /\.css$/,
         use: [
           {
-            loader: 'style-loader',
+            loader: "style-loader",
           },
           {
-            loader: 'css-loader',
+            loader: "css-loader",
           },
         ],
       },
     ],
   },
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+      name: "shared",
+    },
+  },
   plugins: [
     new HtmlWebPackPlugin({
-      template: './src/index.html',
+      template: "./src/index.html",
     }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: "vendor",
+    //   minChunks: ({ resource }) => resource !== undefined && resource.indexOf("node_modules") !== -1,
+    // }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: "manifest",
+    //   minChunks: Infinity,
+    // }),
   ],
 };

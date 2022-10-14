@@ -3,6 +3,11 @@ uniform mat3 u_matrix;
 uniform float time;
 uniform vec2 resolution;
 
+float ppow( float x, float y ) {
+  return x >= 0. ? pow(x, y) : (mod(y, 2.0) == 0. ? pow(-x, y) : pow(x, y)); 
+}
+
+
 vec4 color(vec2 position) {
     float x = position.x;
     float y = position.y;
@@ -43,6 +48,11 @@ void main( void ) {
     vec2 uv = getUV(gl_FragCoord.xy); 
     
     vec2 position1 = (u_matrix * vec3(uv + getUV(vec2(-step, -step)), 1)).xy;
+    
+    // gl_FragColor = color(position1);
+    // return;
+    
+    
     vec2 position1_h = (u_matrix * vec3(uv + getUV(vec2(step, step)), 1)).xy;  
     
     vec4 diff1 = 1. - abs(color(position1) - color(position1_h));
@@ -75,7 +85,8 @@ void main( void ) {
         return;
     }
 
-    gl_FragColor = (diff1 + diff2) / 1.;
+    gl_FragColor = min(diff2, diff1);
+    //gl_FragColor = min((diff1 + diff2) / 2., vec4(1, 1, 1, 1));
     // gl_FragColor = vec4( uv.x, uv.y - uv.x, uv.x + uv.y, 1.0 );
 
 }

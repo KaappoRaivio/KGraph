@@ -7,6 +7,7 @@ import { getCameraMatrix } from "./cameraMath";
 import useDimensions from "./useDimensions";
 import PinchPanZoomListener from "./PinchPanZoomListener";
 import * as mathjs from "mathjs";
+import algebrite from "algebrite";
 import algebra from "algebra.js";
 
 const toGLSLFriendly = parsed => {
@@ -23,18 +24,18 @@ const toGLSLFriendly = parsed => {
         // }
         if (node.op === "^") {
           // console.log("power");
-          return new mathjs.FunctionNode("pow", node.args);
+          return new mathjs.FunctionNode("ppow", node.args);
           // return new mathjs.SymbolNode(`pow(${node.args[0]}, ${node.args[1]})`);
         }
       } else if (node.type === "ConstantNode") {
-        console.log("Constant: ", node);
+        // console.log("Constant: ", node);
         // return new mathjs.ConstantNode();
         // return new mathjs.SymbolNode(`${node.value}.`);
       }
 
       return node;
     });
-    console.log("Transformed:", result.toString(), "-->", transformed.toString());
+    // console.log("Transformed:", result.toString(), "-->", transformed.toString());
 
     if (transformed.toString() === result.toString()) break;
     else {
@@ -43,36 +44,43 @@ const toGLSLFriendly = parsed => {
     }
   }
 
-  return result.toString({ implicit: "show" }).replaceAll(/(?<![\d.])([0-9]+)(?![\d.])/g, "$1.");
+  let transformed = result.toString({ implicit: "show", simplify: "false" });
+  let addedPoints = transformed.replaceAll(/(?<![\d.])([0-9]+)(?![\d.])/g, "$1.");
+  console.log("Transformed:", transformed);
+  console.log("With decimal points:", addedPoints);
+  return addedPoints;
 };
+
+const replaceWithFractions = input => {
+  console.log(input.replaceAll(/[\d]+\.\d*/g, x => `(${algebra.parse(String(x)).constants[0].toString()})`));
+  // console.log(...[...input.matchAll(/[\d]+\.\d*/g)].map(String).map(x => algebra.parse(x).constants[0].toString()));
+  return input.replaceAll(/[\d]+\.\d*/g, x => `(${algebra.parse(String(x)).constants[0].toString()})`);
+};
+
 const toGLSL = input => {
   if (input.length && !input.includes("=")) {
-    input = `y = ${input.toLowerCase()} + P`;
+    if (input.includes("y")) throw Error("Y without equals sign!");
+    // input = `y = ${input.toLowerCase()} + P`;
+    input = `${input.toLowerCase()} - y = P`;
   } else {
     input = `${input.toLowerCase()} + P`;
   }
 
-  try {
-    console.log(input);
-    let parsed = algebra.parse(input).eval({ e: new algebra.Fraction(Math.floor(Math.exp(1) * Math.pow(10, 2)), Math.pow(10, 2)) });
-    console.log("Implicit", parsed.toString({ implicit: "show" }));
-    // console.log("---");
-    // console.log(parsed.toString());
-    const equalToZero = `${parsed.solveFor("P").toString()}`.replaceAll(/([a-z]{1})/g, "$1 ");
+  input = replaceWithFractions(input);
+  console.log(input);
 
-    const reparsed = mathjs.parse(equalToZero, {});
-    console.log(reparsed);
+  const equalToZero = algebrite.run(`roots(${input}, P)`);
 
-    return toGLSLFriendly(reparsed);
-  } catch (err) {
-    console.error(err);
-    return "1.";
-  }
+  const reparsed = mathjs.parse(equalToZero, { simplify: false });
+  console.log("Reparsed:", reparsed.toString());
+
+  return toGLSLFriendly(reparsed);
 };
 
 const Main = () => {
-  const [camera, setCamera] = useState({ x: 0, y: 0, zoom: 0 });
-  const [input, setInput] = useState("e");
+  const [camera, setCamera] = useState({ x: 0, y: 512, zoom: -3 });
+  const [input, setInput] = useState("(x ^ 2 + y ^ 2 - 1) ^ 3 - x ^ 2 y ^ 3 = 0");
+  // const [input, setInput] = useState("0.5x^2+ 0.31x = 1 / 2 y ^ (3.2)");
 
   const graphRootRef = useRef(null);
   const { width, height } = useDimensions(graphRootRef);
@@ -113,7 +121,17 @@ const Main = () => {
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0]), gl.STATIC_DRAW);
 
     // const currentProgram = createProgram(gl, vertexShader, fragmentShader("exp(sin(x) + cos(y)) - sin(exp(x+y))"));
-    const currentProgram = createProgram(gl, vertexShader, fragmentShader(toGLSL(input)));
+    let GLSLSource;
+    try {
+      GLSLSource = toGLSL(input);
+    } catch (err) {
+      // console.error(err);
+      return;
+    }
+
+    console.log("GLSLSource:", GLSLSource);
+
+    const currentProgram = createProgram(gl, vertexShader, fragmentShader(GLSLSource));
     gl.useProgram(currentProgram);
     setCurrentProgram(currentProgram);
     gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
