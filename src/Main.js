@@ -104,12 +104,14 @@ const Main = () => {
     // const timeLocation = gl.getUniformLocation(currentProgram, "time");
     const resolutionLocation = gl.getUniformLocation(currentProgram, "resolution");
     const uCameraMatrixLocation = gl.getUniformLocation(currentProgram, "u_matrix");
+    const uZoomLocation = gl.getUniformLocation(currentProgram, "zoom");
 
     console.log(width, height, width / height);
 
     // gl.uniform1f(timeLocation, parameters.time / 1000);
     gl.uniform2f(resolutionLocation, width, height);
     gl.uniformMatrix3fv(uCameraMatrixLocation, false, getCameraMatrix(camera));
+    gl.uniform1i(uZoomLocation, camera.zoom);
 
     gl.enableVertexAttribArray(0);
     gl.drawArrays(gl.TRIANGLES, 0, 6);

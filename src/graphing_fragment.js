@@ -1,9 +1,16 @@
 export default implicitFunction => `
 uniform mat3 u_matrix;
 uniform vec2 resolution;
+uniform int zoom;
 
 float ppow( float x, float y ) {
-  return x >= 0. ? pow(x, y) : (mod(y, 2.0) == 0. ? pow(-x, y) : -pow(-x, y)); 
+  if (y >= 0.) 
+    return x >= 0. ? pow(x, y) : (mod(y, 2.0) == 0. ? pow(-x, y) : -pow(-x, y));
+  else {
+    float p = abs(y);
+    return 1. / (x >= 0. ? pow(x, p) : (mod(p, 2.0) == 0. ? pow(-x, p) : -pow(-x, p)));
+  }
+   
 }
 
 vec4 color(vec2 position) {
@@ -29,7 +36,7 @@ vec2 getUV(vec2 fragCoord) {
     float scale = min(resolution.x, resolution.y);
     
     
-    vec2 uv = (((fragCoord / scale) - vec2(0.5 + max(overlapW, 0.), 0.5 + max(overlapH, 0.))) * 2.) + vec2(0.5 + max(overlapW, 0.), 0.5 + max(overlapH, 0.));
+    vec2 uv = (((fragCoord / scale) - vec2(0.5 + max(overlapW, 0.), 0.5 + max(overlapH, 0.))) * 1.);// + vec2(0.5 + max(overlapW, 0.), 0.5 + max(overlapH, 0.));
     return (u_matrix * vec3(uv, 1.)).xy;
 }
 
@@ -38,14 +45,16 @@ vec2 getCamera (vec2 uv) {
 }
 
 vec4 shade (vec2 position) {
-    const int step = 1;
-    vec2 position1 = position + getUV(vec2(-step, -step));        
-    vec2 position1_h = position + getUV(vec2(step, step));  
+    float scale = min(resolution.x, resolution.y);
+
+    float step = 1. / ppow(2., float(zoom));
+    vec2 position1 = position + vec2(-step, -step) / scale;        
+    vec2 position1_h = position + vec2(step, step) / scale;  
     
     vec4 diff1 = 1. - abs(color(position1) - color(position1_h));
 
-    vec2 position2 = position + getUV(vec2(step, -step));
-    vec2 position2_h = position + getUV(vec2(-step, step));
+    vec2 position2 = position + vec2(step, -step) / scale;
+    vec2 position2_h = position + vec2(-step, step) / scale;
 
     vec4 diff2 = 1. - abs(color(position2) - color(position2_h));
     
@@ -73,12 +82,12 @@ void main( void ) {
     float x = uv.x;
     float y = uv.y;
 
-    if (isAxis(uv + getUV(vec2(1, 1)))) {
+    if (isAxis(uv)) {
         gl_FragColor = vec4(1, 0, 0, 1);
         return;
     }
     
-    if (isAxisTick(uv + getUV(vec2(1, 1)))) {
+    if (isAxisTick(uv)) {
         gl_FragColor = vec4(1, 0, 0, 1);
         return;
     }
