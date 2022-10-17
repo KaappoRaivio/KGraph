@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 
 const PinchPanZoomListener = ({ children, onChange, initialCamera = { x: 0, y: 0, zoom: 0 } }) => {
   const [panInProgress, setPanInProgress] = useState(false);
-  const [transform, setTransform] = useState(initialCamera);
+  const scale = Math.min(window.innerHeight, window.innerWidth);
+  const [transform, setTransform] = useState({ x: initialCamera.x * -scale, y: initialCamera.y * scale, zoom: initialCamera.zoom });
 
   useEffect(() => {
     const { x, y, zoom } = transform;

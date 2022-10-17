@@ -12,8 +12,8 @@ export const getCameraMatrix = ({ x, y, zoom }) => {
   // mat3.translate(mat, mat, [x, 0]);
 
   mat3.scale(mat, mat, [1 / zoomScale, 1 / zoomScale]);
-  mat3.translate(mat, mat, [x * 2 + 1, y * 2 + (bigger - scale) / scale / 2]);
-
+  mat3.translate(mat, mat, [x, y]);
+  console.log(x);
   return mat3.multiply([], mat3.create(), mat);
 
   // console.log(x);

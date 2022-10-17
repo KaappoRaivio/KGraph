@@ -11,7 +11,7 @@ import PinchPanZoomListener from "./PinchPanZoomListener";
 const worker = new Worker(new URL("./workers/glslConverter.worker.js", import.meta.url));
 
 const Main = () => {
-  const [camera, setCamera] = useState({ x: 0, y: 512, zoom: -3 });
+  const [camera, setCamera] = useState({ x: 0, y: 0, zoom: 0 });
   const [input, setInput] = useState("");
   // const [input, setInput] = useState("0.5x^2+ 0.31x = 1 / 2 y ^ (3.2)");
   const [output, setOutput] = useState("");
@@ -47,13 +47,6 @@ const Main = () => {
   const { width, height } = useDimensions(graphRootRef);
 
   const [currentProgram, setCurrentProgram] = useState(null);
-
-  const parameters = {
-    start_time: new Date().getTime(),
-    time: 0,
-    width,
-    height,
-  };
 
   const [gl, setGl] = useState(null);
   useEffect(() => {
@@ -109,12 +102,14 @@ const Main = () => {
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    const timeLocation = gl.getUniformLocation(currentProgram, "time");
+    // const timeLocation = gl.getUniformLocation(currentProgram, "time");
     const resolutionLocation = gl.getUniformLocation(currentProgram, "resolution");
     const uCameraMatrixLocation = gl.getUniformLocation(currentProgram, "u_matrix");
 
-    gl.uniform1f(timeLocation, parameters.time / 1000);
-    gl.uniform2f(resolutionLocation, parameters.width, parameters.height);
+    console.log(width, height, width / height);
+
+    // gl.uniform1f(timeLocation, parameters.time / 1000);
+    gl.uniform2f(resolutionLocation, width, height);
     gl.uniformMatrix3fv(uCameraMatrixLocation, false, getCameraMatrix(camera));
 
     gl.enableVertexAttribArray(0);

@@ -1,6 +1,5 @@
 export default implicitFunction => `
 uniform mat3 u_matrix;
-uniform float time;
 uniform vec2 resolution;
 
 float ppow( float x, float y ) {
@@ -12,13 +11,7 @@ vec4 color(vec2 position) {
     float x = position.x;
     float y = position.y;
 
-
-    //float value = abs(sin(pow(x, 2.) + 2. * x * y)) - sin(x - 2. * y);
-    //float value = sin(pow(x, 2.)) - y;
-    //float value = exp(sin(x) + cos(y)) - sin(exp(x+y));
     float value = ${implicitFunction};
-    //float value = pow(x, 2.) - y;
-    //float value = pow(x, 2.) + pow(y, 2.) - 2.;
 
     bool positive =  value > 0.;
 
@@ -30,10 +23,31 @@ vec4 color(vec2 position) {
 }
 
 vec2 getUV(vec2 fragCoord) {
-    float scale = min(resolution.x, resolution.y);
-
+    float dmin = min(resolution.x, resolution.y);
+    float dmax = max(resolution.x, resolution.y);
     
-    return ((fragCoord / scale) - 0.5) * 2.;
+    float overlap = (dmax - dmin) / (2. * dmin);
+    float overlapW = (resolution.x - resolution.y) / (2. * resolution.y);
+    float overlapH = (resolution.y - resolution.x) / (2. * resolution.x);
+    
+    float scale = dmin;
+    
+    
+    vec2 uv = (((fragCoord / scale) - vec2(0.5 + max(overlapW, 0.), 0.5 + max(overlapH, 0.))) * 2.) + vec2(0.5 + max(overlapW, 0.), 0.5 + max(overlapH, 0.));
+    // return uv;
+    return (u_matrix * vec3(uv, 1.)).xy;
+}
+
+bool isAxis (vec2 coord) {
+  return abs(coord.x) < 0.01 || abs(coord.y) < 0.01;
+}
+
+bool isAxisTick (vec2 coord) {
+  float y = coord.y;
+  float x = coord.x; 
+
+  return abs(y) < 0.05 && abs(x - floor(x + 0.5)) < 0.02 
+      || abs(x) < 0.05 && abs(y - floor(y + 0.5)) < 0.02;
 }
 
 void main( void ) {
@@ -41,53 +55,42 @@ void main( void ) {
     float offset = (max(resolution.x, resolution.y) - min(resolution.x, resolution.y)) / 2.;
 
     const int step = 1;
-    
-    const float mul = 2.;
-    const float add = -0.5;
 
     vec2 uv = getUV(gl_FragCoord.xy); 
     
-    vec2 position1 = (u_matrix * vec3(uv + getUV(vec2(-step, -step)), 1)).xy;
+    vec2 position1 = uv + getUV(vec2(-step, -step));
     
-    // gl_FragColor = color(position1);
+    // if (abs(uv.x - 1.) <= 0.001 || abs(uv.x + 1.) <= 0.001 || abs(uv.y - 1.) <= 0.005 || abs(uv.y + 1.) <= 0.005) {
+    //   gl_FragColor = vec4(0, 0, 0, 1);
+    //   return;
+    // }
+    
+    // gl_FragColor = vec4((uv.x / 2.) + 0.5, (uv.y / 2.) + 0.5, 0, 1);
     // return;
     
-    
-    vec2 position1_h = (u_matrix * vec3(uv + getUV(vec2(step, step)), 1)).xy;  
+        
+    vec2 position1_h = uv + getUV(vec2(step, step));  
     
     vec4 diff1 = 1. - abs(color(position1) - color(position1_h));
 
-    vec2 position2 = (u_matrix * vec3(uv + getUV(vec2(step, -step)), 1)).xy;
-    vec2 position2_h = (u_matrix * vec3(uv + getUV(vec2(-step, step)), 1)).xy;
+    vec2 position2 = uv + getUV(vec2(step, -step));
+    vec2 position2_h = uv + getUV(vec2(-step, step));
 
     vec4 diff2 = 1. - abs(color(position2) - color(position2_h));
 
     float x = position1.x;
     float y = position1.y;
 
-    if (abs(x) < 0.01) {
+    if (isAxis(position1)) {
         gl_FragColor = vec4(1, 0, 0, 1);
         return;
     }
-
-    if (abs(y) < 0.01) {
+    
+    if (isAxisTick(position1)) {
         gl_FragColor = vec4(1, 0, 0, 1);
         return;
     }
-
-    if (abs(y) < 0.1 && abs(x - floor(x + 0.5)) < 0.02) {
-        gl_FragColor = vec4(1, 0, 0, 1);
-        return;
-    }
-
-    if (abs(x) < 0.1 && abs(y - floor(y + 0.5)) < 0.02) {
-        gl_FragColor = vec4(1, 0, 0, 1);
-        return;
-    }
-
+    
     gl_FragColor = min(diff2, diff1);
-    //gl_FragColor = min((diff1 + diff2) / 2., vec4(1, 1, 1, 1));
-    // gl_FragColor = vec4( uv.x, uv.y - uv.x, uv.x + uv.y, 1.0 );
-
 }
 `;
