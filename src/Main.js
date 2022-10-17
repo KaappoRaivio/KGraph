@@ -13,7 +13,6 @@ const worker = new Worker(new URL("./workers/glslConverter.worker.js", import.me
 const Main = () => {
   const [camera, setCamera] = useState({ x: 0, y: 0, zoom: 0 });
   const [input, setInput] = useState("");
-  // const [input, setInput] = useState("0.5x^2+ 0.31x = 1 / 2 y ^ (3.2)");
   const [output, setOutput] = useState("");
 
   useEffect(() => {

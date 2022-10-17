@@ -22,19 +22,14 @@ vec4 color(vec2 position) {
     return vec4(red, green, blue, 1);
 }
 
-vec2 getUV(vec2 fragCoord) {
-    float dmin = min(resolution.x, resolution.y);
-    float dmax = max(resolution.x, resolution.y);
-    
-    float overlap = (dmax - dmin) / (2. * dmin);
+vec2 getUV(vec2 fragCoord) {   
     float overlapW = (resolution.x - resolution.y) / (2. * resolution.y);
     float overlapH = (resolution.y - resolution.x) / (2. * resolution.x);
     
-    float scale = dmin;
+    float scale = min(resolution.x, resolution.y);
     
     
     vec2 uv = (((fragCoord / scale) - vec2(0.5 + max(overlapW, 0.), 0.5 + max(overlapH, 0.))) * 2.) + vec2(0.5 + max(overlapW, 0.), 0.5 + max(overlapH, 0.));
-    // return uv;
     return (u_matrix * vec3(uv, 1.)).xy;
 }
 

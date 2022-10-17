@@ -17,10 +17,11 @@ const PinchPanZoomListener = ({ children, onChange, initialCamera = { x: 0, y: 0
     onMouseMove: e => {
       if (panInProgress) {
         setTransform(oldPos => {
-          // console.log(Math.pow(2, oldPos.zoom));
+          const zoomScale = Math.pow(2, oldPos.zoom);
+
           return {
-            x: oldPos.x + e.movementX,
-            y: oldPos.y + e.movementY,
+            x: oldPos.x + e.movementX / zoomScale,
+            y: oldPos.y + e.movementY / zoomScale,
             zoom: oldPos.zoom,
           };
         });
@@ -30,7 +31,7 @@ const PinchPanZoomListener = ({ children, onChange, initialCamera = { x: 0, y: 0
       setTransform(old => ({
         x: old.x,
         y: old.y,
-        zoom: old.zoom + Math.sign(e.deltaY),
+        zoom: old.zoom - Math.sign(e.deltaY),
       }));
     },
     onMouseDown: () => setPanInProgress(true),
