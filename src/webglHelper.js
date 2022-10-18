@@ -17,7 +17,7 @@ export const createProgram = (gl, vertex, fragment) => {
   const program = gl.createProgram();
 
   const vs = createShader(gl, vertex, gl.VERTEX_SHADER);
-  const fs = createShader(gl, "#ifdef GL_ES\nprecision highp float;\n#endif\n\n" + fragment, gl.FRAGMENT_SHADER);
+  const fs = createShader(gl, fragment, gl.FRAGMENT_SHADER);
 
   if (vs == null || fs == null) return null;
 

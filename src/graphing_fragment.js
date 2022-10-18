@@ -1,9 +1,13 @@
 export default implicitFunction => `
+precision highp float;
+
+
 uniform mat3 u_matrix;
 uniform vec2 resolution;
 uniform int zoom;
 
-#define C  1. / ppow(2., float(zoom))
+#define c 1. / ppow(2., float(zoom))
+#define C  c / min(resolution.x, resolution.y)
 
 float ppow( float x, float y )  {
   if (y >= 0.) 
@@ -12,6 +16,10 @@ float ppow( float x, float y )  {
     float p = abs(y);
     return 1. / (x >= 0. ? pow(x, p) : (mod(p, 2.0) == 0. ? pow(-x, p) : -pow(-x, p)));
   }
+}
+
+float round (float inp) {
+  return floor(inp + 0.5);
 }
 
 vec4 color(vec2 position) {
@@ -46,17 +54,17 @@ vec2 getCamera (vec2 uv) {
 }
 
 vec4 shade (vec2 position) {
-    float scale = min(resolution.x, resolution.y);
+    // float scale = min(resolution.x, resolution.y);
 
    
-    float step = 1. * C;
-    vec2 position1 = position + vec2(-step, -step) / scale;        
-    vec2 position1_h = position + vec2(step, step) / scale;  
+    float step = 1.5 * C;
+    vec2 position1 = position + vec2(-step, -step);        
+    vec2 position1_h = position + vec2(step, step);  
     
     vec4 diff1 = 1. - abs(color(position1) - color(position1_h));
 
-    vec2 position2 = position + vec2(step, -step) / scale;
-    vec2 position2_h = position + vec2(-step, step) / scale;
+    vec2 position2 = position + vec2(step, -step);
+    vec2 position2_h = position + vec2(-step, step);
 
     vec4 diff2 = 1. - abs(color(position2) - color(position2_h));
     
@@ -65,29 +73,26 @@ vec4 shade (vec2 position) {
 }
 
 bool isAxis (vec2 coord) {
-  return abs(coord.x) < 0.0025 * C || abs(coord.y) < 0.0025 * C;
+  return abs(coord.x) < C || abs(coord.y) < C;
 }
 
-bool isAxisTick (vec2 coord) {
+bool isAxisTick (vec2 coord, float pitch) {
   float y = coord.y;
   float x = coord.x; 
 
-  return abs(y) < 0.01 * C && abs(x - floor(x + 0.5)) < 0.005 * C 
-      || abs(x) < 0.01 * C && abs(y - floor(y + 0.5)) < 0.005 * C;
+  return abs(y) < C * 10. && abs(mod(x, pitch) - pitch) < 3. * C 
+      || abs(x) < C * 10. && abs(mod(y, pitch) - pitch) < 3. * C;
 }
 
-bool isMajorGrid (vec2 coord) {
-  float y = coord.y;
-  float x = coord.x; 
+
+bool isGrid (vec2 coord, float pitch) {
+  return abs(mod(coord.x, pitch) - pitch) < 1. * C || abs(mod(coord.y, pitch) - pitch) < 1. * C;
   
-  return abs(x - floor(x + 0.5)) < 0.001 * C 
-      || abs(y - floor(y + 0.5)) < 0.001 * C;
+  // return abs(x * scale - floor(x * scale + 0.5)) < 0.001 * C 
+  //     || abs(y * scale - floor(y * scale + 0.5)) < 0.001 * C;
 }
 
 void main( void ) {
-    float scale = min(resolution.x, resolution.y);
-    float offset = (max(resolution.x, resolution.y) - min(resolution.x, resolution.y)) / 2.;
-
     vec2 uv = getUV(gl_FragCoord.xy); 
 
     float x = uv.x;
@@ -98,17 +103,30 @@ void main( void ) {
         return;
     }
     
-    if (isAxisTick(uv)) {
-        gl_FragColor = vec4(1, 0, 0, 1);
-        return;
+    
+    
+    vec4 color = shade(uv);
+    if (color != vec4(1, 1, 1, 1)) {
+      gl_FragColor = shade(uv);
+      return;
     }
     
-    if (isMajorGrid(uv)) {
+    
+    float scaler = 1. / ppow(2., floor(float(zoom))) / 16.;
+    if (isGrid(uv, scaler)) {
         gl_FragColor = vec4(0.1, 0.1, 0.1, 1);
         return;
     }
+
+    if (isGrid(uv, scaler / 10.)) {
+        gl_FragColor = vec4(0.01, 0.01, 0.01, 0.25);
+        return;
+    }
     
-    
+    if (isAxisTick(uv, scaler * 1.)) {
+        gl_FragColor = vec4(1, 0, 0, 1);
+        return;
+    }
     // const int antialias = 4;
     //
     // vec4 result = vec4(0., 0., 0., 1.);
@@ -119,7 +137,6 @@ void main( void ) {
     //   }
     // }
     
-    gl_FragColor = shade(uv);
     // gl_FragColor = result / 4.;
 }
 `;
