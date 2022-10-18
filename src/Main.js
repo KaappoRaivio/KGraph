@@ -11,7 +11,7 @@ import PinchPanZoomListener from "./PinchPanZoomListener";
 const worker = new Worker(new URL("./workers/glslConverter.worker.js", import.meta.url));
 
 const Main = () => {
-  const [camera, setCamera] = useState({ x: 0, y: 0, zoom: 0 });
+  const [camera, setCamera] = useState({ x: 0, y: 0, zoom: -4 });
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
 
@@ -50,7 +50,7 @@ const Main = () => {
   const [gl, setGl] = useState(null);
   useEffect(() => {
     const graphRoot = graphRootRef.current;
-    const gl = graphRoot.getContext("webgl");
+    const gl = graphRoot.getContext("webgl", { antialias: true });
 
     setGl(gl);
   }, []);
