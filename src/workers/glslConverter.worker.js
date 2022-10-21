@@ -74,10 +74,11 @@ self.onmessage = message => {
   const input = message.data;
   if (input == null) return;
 
-  // console.log("Worker got input:", input);
+  console.log("Worker got input:", input);
   // console.log(toGLSL(input));
   try {
-    postMessage(toGLSL(input));
+    postMessage({ glsl: toGLSL(input), eliminateVertical: true });
+    console.log("got result");
   } catch (err) {}
 };
 // };

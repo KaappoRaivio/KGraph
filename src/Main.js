@@ -6,6 +6,7 @@ import { createProgram } from "./webglHelper";
 import { getCameraMatrix } from "./cameraMath";
 import useDimensions from "./useDimensions";
 import PinchPanZoomListener from "./PinchPanZoomListener";
+import useSliders from "./useSliders";
 
 // const worker = new WorkerBuilder(glslConverterWorker);
 const worker = new Worker(new URL("./workers/glslConverter.worker.js", import.meta.url));
@@ -13,7 +14,8 @@ const worker = new Worker(new URL("./workers/glslConverter.worker.js", import.me
 const Main = () => {
   const [camera, setCamera] = useState({ x: 0, y: 0, zoom: -4 });
   const [input, setInput] = useState("");
-  const [output, setOutput] = useState("");
+  const [output, setOutput] = useState({ glsl: "", eliminateVertical: true });
+  const { sliders, onSliderChange, addSlider, changes } = useSliders();
 
   useEffect(() => {
     worker.onmessage = message => {
@@ -91,10 +93,10 @@ const Main = () => {
     // console.log("GLSLSource:", GLSLSource);
 
     gl.deleteProgram(null);
-    const currentProgram = createProgram(gl, vertexShader, fragmentShader(output));
+    const currentProgram = createProgram(gl, vertexShader, fragmentShader(output.glsl, false, Object.keys(sliders)));
     gl.useProgram(currentProgram);
     setCurrentProgram(currentProgram);
-  }, [gl, output]);
+  }, [gl, output, JSON.stringify(Object.keys(sliders))]);
 
   useEffect(() => {
     if (!currentProgram) return;
@@ -113,14 +115,31 @@ const Main = () => {
     gl.uniformMatrix3fv(uCameraMatrixLocation, false, getCameraMatrix(camera));
     gl.uniform1i(uZoomLocation, camera.zoom);
 
+    Object.keys(sliders).forEach(key => {
+      console.log("Giving data");
+      const location = gl.getUniformLocation(currentProgram, key);
+      gl.uniform1f(location, sliders[key].value);
+    });
+
     gl.enableVertexAttribArray(0);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
     gl.disableVertexAttribArray(0);
-  }, [currentProgram, width, height, camera]);
+  }, [currentProgram, width, height, camera, JSON.stringify(sliders)]);
 
   return (
     <>
-      <input value={input} onChange={e => setInput(e.target.value)} />
+      <div id={"inputContainer"}>
+        <input value={input} onChange={e => setInput(e.target.value)} />
+        {Object.keys(sliders).map(key => (
+          <input
+            type={"range"}
+            value={sliders[key].value}
+            onChange={onSliderChange(key)}
+            max={sliders[key].max}
+            min={sliders[key].min}
+            step={0.001}></input>
+        ))}
+      </div>
       <PinchPanZoomListener onChange={setCamera} initialCamera={camera}>
         <canvas id={"graphRoot"} ref={graphRootRef} />;
       </PinchPanZoomListener>

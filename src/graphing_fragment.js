@@ -1,10 +1,13 @@
-export default implicitFunction => `
+export default (implicitFunction, eliminateVertical, sliders) => `
 precision highp float;
 
 
 uniform mat3 u_matrix;
 uniform vec2 resolution;
 uniform int zoom;
+
+${sliders.map(name => `uniform float ${name};`).join("\n")}
+
 
 #define c 1. / ppow(2., float(zoom))
 #define C  c / min(resolution.x, resolution.y)
@@ -27,6 +30,9 @@ vec4 color(vec2 position) {
     float y = position.y;
 
     float value = ${implicitFunction};
+    // float value = x;
+
+    // return vec4((value + 0.5), (value + 0.5), (value + 0.5), 1);
 
     bool positive =  value > 0.;
 
@@ -55,16 +61,45 @@ vec2 getCamera (vec2 uv) {
 
 vec4 shade (vec2 position) {
     // float scale = min(resolution.x, resolution.y);
-
-   
     float step = 1.5 * C;
+    
+    if (${eliminateVertical}) {
+        // float stepV = 2. * C;
+        float stepV = 0.1;
+        float stepV2 = 1.;
+    
+        vec2 testVertical = position + vec2(stepV, stepV2);
+        vec2 testVertical_h = position + vec2(-stepV, stepV2);
+        
+        vec4 testVerticalDiff = color(testVertical) - color(testVertical_h);
+        
+        vec2 testVertical1 = position + vec2(0, stepV);
+        vec2 testVertical1_h = position + vec2(0, -stepV);
+        vec4 testVerticalDiff1 = color(testVertical1) - color(testVertical1_h);
+    
+        if (abs(testVerticalDiff.x) > 0. && testVerticalDiff1.x == 0.) return vec4(1, 1, 1, 1); 
+    }
+   
+   
+    
+    
+    
+   
+   
     vec2 position1 = position + vec2(-step, -step);        
     vec2 position1_h = position + vec2(step, step);  
     
+    // vec2 position1 = position + vec2(-step, 0);        
+    // vec2 position1_h = position + vec2(step, 0);  
+
+
     vec4 diff1 = 1. - abs(color(position1) - color(position1_h));
 
     vec2 position2 = position + vec2(step, -step);
     vec2 position2_h = position + vec2(-step, step);
+    
+    // vec2 position2 = position + vec2(0, -step);
+    // vec2 position2_h = position + vec2(0, step);
 
     vec4 diff2 = 1. - abs(color(position2) - color(position2_h));
     
@@ -105,9 +140,10 @@ void main( void ) {
     
     
     
-    vec4 color = shade(uv);
-    if (color != vec4(1, 1, 1, 1)) {
-      gl_FragColor = shade(uv);
+    vec4 functionColor = shade(uv);
+    // vec4 functionColor = color(uv);
+    if (functionColor != vec4(1, 1, 1, 1)) {
+      gl_FragColor = functionColor;
       return;
     }
     

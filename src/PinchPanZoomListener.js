@@ -37,6 +37,12 @@ const PinchPanZoomListener = ({ children, onChange, initialCamera = { x: 0, y: 0
     onMouseDown: () => setPanInProgress(true),
     onMouseUp: () => setPanInProgress(false),
     onMouseLeave: () => setPanInProgress(false),
+
+    onTouchStart: () => setPanInProgress(true),
+    onTouchEnd: () => setPanInProgress(false),
+    onTouchMove: () => e => {
+      console.log(e.touches);
+    },
   });
 };
 
