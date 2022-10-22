@@ -108,7 +108,7 @@ const Main = () => {
     const uCameraMatrixLocation = gl.getUniformLocation(currentProgram, "u_matrix");
     const uZoomLocation = gl.getUniformLocation(currentProgram, "zoom");
 
-    console.log(width, height, width / height);
+    // console.log(width, height, width / height);
 
     // gl.uniform1f(timeLocation, parameters.time / 1000);
     gl.uniform2f(resolutionLocation, width, height);
@@ -116,7 +116,6 @@ const Main = () => {
     gl.uniform1i(uZoomLocation, camera.zoom);
 
     Object.keys(sliders).forEach(key => {
-      console.log("Giving data");
       const location = gl.getUniformLocation(currentProgram, key);
       gl.uniform1f(location, sliders[key].value);
     });

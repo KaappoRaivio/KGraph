@@ -1,20 +1,39 @@
 import React, { useEffect, useState } from "react";
+import { calculateTransform } from "./pinchToZoomMath";
 
 const PinchPanZoomListener = ({ children, onChange, initialCamera = { x: 0, y: 0, zoom: 0 } }) => {
   const [panInProgress, setPanInProgress] = useState(false);
   const scale = Math.min(window.innerHeight, window.innerWidth);
   const [transform, setTransform] = useState({ x: initialCamera.x * -scale, y: initialCamera.y * scale, zoom: initialCamera.zoom });
 
+  const [duringDragTransform, setDuringDragTransform] = useState({ x: 0, y: 0, zoom: 0 });
+
+  const [touchOffset, setTouchOffset] = useState([]);
+
   useEffect(() => {
     const { x, y, zoom } = transform;
+    const { x: dx, y: dy, zoom: dz } = duringDragTransform;
 
     const scale = Math.min(window.innerHeight, window.innerWidth);
 
-    onChange({ x: x / -scale, y: transform.y / scale, zoom });
-  }, [transform.x, transform.y, transform.zoom]);
+    onChange({ x: (x + dx) / -scale, y: (y + dy) / scale, zoom: zoom + dz });
+  }, [transform.x, transform.y, transform.zoom, duringDragTransform.x, duringDragTransform.y, duringDragTransform.zoom]);
+
+  const endDrag = touches => {
+    const { x: dx, y: dy, zoom: dz } = duringDragTransform;
+
+    setTransform(({ x, y, zoom }) => ({ x: x + dx, y: y + dy, zoom: zoom + dz }));
+    setDuringDragTransform({ x: 0, y: 0, zoom: 0 });
+    setTouchOffset([]);
+  };
+
+  const startDrag = touches => {
+    setTouchOffset(touches);
+  };
 
   return React.cloneElement(children[0], {
     onMouseMove: e => {
+      // console.log("mousemove");
       if (panInProgress) {
         setTransform(oldPos => {
           const zoomScale = Math.pow(2, oldPos.zoom);
@@ -38,10 +57,26 @@ const PinchPanZoomListener = ({ children, onChange, initialCamera = { x: 0, y: 0
     onMouseUp: () => setPanInProgress(false),
     onMouseLeave: () => setPanInProgress(false),
 
-    onTouchStart: () => setPanInProgress(true),
-    onTouchEnd: () => setPanInProgress(false),
-    onTouchMove: () => e => {
-      console.log(e.touches);
+    onTouchStart: e => {
+      const touches = [...e.touches].map(touch => ({ x: touch.pageX, y: touch.pageY, id: touch.identifier }));
+      endDrag(touches);
+      startDrag(touches);
+    },
+    onTouchEnd: e => {
+      const touches = [...e.touches].map(touch => ({ x: touch.pageX, y: touch.pageY, id: touch.identifier }));
+      endDrag(touches);
+      startDrag(touches);
+    },
+    onTouchMove: e => {
+      const touches = [...e.touches].map(touch => ({ x: touch.pageX, y: touch.pageY, id: touch.identifier }));
+
+      const zoomTransform = calculateTransform(touches, touchOffset, 0);
+
+      setDuringDragTransform(oldDuringDragTransform => {
+        const zoomScale = Math.pow(2, oldDuringDragTransform.zoom + transform.zoom);
+
+        return { zoom: Math.log2(zoomTransform.scale), x: zoomTransform.translation.x / zoomScale, y: zoomTransform.translation.y / zoomScale };
+      });
     },
   });
 };

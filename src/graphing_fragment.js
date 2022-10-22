@@ -154,10 +154,10 @@ void main( void ) {
         return;
     }
 
-    if (isGrid(uv, scaler / 10.)) {
-        gl_FragColor = vec4(0.01, 0.01, 0.01, 0.25);
-        return;
-    }
+    // if (isGrid(uv, scaler / 10.)) {
+    //     gl_FragColor = vec4(0.01, 0.01, 0.01, 0.25);
+    //     return;
+    // }
     
     if (isAxisTick(uv, scaler * 1.)) {
         gl_FragColor = vec4(1, 0, 0, 1);
