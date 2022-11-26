@@ -19,7 +19,10 @@ export const createProgram = (gl, vertex, fragment) => {
   const vs = createShader(gl, vertex, gl.VERTEX_SHADER);
   const fs = createShader(gl, fragment, gl.FRAGMENT_SHADER);
 
-  if (vs == null || fs == null) return null;
+  if (vs == null || fs == null) {
+    console.log("Returning null!");
+    return null;
+  }
 
   gl.attachShader(program, vs);
   gl.attachShader(program, fs);

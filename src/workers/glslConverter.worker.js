@@ -77,7 +77,7 @@ self.onmessage = message => {
   console.log("Worker got input:", input);
   // console.log(toGLSL(input));
   try {
-    postMessage({ glsl: toGLSL(input), eliminateVertical: true });
+    postMessage({ glsl: toGLSL(input), eliminateVertical: false });
     console.log("got result");
   } catch (err) {}
 };
