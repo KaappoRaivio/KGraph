@@ -11,5 +11,5 @@ export default (gl, isGlPresent, graphRootRef) => {
       graphRoot.width = width;
       graphRoot.height = height;
     }
-  }, [gl, isGlPresent]);
+  }, [gl, isGlPresent, width, height]);
 };
