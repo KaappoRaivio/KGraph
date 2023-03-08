@@ -6,7 +6,9 @@ export default ref => {
   useEffect(() => {
     const updateSize = _ => {
       if (ref.current) {
-        setSize([ref.current.clientWidth, ref.current.clientHeight]);
+        const r = ref.current.getBoundingClientRect();
+        // setSize([ref.current.clientWidth, ref.current.clientHeight]);
+        setSize([r.right - r.left, r.bottom - r.top]);
       } else {
         console.log("null!");
       }

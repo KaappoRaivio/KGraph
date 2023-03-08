@@ -9,7 +9,7 @@ const Sliders = ({ sliders, onSliderChange, updateSlider, addSlider, deleteSlide
       <ul className={"no-bullets"} id={"sliders"}>
         {sliders.map((slider, index) => {
           return (
-            <li>
+            <li key={slider.name}>
               <label htmlFor={slider.name}>
                 <InlineInput value={slider.name} onChange={e => updateSlider(index, { name: e.target.value })} style={{ fontSize: "100%" }} />
                 <span style={{ fontSize: "100%" }}> = </span>

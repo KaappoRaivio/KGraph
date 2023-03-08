@@ -18,6 +18,9 @@ input {
 #graphRoot {
   width: 100%;
   height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .react-transform-component {
@@ -32,6 +35,7 @@ input {
   font-size: 200%;
   width: 100%;
   bottom: 0;
+  flex: 1 1 0;
 }
 
 ul.no-bullets,

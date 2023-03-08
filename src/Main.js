@@ -1,17 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-
-import vertexShader from "./graphing_vertex";
-import fragmentShader from "./graphing_fragment";
-import { createProgram } from "./webglHelper";
-import { getCameraMatrix } from "./cameraMath";
-import useDimensions from "./hooks/useDimensions";
+import React, { useEffect, useState } from "react";
 import PinchPanZoomListener from "./PinchPanZoomListener";
 import useSliders from "./hooks/useSliders";
 import Sliders from "./Sliders";
-import useUpdateShaderInputs from "./hooks/useUpdateShaderInputs";
-import useUpdateShader from "./hooks/useUpdateShader";
-import useWebGl from "./hooks/useWebGl";
-import useGlScaling from "./hooks/useGlScaling";
+import Content from "./content/Content";
 
 // const worker = new WorkerBuilder(glslConverterWorker);
 const worker = new Worker(new URL("./workers/glslConverter.worker.js", import.meta.url));
@@ -49,21 +40,11 @@ const Main = () => {
     worker.postMessage(input);
   }, [input]);
 
-  const graphRootRef = useRef(null);
-
-  const { gl, isGlPresent } = useWebGl(graphRootRef);
-  useGlScaling(gl, isGlPresent, graphRootRef);
-
-  const [currentProgram, setCurrentProgram] = useState(null);
-  useUpdateShader(gl, output, sliders, currentProgram, setCurrentProgram);
-  const { width, height } = useDimensions(graphRootRef);
-  useUpdateShaderInputs(gl, currentProgram, width, height, camera, sliders);
-
   return (
     <>
       <Sliders sliders={sliders} onSliderChange={onSliderChange} updateSlider={updateSlider} addSlider={addSlider} deleteSlider={deleteSlider} />
       <PinchPanZoomListener onChange={setCamera} initialCamera={camera}>
-        <canvas id={"graphRoot"} ref={graphRootRef} />;
+        <Content input={output} sliders={sliders} camera={camera} />
       </PinchPanZoomListener>
       <div id={"inputContainer"}>
         <input value={input} onChange={e => setInput(e.target.value)} />

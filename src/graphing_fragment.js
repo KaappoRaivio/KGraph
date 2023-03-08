@@ -48,10 +48,12 @@ vec2 getUV(vec2 fragCoord) {
     float overlapW = (resolution.x - resolution.y) / (2. * resolution.y);
     float overlapH = (resolution.y - resolution.x) / (2. * resolution.x);
     
-    float scale = min(resolution.x, resolution.y);
+    float scale = min(resolution.x, resolution.y) * ${window.devicePixelRatio};
     
     
-    vec2 uv = (((fragCoord / scale) - vec2(0.5 + max(overlapW, 0.), 0.5 + max(overlapH, 0.))) * 1.);// + vec2(0.5 + max(overlapW, 0.), 0.5 + max(overlapH, 0.));
+    vec2 uv = (((fragCoord / scale) - vec2(0.5 + max(overlapW, 0.), 0.5 + max(overlapH, 0.))) * 1.);
+    
+    // + vec2(0.5 + max(overlapW, 0.), 0.5 + max(overlapH, 0.));
     return (u_matrix * vec3(uv, 1.)).xy;
 }
 
@@ -108,10 +110,12 @@ vec4 shade (vec2 position) {
 }
 
 bool isAxis (vec2 coord) {
+  return false;
   return abs(coord.x) < C || abs(coord.y) < C;
 }
 
 bool isAxisTick (vec2 coord, float pitch) {
+  return false;
   float y = coord.y;
   float x = coord.x; 
 
@@ -121,6 +125,7 @@ bool isAxisTick (vec2 coord, float pitch) {
 
 
 bool isGrid (vec2 coord, float pitch) {
+return false;
   return abs(mod(coord.x, pitch) - pitch) < 1. * C || abs(mod(coord.y, pitch) - pitch) < 1. * C;
   
   // return abs(x * scale - floor(x * scale + 0.5)) < 0.001 * C 
