@@ -50,7 +50,7 @@ const PinchPanZoomListener = ({ children, onChange, initialCamera = { x: 0, y: 0
       setTransform(old => ({
         x: old.x,
         y: old.y,
-        zoom: old.zoom - 0.2 * Math.sign(e.deltaY),
+        zoom: old.zoom - Math.sign(e.deltaY) * 0.1,
       }));
     },
     onMouseDown: () => setPanInProgress(true),

@@ -11,6 +11,7 @@ ${sliders.map(name => `uniform float ${name};`).join("\n")}
 
 #define c 1. / ppow(2., float(zoom))
 #define C  c / min(resolution.x, resolution.y)
+#define MAX_ITERATIONS 500
 
 float ppow( float x, float y )  {
   if (y >= 0.) 
@@ -42,6 +43,94 @@ vec4 color(vec2 position) {
 
     return vec4(red, green, blue, 1);
 }
+
+vec2 nextMandel (vec2 z, vec2 constant) {
+    float zr = z.x * z.x - z.y * z.y;
+    float zi = 2.0 * z.x * z.y;
+
+    return vec2(zr, zi) + constant;
+    // float zr = constant.x * constant.x - constant.y * constant.y;
+    // float zi = 2.0 * constant.x * constant.y;
+    //
+    // return vec2(zr, zi) + z ;
+}
+
+float squared(vec2 v) {
+    return v.x * v.x + v.y * v.y;
+}
+
+float mandel(vec2 z0, vec2 constant) {
+    vec2 zn = z0;
+    
+    int result = MAX_ITERATIONS;
+    float length = 0.;
+    
+    for (int iteration = 0; iteration < MAX_ITERATIONS; ++iteration) {
+        zn = nextMandel(zn, constant);
+        
+        if (squared(zn) >= 4.0 && result == MAX_ITERATIONS) {
+            result = iteration;
+            length = sqrt(squared(zn));
+        }
+        // iteration++;
+    }
+
+    // float length = sqrt(squared(zn));
+    float smooth = float(result) - log2(max(1.0, log2(length)));
+    return smooth;
+    // return result;
+}
+
+
+bool logistic (vec2 uv) {
+    float r = uv.x;
+    float res1 = .5;
+    for (int iteration = 0; iteration < MAX_ITERATIONS; ++iteration) {
+        res1 = r * res1 * (1. - res1);
+    }
+    
+    float res2 = .5;
+    for (int iteration = 0; iteration < MAX_ITERATIONS + 1; ++iteration) {
+        res2 = r * res2 * (1. - res2);
+    }
+    
+    float res3 = .5;
+    for (int iteration = 0; iteration < MAX_ITERATIONS + 2; ++iteration) {
+        res3 = r * res3 * (1. - res3);
+    }
+    
+    float res4 = .5;
+    for (int iteration = 0; iteration < MAX_ITERATIONS + 3; ++iteration) {
+        res4 = r * res4 * (1. - res4);
+    }
+    
+    float res5 = .5;
+    for (int iteration = 0; iteration < MAX_ITERATIONS + 4; ++iteration) {
+        res5 = r * res5 * (1. - res5);
+    }
+    
+    float res6 = .5;
+    for (int iteration = 0; iteration < MAX_ITERATIONS + 5; ++iteration) {
+        res6 = r * res6 * (1. - res6);
+    }
+    
+    float res7 = .5;
+    for (int iteration = 0; iteration < MAX_ITERATIONS + 6; ++iteration) {
+        res7 = r * res7 * (1. - res7);
+    }
+    
+    float res8 = .5;
+    for (int iteration = 0; iteration < MAX_ITERATIONS + 7; ++iteration) {
+        res8 = r * res8 * (1. - res8);
+    }
+    
+    
+    return abs(res1 - uv.y) < 0.001
+    || abs(res2 - uv.y) < 0.001
+    || abs(res3 - uv.y) < 0.001
+    || abs(res4 - uv.y) < 0.001;
+}
+
 
 
 vec2 getUV(vec2 fragCoord) {   
@@ -152,19 +241,31 @@ void main( void ) {
       return;
     }
     
+    float iterations = mandel(uv, vec2(a, b));
+    float a = iterations / float(MAX_ITERATIONS);
+    gl_FragColor = vec4(a, a, a, 1);
+    return;
     
-    float scaler = 1. / ppow(2., floor(float(zoom))) / 16.;
-    if (isGrid(uv, scaler)) {
-        gl_FragColor = vec4(0.1, 0.1, 0.1, 1);
+    
+    // bool isCurve = logistic(uv);
+    // float a = float(isCurve) * 1.;
+    // gl_FragColor = vec4(a, a, a, 1);
+    // return;
+    
+    
+    float scalerMajor = 1. / ppow(2., floor(float(zoom))) / 8.;
+    if (isGrid(uv, scalerMajor, 0.05)) {
+        gl_FragColor = vec4(0.1, 0.1, 0.1, 0.5);
         return;
     }
-
-    // if (isGrid(uv, scaler / 10.)) {
-    //     gl_FragColor = vec4(0.01, 0.01, 0.01, 0.25);
-    //     return;
-    // }
     
-    if (isAxisTick(uv, scaler * 1.)) {
+    float scalerMinor = 1. / ppow(2., floor(float(zoom))) / 32.;
+    if (isGrid(uv, scalerMinor, 0.1)) {
+        gl_FragColor = vec4(0.0001, 0.0001, 0.0001, 0.25);
+        return;
+    }
+    
+    if (isAxisTick(uv, scalerMajor * 1.)) {
         gl_FragColor = vec4(1, 0, 0, 1);
         return;
     }

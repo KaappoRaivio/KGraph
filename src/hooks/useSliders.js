@@ -49,5 +49,6 @@ export default () => {
       }
       return value;
     },
+    setSliders
   };
 };
