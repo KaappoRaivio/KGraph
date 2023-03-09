@@ -88,7 +88,7 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
   const xMin = Math.round(topLeft.x / tickPitch) * tickPitch;
   const xMax = Math.round((bottomRight.x + 0.5) / tickPitch) * tickPitch;
 
-  ctx.font = "12px Courier New";
+  ctx.font = `${20 * window.devicePixelRatio}px Courier New`;
   ctx.textAlign = "center";
   ctx.textBaseline = "bottom";
   // x axis
@@ -103,7 +103,7 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
       height / 2;
 
     // console.log(H, textY);
-    if (xTick !== 0) ctx.fillText(xTick.toFixed(2), c2p({ x: xTick, y: 0 }).x - thickness / 2, Math.min(Math.max(textY, 12), H * 0.9));
+    if (xTick !== 0) ctx.fillText(xTick.toFixed(4), c2p({ x: xTick, y: 0 }).x - thickness / 2, Math.min(Math.max(textY, 12), H * 0.9));
   }
 
   const yMin = -Math.round((bottomRight.y + 0.5) / tickPitch) * tickPitch;

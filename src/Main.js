@@ -9,7 +9,14 @@ import throttle from "lodash.throttle";
 // const worker = new WorkerBuilder(glslConverterWorker);
 const worker = new Worker(new URL("./workers/glslConverter.worker.js", import.meta.url));
 
-const myReplaceState = throttle(s => window.history.replaceState(null, "", s), 1000);
+const myReplaceState = throttle(s => {
+  window.history.replaceState(null, "", s);
+  console.log("Early update");
+  setTimeout(() => {
+    console.log("Late update");
+    window.history.replaceState(null, "", s);
+  }, 1000);
+}, 1000);
 
 const planeToPx = (camera, width, height) => {
   const w = (width / 10) * Math.pow(2, camera.zoom);
@@ -59,9 +66,6 @@ const Main = () => {
     }
 
     myReplaceState(`?${params.toString()}`);
-    setTimeout(() => {
-      myReplaceState(`?${params.toString()}`);
-    }, [1000]);
     // myReplaceState(null, "", `?${params.toString()}`);
   }, [input, JSON.stringify(sliders), JSON.stringify(camera)]);
 
