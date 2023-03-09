@@ -7,14 +7,18 @@ export default (gl, output, sliders, currentProgram, setCurrentProgram) => {
   useEffect(() => {
     if (!gl) return;
 
-    const currentProgram = createProgram(
-      gl,
-      vertexShader,
-      fragmentShader(
+    console.log(JSON.stringify(sliders.map(slider => slider.name).filter(x => x.length)), output)
+
+    let fragment = fragmentShader(
         output.glsl,
         false,
         sliders.map(slider => slider.name).filter(x => x.length),
-      ),
+    );
+    // console.log(fragment)
+    const currentProgram = createProgram(
+      gl,
+      vertexShader,
+      fragment,
     );
     if (currentProgram != null) {
       gl.deleteProgram(null);
@@ -22,5 +26,5 @@ export default (gl, output, sliders, currentProgram, setCurrentProgram) => {
     }
 
     setCurrentProgram(currentProgram);
-  }, [gl, output, JSON.stringify(sliders.map(slider => slider.name).filter(x => x.length))]);
+  }, [gl, output.glsl, JSON.stringify(sliders.map(slider => slider.name).filter(x => x.length))]);
 };

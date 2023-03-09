@@ -6,6 +6,7 @@ const PinchPanZoomListener = ({ children, onChange, initialCamera = { x: 0, y: 0
   const scale = Math.min(window.innerHeight, window.innerWidth);
   const [transform, setTransform] = useState({ x: initialCamera.x * -scale, y: initialCamera.y * scale, zoom: initialCamera.zoom });
 
+
   const [duringDragTransform, setDuringDragTransform] = useState({ x: 0, y: 0, zoom: 0 });
 
   const [touchOffset, setTouchOffset] = useState([]);
@@ -50,7 +51,7 @@ const PinchPanZoomListener = ({ children, onChange, initialCamera = { x: 0, y: 0
       setTransform(old => ({
         x: old.x,
         y: old.y,
-        zoom: old.zoom - Math.sign(e.deltaY),
+        zoom: old.zoom - Math.sign(e.deltaY) * 0.1,
       }));
     },
     onMouseDown: () => setPanInProgress(true),

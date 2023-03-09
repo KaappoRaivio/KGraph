@@ -32,6 +32,7 @@
   "dependencies": {
     "algebra.js": "^0.2.6",
     "algebrite": "^1.4.0",
+    "lodash.throttle": "^4.1.1",
     "mathjs": "^11.3.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
