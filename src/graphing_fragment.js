@@ -188,6 +188,7 @@ void main( void ) {
       return;
     }
     
+    return;
     float iterations = mandel(uv, vec2(a, b));
     float a = iterations / float(MAX_ITERATIONS);
     gl_FragColor = vec4(a, a, a, 1);
