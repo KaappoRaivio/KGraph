@@ -4,14 +4,14 @@ precision highp float;
 
 uniform mat3 u_matrix;
 uniform vec2 resolution;
-uniform int zoom;
+uniform float zoom;
 
 ${sliders.map(name => `uniform float ${name};`).join("\n")}
 
 
 #define c 1. / ppow(2., float(zoom))
 #define C  c / min(resolution.x, resolution.y)
-#define MAX_ITERATIONS 500
+#define MAX_ITERATIONS 100
 
 float ppow( float x, float y )  {
   if (y >= 0.) 
@@ -187,9 +187,9 @@ void main( void ) {
       return;
     }
     
-    return;
+    // return;
     
-    float iterations = mandel(uv, vec2(a, b));
+    float iterations = mandel(vec2(0., 0.), uv);
     float a = iterations / float(MAX_ITERATIONS);
     gl_FragColor = vec4(a, a, a, 1);
     return;

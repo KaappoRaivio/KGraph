@@ -14,7 +14,7 @@ export default (gl, currentProgram, width, height, camera, sliders) => {
 
     gl.uniform2f(resolutionLocation, width, height);
     gl.uniformMatrix3fv(uCameraMatrixLocation, false, getCameraMatrix(camera));
-    gl.uniform1i(uZoomLocation, camera.zoom);
+    gl.uniform1f(uZoomLocation, camera.zoom);
 
     sliders
       .filter(slider => slider.name.length)
