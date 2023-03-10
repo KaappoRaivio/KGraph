@@ -137,7 +137,7 @@ vec2 getUV(vec2 fragCoord) {
     float overlapW = (resolution.x - resolution.y) / (2. * resolution.y);
     float overlapH = (resolution.y - resolution.x) / (2. * resolution.x);
     
-    float scale = min(resolution.x, resolution.y) * ${window.devicePixelRatio};
+    float scale = min(resolution.x, resolution.y) * ${window.devicePixelRatio.toFixed(10)};
     
     
     vec2 uv = (((fragCoord / scale) - vec2(0.5 + max(overlapW, 0.), 0.5 + max(overlapH, 0.))) * 1.);
@@ -151,32 +151,8 @@ vec2 getCamera (vec2 uv) {
 }
 
 vec4 shade (vec2 position) {
-    // float scale = min(resolution.x, resolution.y);
-    float step = 1.5 * C;
-    
-    if (${eliminateVertical}) {
-        // float stepV = 2. * C;
-        float stepV = 0.1;
-        float stepV2 = 1.;
-    
-        vec2 testVertical = position + vec2(stepV, stepV2);
-        vec2 testVertical_h = position + vec2(-stepV, stepV2);
-        
-        vec4 testVerticalDiff = color(testVertical) - color(testVertical_h);
-        
-        vec2 testVertical1 = position + vec2(0, stepV);
-        vec2 testVertical1_h = position + vec2(0, -stepV);
-        vec4 testVerticalDiff1 = color(testVertical1) - color(testVertical1_h);
-    
-        if (abs(testVerticalDiff.x) > 0. && testVerticalDiff1.x == 0.) return vec4(1, 1, 1, 1); 
-    }
-   
-   
-    
-    
-    
-   
-   
+    float step = 1. * C;
+
     vec2 position1 = position + vec2(-step, -step);        
     vec2 position1_h = position + vec2(step, step);  
     
@@ -198,48 +174,20 @@ vec4 shade (vec2 position) {
     // return color(position);
 }
 
-bool isAxis (vec2 coord) {
-  return false;
-  return abs(coord.x) < C || abs(coord.y) < C;
-}
-
-bool isAxisTick (vec2 coord, float pitch) {
-  return false;
-  float y = coord.y;
-  float x = coord.x; 
-
-  return abs(y) < C * 10. && abs(mod(x, pitch) - pitch) < 3. * C 
-      || abs(x) < C * 10. && abs(mod(y, pitch) - pitch) < 3. * C;
-}
-
-
-bool isGrid (vec2 coord, float pitch) {
-return false;
-  return abs(mod(coord.x, pitch) - pitch) < 1. * C || abs(mod(coord.y, pitch) - pitch) < 1. * C;
-  
-  // return abs(x * scale - floor(x * scale + 0.5)) < 0.001 * C 
-  //     || abs(y * scale - floor(y * scale + 0.5)) < 0.001 * C;
-}
-
 void main( void ) {
     vec2 uv = getUV(gl_FragCoord.xy); 
 
     float x = uv.x;
     float y = uv.y;
-
-    if (isAxis(uv)) {
-        gl_FragColor = vec4(1, 0, 0, 1);
-        return;
-    }
-    
-    
-    
+      
     vec4 functionColor = shade(uv);
     // vec4 functionColor = color(uv);
     if (functionColor != vec4(1, 1, 1, 1)) {
       gl_FragColor = functionColor;
       return;
     }
+    
+    return;
     
     float iterations = mandel(uv, vec2(a, b));
     float a = iterations / float(MAX_ITERATIONS);
@@ -252,23 +200,6 @@ void main( void ) {
     // gl_FragColor = vec4(a, a, a, 1);
     // return;
     
-    
-    float scalerMajor = 1. / ppow(2., floor(float(zoom))) / 8.;
-    if (isGrid(uv, scalerMajor, 0.05)) {
-        gl_FragColor = vec4(0.1, 0.1, 0.1, 0.5);
-        return;
-    }
-    
-    float scalerMinor = 1. / ppow(2., floor(float(zoom))) / 32.;
-    if (isGrid(uv, scalerMinor, 0.1)) {
-        gl_FragColor = vec4(0.0001, 0.0001, 0.0001, 0.25);
-        return;
-    }
-    
-    if (isAxisTick(uv, scalerMajor * 1.)) {
-        gl_FragColor = vec4(1, 0, 0, 1);
-        return;
-    }
     // const int antialias = 4;
     //
     // vec4 result = vec4(0., 0., 0., 1.);
