@@ -102,7 +102,7 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
       height / 2;
 
     // console.log(H, textY);
-    if (xTick !== 0) ctx.fillText(xTick.toFixed(2), c2p({ x: xTick, y: 0 }).x - thickness / 2, Math.min(Math.max(textY, 12), H * 0.9));
+    if (xTick !== 0) ctx.fillText(xTick.toPrecision(2), c2p({ x: xTick, y: 0 }).x - thickness / 2, Math.min(Math.max(textY, 12), H * 0.9));
   }
 
   const yMin = -Math.round(bottomRight.y / tickPitch) * tickPitch;
@@ -124,7 +124,7 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
 
     // console.log(H, textHeight);
     if (yTick !== 0)
-      ctx.fillText((-yTick).toFixed(2), Math.min(Math.max(textX, height), W * 0.98 - height), c2p({ x: 0, y: yTick }).y - thickness / 2);
+      ctx.fillText((-yTick).toPrecision(3), Math.min(Math.max(textX, height), W * 0.98 - height), c2p({ x: 0, y: yTick }).y - thickness / 2);
   }
 };
 
