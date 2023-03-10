@@ -80,7 +80,7 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
   // console.log(visibleClipSpace);
 
   const base = 2;
-  const scale = Math.pow(base, Math.trunc(camera.zoom / Math.log2(base)));
+  const scale = Math.pow(base, Math.trunc(camera.zoom / Math.log2(base) - window.devicePixelRatio * 0.5));
 
   const tickPitch = 1 / scale / Math.pow(base, 4);
 
@@ -88,7 +88,7 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
   const xMin = Math.round(topLeft.x / tickPitch) * tickPitch;
   const xMax = Math.round((bottomRight.x + 0.5) / tickPitch) * tickPitch;
 
-  ctx.font = "12px Courier New";
+  ctx.font = `${12 * window.devicePixelRatio}px Courier New`;
   ctx.textAlign = "center";
   ctx.textBaseline = "bottom";
   // x axis
