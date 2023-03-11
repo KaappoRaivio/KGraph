@@ -49,7 +49,7 @@ const replaceWithFractions = input => {
   return input.replaceAll(/[\d]+\.\d*/g, x => `(${algebra.parse(String(x)).constants[0].toString()})`);
 };
 
-const toGLSL = input => {
+export const toGLSL = input => {
   if (input.length && !input.includes("=")) {
     if (input.includes("y")) throw Error("Y without equals sign!");
     // input = `y = ${input.toLowerCase()} + P`;
@@ -69,16 +69,21 @@ const toGLSL = input => {
   return toGLSLFriendly(reparsed);
 };
 
-// export default () => {
-self.onmessage = message => {
-  const input = message.data;
-  if (input == null) return;
-
-  console.log("Worker got input:", input);
-  // console.log(toGLSL(input));
-  try {
-    postMessage({ glsl: toGLSL(input), eliminateVertical: false });
-    console.log("got result");
-  } catch (err) {}
-};
+// // export default () => {
+// self.onmessage = message => {
+//   // console.timeEnd("Worker");
+//
+//   console.log("moi");
+//   const input = message?.data?.input;
+//   // const index = message.data.index;
+//   if (input == null) return postMessage(null);
+//
+//   console.log("Worker got input:", input);
+//   // console.log(toGLSL(input));
+//   try {
+//     postMessage(toGLSL(input));
+//     console.log("got result");
+//   } catch (err) {
+//     console.error(err.message);
+//   }
 // };

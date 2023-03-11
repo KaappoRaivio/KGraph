@@ -5,6 +5,8 @@ import Sliders from "./Sliders";
 import Content from "./content/Content";
 
 import throttle from "lodash.throttle";
+import { useDispatch, useSelector } from "react-redux";
+import { inputAdded, inputChanged } from "./redux/reducers/inputsSlice";
 
 // const worker = new WorkerBuilder(glslConverterWorker);
 const worker = new Worker(new URL("./workers/glslConverter.worker.js", import.meta.url));
@@ -73,6 +75,9 @@ const Main = () => {
     worker.postMessage(input);
   }, [input]);
 
+  const inputValue = useSelector(state => state.inputs[0].rawInput);
+  const dispatch = useDispatch();
+
   return (
     <>
       <Sliders sliders={sliders} onSliderChange={onSliderChange} updateSlider={updateSlider} addSlider={addSlider} deleteSlider={deleteSlider} />
@@ -83,7 +88,8 @@ const Main = () => {
       {/*  backgroundSize: `${planeToPx(camera, width, height)}`*/}
       {/*}}></div>*/}
       <div id={"inputContainer"}>
-        <input autoCorrect={"off"} value={input} onChange={e => setInput(e.target.value)} />
+        {/*<input autoCorrect={"off"} value={inputValue} onChange={e => setInput(e.target.value)} />*/}
+        <input autoCorrect={"off"} value={inputValue} onChange={e => dispatch(inputChanged({ index: 0, rawInput: e.target.value }))} />
       </div>
     </>
   );

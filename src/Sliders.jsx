@@ -22,7 +22,8 @@ const Sliders = ({ sliders, onSliderChange, updateSlider, addSlider, deleteSlide
                 onChange={onSliderChange(index)}
                 max={slider.max}
                 min={slider.min}
-                step={slider.step}
+                // step={slider.step}
+                step={0.0001}
               />
               <button className={"round"} onClick={deleteSlider(index)}>
                 ×

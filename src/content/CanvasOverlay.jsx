@@ -132,7 +132,7 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
 
 const CanvasOverlay = ({ camera }) => {
   const canvasRef = useRef(null);
-  useCanvasScaling(canvasRef);
+  const { width, height } = useCanvasScaling(canvasRef);
 
   useDraw(
     canvasRef,
@@ -162,7 +162,7 @@ const CanvasOverlay = ({ camera }) => {
       const b = c2p({ x: 1, y: 2 });
       // ctx.strokeRect(a.x, a.y, b.x - a.x, b.y - a.y);
     },
-    [camera.x, camera.y, camera.zoom],
+    [camera.x, camera.y, camera.zoom, width, height],
   );
   return <canvas id={styles.overlay} ref={canvasRef}></canvas>;
 };

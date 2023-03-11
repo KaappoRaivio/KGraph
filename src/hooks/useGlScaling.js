@@ -34,4 +34,6 @@ export const useCanvasScaling = canvasRef => {
     graphRoot.height = height * window.devicePixelRatio;
     // graphRoot.height = 1920;
   }, [width, height, canvasRef.current]);
+
+  return { width, height };
 };
