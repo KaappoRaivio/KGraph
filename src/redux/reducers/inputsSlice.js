@@ -5,6 +5,9 @@ const inputsSlice = createSlice({
   name: "inputs",
   initialState: [{ name: "f(x)", rawInput: "", glslSource: "" }],
   reducers: {
+    inputSet: (state, action) => {
+      state = action.payload;
+    },
     inputAdded: (state, action) => {
       state.push({
         name: action.payload.name,
@@ -26,8 +29,8 @@ const inputsSlice = createSlice({
   },
 });
 
-const { inputAdded, rawInputChanged } = inputsSlice.actions;
-export { inputAdded };
+const { inputAdded, rawInputChanged, inputSet } = inputsSlice.actions;
+export { inputAdded, inputSet };
 export const inputChanged = createAsyncThunk("inputs/inputChanged", async (input, { dispatch, getState }) => {
   dispatch(rawInputChanged(input));
 
@@ -43,4 +46,5 @@ export const inputChanged = createAsyncThunk("inputs/inputChanged", async (input
     index: input.index,
   };
 });
+
 export default inputsSlice.reducer;

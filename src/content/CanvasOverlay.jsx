@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "./Content.module.css";
 import { useCanvasScaling } from "../hooks/useGlScaling";
 import { getCameraMatrix } from "../cameraMath";
+import { useSelector } from "react-redux";
 
 const useDraw = (ref, callback, dependencies) => {
   const [ctx, setCtx] = useState(null);
@@ -130,7 +131,8 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
   }
 };
 
-const CanvasOverlay = ({ camera }) => {
+const CanvasOverlay = () => {
+  const camera = useSelector(state => state.camera.current);
   const canvasRef = useRef(null);
   const { width, height } = useCanvasScaling(canvasRef);
 

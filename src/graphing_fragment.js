@@ -68,7 +68,7 @@ export default (implicitFunction, eliminateVertical, sliders) => {
         float length = 0.;
         
         for (int iteration = 0; iteration < MAX_ITERATIONS; ++iteration) {
-            if (iteration < int(a)) {
+            
                 zn = nextMandel(zn, constant);
     
                 if (squared(zn) >= 4.0 && result == MAX_ITERATIONS) {
@@ -76,7 +76,7 @@ export default (implicitFunction, eliminateVertical, sliders) => {
                     length = sqrt(squared(zn));
                 }
                 // iteration++;
-            }
+            
         }
     
         // float length = sqrt(squared(zn));

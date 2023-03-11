@@ -3,10 +3,6 @@ import { toGLSL } from "./glslConverter.worker";
 export default input => {
   return new Promise((resolve, reject) => {
     try {
-      // let a = 0;
-      // while (a < 100000000000000000) {
-      //   ++a;
-      // }
       resolve(toGLSL(input));
     } catch (err) {
       console.log("asdasd");

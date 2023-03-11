@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PinchPanZoomListener from "./PinchPanZoomListener";
 import useSliders from "./hooks/useSliders";
 import Sliders from "./Sliders";
@@ -6,89 +6,20 @@ import Content from "./content/Content";
 
 import throttle from "lodash.throttle";
 import { useDispatch, useSelector } from "react-redux";
-import { inputAdded, inputChanged } from "./redux/reducers/inputsSlice";
-
-// const worker = new WorkerBuilder(glslConverterWorker);
-const worker = new Worker(new URL("./workers/glslConverter.worker.js", import.meta.url));
-
-const myReplaceState = throttle(s => {
-  window.history.replaceState(null, "", s);
-  console.log("Early update");
-  setTimeout(() => {
-    console.log("Late update");
-    window.history.replaceState(null, "", s);
-  }, 1000);
-}, 1000);
-
-const planeToPx = (camera, width, height) => {
-  const w = (width / 10) * Math.pow(2, camera.zoom);
-  const h = height / 10;
-  return `${w}px ${h}px`;
-};
+import { inputChanged } from "./redux/reducers/inputsSlice";
+import { cameraChanged } from "./redux/reducers/cameraSlice";
 
 const Main = () => {
-  const [camera, setCamera] = useState(JSON.parse(new URLSearchParams(window.location.search).get("camera")) ?? { x: 0, y: 0, zoom: -4 });
-  const [input, setInput] = useState("");
-  const [output, setOutput] = useState({ glsl: "", eliminateVertical: false });
-  const { sliders, onSliderChange, updateSlider, addSlider, deleteSlider, changes, setSliders } = useSliders();
-
-  useEffect(() => {
-    worker.onmessage = message => {
-      if (message) {
-        if (message.data != null) {
-          setOutput(message.data);
-        }
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("input")) {
-      setInput(params.get("input"));
-    }
-    if (params.get("sliders")) {
-      setSliders(JSON.parse(params.get("sliders")));
-    }
-  }, []);
-
-  useEffect(() => {
-    const params = new URLSearchParams();
-
-    if (input) {
-      params.set("input", input);
-    }
-
-    if (sliders) {
-      params.set("sliders", JSON.stringify(sliders));
-    }
-
-    if (camera) {
-      params.set("camera", JSON.stringify(camera));
-    }
-
-    myReplaceState(`?${params.toString()}`);
-    // myReplaceState(null, "", `?${params.toString()}`);
-  }, [input, JSON.stringify(sliders), JSON.stringify(camera)]);
-
-  useEffect(() => {
-    worker.postMessage(input);
-  }, [input]);
-
-  const inputValue = useSelector(state => state.inputs[0].rawInput);
   const dispatch = useDispatch();
+  const inputValue = useSelector(state => state.inputs[0].rawInput);
 
   return (
     <>
-      <Sliders sliders={sliders} onSliderChange={onSliderChange} updateSlider={updateSlider} addSlider={addSlider} deleteSlider={deleteSlider} />
-      <PinchPanZoomListener onChange={setCamera} initialCamera={camera}>
-        <Content input={output} sliders={sliders} camera={camera} />
+      <Sliders />
+      <PinchPanZoomListener onChange={camera => dispatch(cameraChanged(camera))} initialCamera={useSelector(state => state.camera.current)}>
+        <Content />
       </PinchPanZoomListener>
-      {/*<div id={"overlay"} style={{*/}
-      {/*  backgroundSize: `${planeToPx(camera, width, height)}`*/}
-      {/*}}></div>*/}
       <div id={"inputContainer"}>
-        {/*<input autoCorrect={"off"} value={inputValue} onChange={e => setInput(e.target.value)} />*/}
         <input autoCorrect={"off"} value={inputValue} onChange={e => dispatch(inputChanged({ index: 0, rawInput: e.target.value }))} />
       </div>
     </>

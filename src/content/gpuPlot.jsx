@@ -7,8 +7,8 @@ import useDimensions from "../hooks/useDimensions";
 import useUpdateShaderInputs from "../hooks/useUpdateShaderInputs";
 import { useSelector } from "react-redux";
 
-const GPUPlot = ({ sliders, camera, ...rest }) => {
-  const input = useSelector(state => state.inputs[0]?.glslSource);
+const GPUPlot = ({ sliders, input, ...rest }) => {
+  const camera = useSelector(state => state.camera.current);
   const graphRootRef = useRef(null);
 
   const { gl, isGlPresent } = useWebGl(graphRootRef);
