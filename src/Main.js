@@ -83,7 +83,7 @@ const Main = () => {
       {/*  backgroundSize: `${planeToPx(camera, width, height)}`*/}
       {/*}}></div>*/}
       <div id={"inputContainer"}>
-        <input value={input} onChange={e => setInput(e.target.value)} />
+        <input autoCorrect={"off"} value={input} onChange={e => setInput(e.target.value)} />
       </div>
     </>
   );
