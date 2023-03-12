@@ -1,20 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { calculateTransform } from "./pinchToZoomMath";
+import { useResizeDetector } from "react-resize-detector";
+import useDimensions from "./hooks/useDimensions";
 
 const PinchPanZoomListener = ({ children, onChange, initialCamera = { x: 0, y: 0, zoom: 0 } }) => {
+  const childRef = useRef(null);
+
+  const { width, height } = useDimensions(childRef);
+  const scale = Math.min(width, height);
+
   const [panInProgress, setPanInProgress] = useState(false);
-  const scale = Math.min(window.innerHeight, window.innerWidth);
   const [transform, setTransform] = useState({ x: initialCamera.x * -scale, y: initialCamera.y * scale, zoom: initialCamera.zoom });
-
   const [duringDragTransform, setDuringDragTransform] = useState({ x: 0, y: 0, zoom: 0 });
-
   const [touchOffset, setTouchOffset] = useState([]);
 
   useEffect(() => {
     const { x, y, zoom } = transform;
     const { x: dx, y: dy, zoom: dz } = duringDragTransform;
-
-    const scale = Math.min(window.innerHeight, window.innerWidth);
 
     onChange({ x: (x + dx) / -scale, y: (y + dy) / scale, zoom: zoom + dz });
   }, [transform.x, transform.y, transform.zoom, duringDragTransform.x, duringDragTransform.y, duringDragTransform.zoom]);
@@ -31,8 +33,8 @@ const PinchPanZoomListener = ({ children, onChange, initialCamera = { x: 0, y: 0
     setTouchOffset(touches);
   };
 
-  // console.log(children[0]);
   return React.cloneElement(children, {
+    forwardRef: childRef,
     onMouseMove: e => {
       if (panInProgress) {
         setTransform(oldPos => {

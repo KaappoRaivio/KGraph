@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import ReduxQuerySync from "redux-query-sync";
 
+import uiReducer, { mobileStatusChanged } from "./reducers/uiSlice";
 import inputsReducer, { inputChanged, inputSet } from "./reducers/inputsSlice";
 import cameraReducer, { cameraChanged } from "./reducers/cameraSlice";
 import slidersReducer from "./reducers/slidersSlice";
@@ -9,12 +10,12 @@ import getStateFromURL from "./persist";
 
 const myReplaceState = throttle(state => {
   const params = new URLSearchParams();
-  params.set("d", btoa(JSON.stringify(state)));
+  const { ui, ...rest } = state;
+  params.set("d", btoa(JSON.stringify(rest)));
 
   window.history.replaceState(null, "", `?${params.toString()}`);
-  // console.log("Early update");
   setTimeout(() => {
-    // console.log("Late update");
+    console.log("late update");
     window.history.replaceState(null, "", `?${params.toString()}`);
   }, 400);
 }, 400);
@@ -22,6 +23,7 @@ const myReplaceState = throttle(state => {
 const store = configureStore({
   preloadedState: getStateFromURL(),
   reducer: {
+    ui: uiReducer,
     sliders: slidersReducer,
     inputs: inputsReducer,
     camera: cameraReducer,
@@ -39,5 +41,12 @@ const store = configureStore({
 for (const input of store.getState().inputs) {
   store.dispatch(inputChanged(input));
 }
+
+window.addEventListener("resize", () => {
+  const isMobilePrevious = store.getState().ui.isMobile;
+  const isMobile = window.innerWidth < 600;
+
+  if (isMobile !== isMobilePrevious) store.dispatch(mobileStatusChanged({ isMobile }));
+});
 
 export default store;

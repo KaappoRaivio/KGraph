@@ -1,0 +1,28 @@
+#sidebar {
+  flex: 0 1 20%;
+  border: 2px orange solid;
+}
+
+#handle {
+  padding-top: 4px;
+
+  /*border: 100px solid yellow;*/
+  display: flex;
+  justify-content: center;
+  user-select: none;
+  touch-action: none;
+}
+
+.vertical {
+  padding-top: 0;
+  padding-left: 4px;
+  text-orientation: sideways;
+  writing-mode: vertical-lr;
+}
+
+@media screen and (max-width: 600px) {
+  #sidebar {
+    flex-basis: 0;
+    width: 0;
+  }
+}
