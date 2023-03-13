@@ -3,7 +3,7 @@
 .listItem {
     padding: 8px;
     margin: 8px;
-    background: rgba(255, 255, 25, 50%);
+    /*background: rgba(255, 255, 25, 50%);*/
     box-shadow: 0 0 1px 1px lightgray;
     border-radius: 5px;
     position: relative;
