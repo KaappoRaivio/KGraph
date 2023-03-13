@@ -22,5 +22,5 @@ export default (gl, output, sliders, currentProgram, setCurrentProgram) => {
     }
 
     setCurrentProgram(currentProgram);
-  }, [gl, output, JSON.stringify(sliders.map(slider => slider.name).filter(x => x.length))]);
+  }, [gl, JSON.stringify(output)]);
 };

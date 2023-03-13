@@ -38,6 +38,10 @@ const inputsSlice = createSlice({
       console.log("SliderChanged", index, value, name);
     },
     // sliderInputAdded: (state, action) => {},
+    inputRemoved: (state, action) => {
+      const { index } = action.payload;
+      state.splice(index, 1);
+    },
   },
   extraReducers: builder => {
     builder.addCase(functionInputChanged.fulfilled, (state, action) => {
@@ -48,8 +52,8 @@ const inputsSlice = createSlice({
   },
 });
 
-const { functionInputAdded, functionRawInputChanged, inputSet, sliderChanged } = inputsSlice.actions;
-export { functionInputAdded, inputSet, sliderChanged };
+const { functionInputAdded, functionRawInputChanged, inputSet, sliderChanged, inputRemoved } = inputsSlice.actions;
+export { functionInputAdded, inputSet, sliderChanged, inputRemoved };
 export const functionInputChanged = createAsyncThunk("inputs/functionInputChanged", async (input, { dispatch, getState }) => {
   dispatch(functionRawInputChanged(input));
 

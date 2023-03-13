@@ -21,7 +21,7 @@ const myReplaceState = throttle(state => {
 }, 400);
 
 const store = configureStore({
-  // preloadedState: getStateFromURL(),
+  preloadedState: getStateFromURL(),
   reducer: {
     ui: uiReducer,
     sliders: slidersReducer,

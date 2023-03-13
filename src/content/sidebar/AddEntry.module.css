@@ -1,0 +1,38 @@
+.listItem {
+    padding: 8px;
+    margin: 8px;
+    /*background: rgba(255, 255, 25, 50%);*/
+    box-shadow: 0 0 1px 1px lightgray;
+    border-radius: 5px;
+    position: relative;
+    color: gray;
+    transition: color 0.25s linear;
+
+}
+
+.listItem:hover {
+    color: black;
+}
+
+.buttonWrapper, .buttonWrapper:active, .buttonWrapper:focus, .buttonWrapper:hover {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
+    color: inherit;
+}
+
+
+
+.plusSign {
+    /*font-size: 500%;*/
+    text-align: center;
+    user-select: none;
+}
+
+.plusSign:hover {
+}

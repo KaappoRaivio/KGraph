@@ -3,8 +3,9 @@ import styles from "./Sidebar.module.css";
 import { useResizable } from "react-resizable-layout-mobile";
 import { useDispatch, useSelector } from "react-redux";
 import FunctionEntry from "./sidebar/FunctionEntry";
-import { functionInputChanged, sliderChanged } from "../redux/reducers/inputsSlice";
+import { functionInputChanged, inputRemoved, sliderChanged } from "../redux/reducers/inputsSlice";
 import SliderEntry from "./sidebar/SliderEntry";
+import AddEntry from "./sidebar/AddEntry";
 
 const Sidebar = () => {
   const isMobile = useSelector(state => state.ui.isMobile);
@@ -29,6 +30,8 @@ const Sidebar = () => {
         <ol className={"no-bullets"}>
           {inputs.map((item, index) => {
             const { type, key, ...rest } = item;
+            rest.onRemoval = () => dispatch(inputRemoved({ index }));
+
             switch (type) {
               case "function":
                 return (
@@ -37,6 +40,7 @@ const Sidebar = () => {
                     {...rest}
                     index={index}
                     onChange={e => dispatch(functionInputChanged({ index, rawInput: e.target.value }))}
+                    onRemoval={() => dispatch(inputRemoved({ index }))}
                   />
                 );
               case "slider":
@@ -45,6 +49,7 @@ const Sidebar = () => {
                 throw new Error("Unknown type " + item.type + "!");
             }
           })}
+          <AddEntry />
         </ol>
       </aside>
       <div id={styles.handle} className={isMobile ? "" : styles.vertical} {...separatorProps}>
