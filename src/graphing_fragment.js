@@ -1,3 +1,12 @@
+const hex2glsl = hex => {
+  const color = hex.slice(1);
+  const r = parseInt(color.slice(0, 2), 16);
+  const g = parseInt(color.slice(2, 4), 16);
+  const b = parseInt(color.slice(4, 6), 16);
+
+  return `vec4(${(r / 255).toFixed(10)}, ${(g / 255).toFixed(10)}, ${(b / 255).toFixed(10)}, 1.)`;
+};
+
 export default (implicitFunctions, eliminateVertical, sliders) => {
   console.log(implicitFunctions);
   return `#version 300 es
@@ -32,7 +41,7 @@ export default (implicitFunctions, eliminateVertical, sliders) => {
         float x = position.x;
         float y = position.y;
     
-        float value = ${implicitFunction.length > 0 ? implicitFunction : "1."};
+        float value = ${implicitFunction.glslSource.length > 0 ? implicitFunction.glslSource : "1."};
         
         bool positive =  value > 0.;
     
@@ -47,23 +56,24 @@ export default (implicitFunctions, eliminateVertical, sliders) => {
       .join("\n")}
     
     ${implicitFunctions
-      .map(
-        (implicitFunction, index) => `vec4 shade${index} (vec2 position) {
-        float step = 1. * C;
-    
-        vec2 position1 = position + vec2(-step, -step);        
-        vec2 position1_h = position + vec2(step, step);  
-        
-        vec4 diff1 = abs(color${index}(position1) - color${index}(position1_h));
-    
-        vec2 position2 = position + vec2(step, -step);
-        vec2 position2_h = position + vec2(-step, step);
-    
-        vec4 diff2 = abs(color${index}(position2) - color${index}(position2_h));
-        
-        return max(diff2, diff1);
-    }`,
-      )
+      .map((implicitFunction, index) => {
+        console.log(implicitFunction.color, hex2glsl(implicitFunction.color));
+        return `vec4 shade${index} (vec2 position) {
+          float step = 1. * C;
+      
+          vec2 position1 = position + vec2(-step, -step);        
+          vec2 position1_h = position + vec2(step, step);  
+          
+          vec4 diff1 = abs(color${index}(position1) - color${index}(position1_h));
+      
+          vec2 position2 = position + vec2(step, -step);
+          vec2 position2_h = position + vec2(-step, step);
+      
+          vec4 diff2 = abs(color${index}(position2) - color${index}(position2_h));
+          
+          return max(diff1, diff2).z * ${hex2glsl(implicitFunction.color)};
+      }`;
+      })
       .join("\n")}
     
     
@@ -189,7 +199,9 @@ export default (implicitFunctions, eliminateVertical, sliders) => {
           
         
         
-        fragColor = 1. - (${implicitFunctions.map((_, index) => `shade${index}(uv)`).join(" + ")});
+        fragColor = (${implicitFunctions.map((_, index) => `shade${index}(uv)`).join(" + ")});
+        // fragColor = shade0(uv);
+        // fragColor = vec4(0.5, 0.5, 1., 1.);
         
         return;
         

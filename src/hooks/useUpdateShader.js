@@ -3,14 +3,14 @@ import { createProgram } from "../webglHelper";
 import vertexShader from "../graphing_vertex";
 import fragmentShader from "../graphing_fragment";
 
-export default (gl, output, sliders, currentProgram, setCurrentProgram) => {
+export default (gl, input, sliders, currentProgram, setCurrentProgram) => {
   useEffect(() => {
     if (!gl) return;
 
-    console.log(JSON.stringify(sliders.map(slider => slider.name).filter(x => x.length)), output);
-
+    console.log(JSON.stringify(sliders.map(slider => slider.name).filter(x => x.length)), input);
+    console.log(input);
     let fragment = fragmentShader(
-      output,
+      input,
       false,
       sliders.map(slider => slider.name).filter(x => x.length),
     );
@@ -22,5 +22,5 @@ export default (gl, output, sliders, currentProgram, setCurrentProgram) => {
     }
 
     setCurrentProgram(currentProgram);
-  }, [gl, JSON.stringify(output)]);
+  }, [gl, JSON.stringify(input)]);
 };

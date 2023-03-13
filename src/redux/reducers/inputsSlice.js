@@ -5,8 +5,8 @@ import { v4 as uuid } from "uuid";
 const inputsSlice = createSlice({
   name: "inputs",
   initialState: [
-    { name: "f(x)", rawInput: "", glslSource: "", type: "function", key: uuid() },
-    { name: "g(x)", rawInput: "", glslSource: "", type: "function", key: uuid() },
+    { name: "f(x)", rawInput: "", glslSource: "", type: "function", key: uuid(), color: "#ff7faf" },
+    { name: "g(x)", rawInput: "", glslSource: "", type: "function", key: uuid(), color: "#af7fff" },
     { name: "a", max: 10, min: -10, value: 0, step: 0.01, type: "slider", key: uuid() },
   ],
   reducers: {

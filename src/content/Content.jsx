@@ -6,7 +6,7 @@ import CanvasOverlay from "./CanvasOverlay";
 import { useSelector } from "react-redux";
 
 const Content = ({ forwardRef, ...rest }) => {
-  const input = useSelector(state => state.inputs?.filter(input => input.type === "function").map(input => input.glslSource));
+  const input = useSelector(state => state.inputs?.filter(input => input.type === "function"));
   const sliders = useSelector(state => state.inputs.filter(input => input.type === "slider"));
   return (
     <div ref={forwardRef} {...rest} id={styles.contentWrapper}>

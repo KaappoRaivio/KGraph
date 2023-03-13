@@ -74,7 +74,7 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
   const W = ctx.canvas.width;
   const H = ctx.canvas.height;
   const percent = (window.devicePixelRatio * Math.min(W, H)) / 100;
-  console.log(percent);
+  // console.log(percent);
 
   const topLeft = p2c({ x: 0, y: 0 });
   const bottomRight = p2c({ x: W, y: H });
@@ -90,7 +90,7 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
   const xMin = Math.round(topLeft.x / tickPitch) * tickPitch;
   const xMax = Math.round(bottomRight.x / tickPitch) * tickPitch;
 
-  ctx.font = `${2 * percent}px Courier New`;
+  ctx.font = `${Math.floor(2 * percent)}px Courier New`;
 
   ctx.textAlign = "center";
   ctx.textBaseline = "bottom";
