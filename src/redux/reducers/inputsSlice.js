@@ -1,27 +1,46 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import toGlsl from "../../workers/toGlslPromise";
+import { v4 as uuid } from "uuid";
 
 const inputsSlice = createSlice({
   name: "inputs",
-  initialState: [{ name: "f(x)", rawInput: "", glslSource: "" }],
+  initialState: [
+    { name: "f(x)", rawInput: "", glslSource: "", type: "function", key: uuid() },
+    { name: "g(x)", rawInput: "", glslSource: "", type: "function", key: uuid() },
+    { name: "a", max: 10, min: -10, value: 0, step: 0.01, type: "slider", key: uuid() },
+  ],
   reducers: {
     inputSet: (state, action) => {
       state = action.payload;
     },
-    inputAdded: (state, action) => {
+    functionInputAdded: (state, action) => {
+      const { name } = action.payload;
       state.push({
-        name: action.payload.name,
+        type: "function",
+        name,
         rawInput: "",
         glslSource: "",
+        key: uuid(),
       });
     },
-    rawInputChanged: (state, action) => {
+    functionRawInputChanged: (state, action) => {
       const { index, rawInput } = action.payload;
       state[index].rawInput = rawInput;
     },
+    sliderChanged: (state, action) => {
+      const { index, value, name, max, min, step } = action.payload;
+
+      if (value != null) state[index].value = value;
+      if (name != null) state[index].name = name;
+      if (max != null) state[index].max = max;
+      if (min != null) state[index].min = min;
+      if (step != null) state[index].step = step;
+      console.log("SliderChanged", index, value, name);
+    },
+    // sliderInputAdded: (state, action) => {},
   },
   extraReducers: builder => {
-    builder.addCase(inputChanged.fulfilled, (state, action) => {
+    builder.addCase(functionInputChanged.fulfilled, (state, action) => {
       const { index, glslSource } = action.payload;
       console.log("InputChanged fulfilled", index, glslSource);
       if (glslSource != null) state[index].glslSource = glslSource;
@@ -29,10 +48,10 @@ const inputsSlice = createSlice({
   },
 });
 
-const { inputAdded, rawInputChanged, inputSet } = inputsSlice.actions;
-export { inputAdded, inputSet };
-export const inputChanged = createAsyncThunk("inputs/inputChanged", async (input, { dispatch, getState }) => {
-  dispatch(rawInputChanged(input));
+const { functionInputAdded, functionRawInputChanged, inputSet, sliderChanged } = inputsSlice.actions;
+export { functionInputAdded, inputSet, sliderChanged };
+export const functionInputChanged = createAsyncThunk("inputs/functionInputChanged", async (input, { dispatch, getState }) => {
+  dispatch(functionRawInputChanged(input));
 
   let glslSource;
   try {

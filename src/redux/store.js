@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import ReduxQuerySync from "redux-query-sync";
 
 import uiReducer, { mobileStatusChanged } from "./reducers/uiSlice";
-import inputsReducer, { inputChanged, inputSet } from "./reducers/inputsSlice";
+import inputsReducer, { functionInputChanged, inputSet } from "./reducers/inputsSlice";
 import cameraReducer, { cameraChanged } from "./reducers/cameraSlice";
 import slidersReducer from "./reducers/slidersSlice";
 import throttle from "lodash.throttle";
@@ -21,7 +21,7 @@ const myReplaceState = throttle(state => {
 }, 400);
 
 const store = configureStore({
-  preloadedState: getStateFromURL(),
+  // preloadedState: getStateFromURL(),
   reducer: {
     ui: uiReducer,
     sliders: slidersReducer,
@@ -39,7 +39,7 @@ const store = configureStore({
 });
 
 for (const input of store.getState().inputs) {
-  store.dispatch(inputChanged(input));
+  store.dispatch(functionInputChanged(input));
 }
 
 window.addEventListener("resize", () => {

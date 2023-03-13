@@ -3,7 +3,7 @@ import React from "react";
 import "./index.css";
 import InlineInput from "./InlineInput";
 import { useDispatch, useSelector } from "react-redux";
-import { sliderAdded, sliderChanged, sliderDeleted } from "./redux/reducers/slidersSlice";
+import { sliderAdded, sliderDeleted } from "./redux/reducers/slidersSlice";
 
 const Sliders = ({}) => {
   const sliders = useSelector(state => state.sliders);

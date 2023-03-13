@@ -1,0 +1,17 @@
+.listItem {
+    padding: 2%;
+    margin: 8px;
+    background: rgba(255, 255, 25, 50%);
+    border-radius: 5px;
+}
+
+.sliderContainer {
+    margin-top: 16px;
+    display: flex;
+}
+
+.slider {
+    flex-grow: 1;
+    min-width: 0;
+    margin: 0 8px;
+}

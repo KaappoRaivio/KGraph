@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 
 const Content = ({ forwardRef, ...rest }) => {
   const input = useSelector(state => state.inputs[0]?.glslSource);
-  const sliders = useSelector(state => state.sliders);
+  const sliders = useSelector(state => state.inputs.filter(input => input.type === "slider"));
   return (
     <div ref={forwardRef} {...rest} id={styles.contentWrapper}>
       <GPUPlot input={input} sliders={sliders} />

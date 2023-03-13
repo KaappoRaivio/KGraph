@@ -1,0 +1,15 @@
+.listItem {
+    padding: 2%;
+    margin: 2%;
+    background: rgba(255, 255, 25, 50%);
+    border-radius: 5px;
+}
+
+.functionInput {
+width: 100%;
+}
+
+
+.listItem:not(:last-child) {
+    /*margin-bottom: 2%;*/
+}

@@ -6,6 +6,9 @@ body {
   margin: 0;
   font-family: monospace;
 }
+* {
+  box-sizing: border-box;
+}
 input {
   font-family: monospace;
 }

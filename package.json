@@ -44,6 +44,7 @@
     "react-resize-detector": "^8.0.4",
     "react-router-dom": "^6.4.2",
     "redux": "^4.2.1",
-    "redux-query-sync": "^0.1.10"
+    "redux-query-sync": "^0.1.10",
+    "uuid": "^9.0.0"
   }
 }

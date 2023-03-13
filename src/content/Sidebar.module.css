@@ -1,6 +1,8 @@
 #sidebar {
+  position: relative;
   flex: 0 1 20%;
-  border: 2px orange solid;
+  border-right: 2px lightgray solid;
+  min-width: 150px;
 }
 
 #handle {
@@ -22,7 +24,9 @@
 
 @media screen and (max-width: 600px) {
   #sidebar {
-    flex-basis: 0;
-    width: 0;
+    border-right: none;
+    border-top: 2px lightgray solid;
   }
 }
+
+
