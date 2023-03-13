@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const uiSlice = createSlice({
   name: "ui",
-  initialState: { sidebarOpen: false, isMobile: window.innerWidth < 600 },
+  initialState: { sidebarOpen: false, isMobile: window.innerWidth < 600, addInputPressed: false },
   reducers: {
     sidebarToggled: (state, action) => {
       state.sidebarOpen = !state.sidebarOpen;
@@ -11,8 +11,12 @@ const uiSlice = createSlice({
       console.log("IS MOBILE", action.payload.isMobile);
       state.isMobile = action.payload.isMobile;
     },
+    addInputPressed: (state, action) => {
+      const { pressed } = action.payload;
+      state.addInputPressed = pressed;
+    },
   },
 });
 
-export const { sidebarToggled, mobileStatusChanged } = uiSlice.actions;
+export const { sidebarToggled, mobileStatusChanged, addInputPressed } = uiSlice.actions;
 export default uiSlice.reducer;

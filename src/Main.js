@@ -12,8 +12,6 @@ const Main = () => {
   const dispatch = useDispatch();
   const isMobile = useSelector(state => state.ui.isMobile);
 
-  const inputValue = useSelector(state => state.inputs[0].rawInput);
-
   return (
     <div id={styles.topContainer} style={{ flexDirection: isMobile ? "column-reverse" : "row" }}>
       <Sidebar />
