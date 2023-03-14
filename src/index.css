@@ -84,17 +84,20 @@ ol.no-bullets {
   margin-right: 16px;
 }
 button {
-  background: #eee;
-  margin-left: 16px;
-  padding: 8px;
+  background: transparent;
+
   border-radius: 2px;
-  box-shadow: none;
-  border: 1px solid black;
-  transition: box-shadow 0.4s linear;
+  /*box-shadow: none;*/
+  padding: 4px;
+  border: none;
+  box-shadow: 0 0 1px 1px lightgray;
+
+  transition: box-shadow 0.1s linear;
 }
 
 button:active,
 button:hover {
+  box-shadow: 0 0 1px 1.5px lightgray;
   box-shadow: 0 0 0 1px black;
 }
 

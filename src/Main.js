@@ -8,6 +8,8 @@ import styles from "./main.module.css";
 import { useResizable } from "react-resizable-layout";
 import Sidebar from "./content/Sidebar";
 
+// window.devicePixelRatio = 1;
+
 const Main = () => {
   const dispatch = useDispatch();
   const isMobile = useSelector(state => state.ui.isMobile);

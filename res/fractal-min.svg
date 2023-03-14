@@ -7,35 +7,8 @@
    viewBox="0 0 40 30"
    version="1.1"
    id="svg21926"
-   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
-   sodipodi:docname="fractal.svg"
-   inkscape:export-filename="fractal-min.svg"
-   inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview21928"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="mm"
-     showgrid="false"
-     inkscape:zoom="1.903866"
-     inkscape:cx="225.85623"
-     inkscape:cy="101.37268"
-     inkscape:window-width="1856"
-     inkscape:window-height="1043"
-     inkscape:window-x="64"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
   <defs
      id="defs21923">
     <clipPath
@@ -219,160 +192,6 @@
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath21699">
-      <g
-         id="g21697">
-        <rect
-           style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-dasharray:none;stroke-opacity:1"
-           id="rect21695"
-           width="40"
-           height="30.000002"
-           x="32.244892"
-           y="26.750242" />
-      </g>
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath21705">
-      <g
-         id="g21703">
-        <rect
-           style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-dasharray:none;stroke-opacity:1"
-           id="rect21701"
-           width="40"
-           height="30.000002"
-           x="32.244892"
-           y="26.750242" />
-      </g>
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath21711">
-      <g
-         id="g21709">
-        <rect
-           style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-dasharray:none;stroke-opacity:1"
-           id="rect21707"
-           width="40"
-           height="30.000002"
-           x="32.244892"
-           y="26.750242" />
-      </g>
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath21717">
-      <g
-         id="g21715">
-        <rect
-           style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-dasharray:none;stroke-opacity:1"
-           id="rect21713"
-           width="40"
-           height="30.000002"
-           x="32.244892"
-           y="26.750242" />
-      </g>
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath21723">
-      <g
-         id="g21721">
-        <rect
-           style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-dasharray:none;stroke-opacity:1"
-           id="rect21719"
-           width="40"
-           height="30.000002"
-           x="32.244892"
-           y="26.750242" />
-      </g>
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath21729">
-      <g
-         id="g21727">
-        <rect
-           style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-dasharray:none;stroke-opacity:1"
-           id="rect21725"
-           width="40"
-           height="30.000002"
-           x="32.244892"
-           y="26.750242" />
-      </g>
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath21735">
-      <g
-         id="g21733">
-        <rect
-           style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-dasharray:none;stroke-opacity:1"
-           id="rect21731"
-           width="40"
-           height="30.000002"
-           x="32.244892"
-           y="26.750242" />
-      </g>
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath21741">
-      <g
-         id="g21739">
-        <rect
-           style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-dasharray:none;stroke-opacity:1"
-           id="rect21737"
-           width="40"
-           height="30.000002"
-           x="32.244892"
-           y="26.750242" />
-      </g>
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath21747">
-      <g
-         id="g21745">
-        <rect
-           style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-dasharray:none;stroke-opacity:1"
-           id="rect21743"
-           width="40"
-           height="30.000002"
-           x="32.244892"
-           y="26.750242" />
-      </g>
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath21753">
-      <g
-         id="g21751">
-        <rect
-           style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-dasharray:none;stroke-opacity:1"
-           id="rect21749"
-           width="40"
-           height="30.000002"
-           x="32.244892"
-           y="26.750242" />
-      </g>
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath21759">
-      <g
-         id="g21757">
-        <rect
-           style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-dasharray:none;stroke-opacity:1"
-           id="rect21755"
-           width="40"
-           height="30.000002"
-           x="32.244892"
-           y="26.750242" />
-      </g>
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
        id="clipPath16925">
       <rect
          style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-dasharray:none;stroke-opacity:1"
@@ -395,8 +214,6 @@
     </clipPath>
   </defs>
   <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
      id="layer1">
     <rect
        style="fill:#f6f2ff;fill-opacity:1;stroke:none;stroke-width:1;stroke-dasharray:100, 49.9999"
@@ -632,18 +449,15 @@
       <path
          style="fill:#2e2a3d;fill-opacity:1;stroke:#2e2a3d;stroke-width:1;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
          d="m 162.72462,41.750241 c 3.28956,-3.757665 -0.84618,-7.155767 -1.69959,-7.703409 -2.93977,-1.886466 -10.12138,-1.778053 -11.82298,5.156827"
-         id="path11209"
-         sodipodi:nodetypes="csc" />
+         id="path11209" />
       <path
          style="fill:#2e2a3d;fill-opacity:1;stroke:#2e2a3d;stroke-width:1;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
          d="m 162.72462,41.993629 c 3.28956,3.757665 -0.84618,7.155767 -1.69959,7.703409 -2.93977,1.886466 -10.12138,1.778053 -11.82298,-5.156827"
-         id="path11211"
-         sodipodi:nodetypes="csc" />
+         id="path11211" />
       <path
          style="fill:#2e2a3d;fill-opacity:1;stroke:#2e2a3d;stroke-width:1;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
          d="m 149.13915,44.297599 c 0,0 -0.23261,-1.745193 -0.21983,-2.578366 0.0128,-0.83317 0.28273,-2.515574 0.28273,-2.515574"
-         id="path11269"
-         sodipodi:nodetypes="csc" />
+         id="path11269" />
       <path
          style="fill:#2e2a3d;fill-opacity:1;stroke:#2e2a3d;stroke-width:1;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
          d="m 149.0604,40.696893 c 0,0 -1.04869,-2.618767 -3.69646,-2.593763 -2.64778,0.025 -3.24264,2.855674 -3.24264,2.855674"
