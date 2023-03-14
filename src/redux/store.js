@@ -8,33 +8,33 @@ import slidersReducer from "./reducers/slidersSlice";
 import throttle from "lodash.throttle";
 import getStateFromURL from "./persist";
 
-const myReplaceState = throttle(state => {
-  const params = new URLSearchParams();
-  const { ui, ...rest } = state;
-  params.set("d", btoa(JSON.stringify(rest)));
-
-  window.history.replaceState(null, "", `?${params.toString()}`);
-  setTimeout(() => {
-    // console.log("late update");
-    window.history.replaceState(null, "", `?${params.toString()}`);
-  }, 400);
-}, 400);
+let timeout;
 
 const store = configureStore({
   preloadedState: getStateFromURL(),
   reducer: {
     ui: uiReducer,
-    sliders: slidersReducer,
+    // sliders: slidersReducer,
     inputs: inputsReducer,
     camera: cameraReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware().concat(store => next => action => {
+      next(action);
       if (!action.type.endsWith("pending")) {
+        // setTimeout(() => {
+        if (timeout !== 0) clearTimeout(timeout);
         const state = store.getState();
-        myReplaceState(state);
+        timeout = setTimeout(() => {
+          const { ui, ...rest } = state;
+
+          const params = new URLSearchParams();
+          params.set("d", btoa(JSON.stringify(rest)));
+
+          window.history.replaceState(null, "", `?${params.toString()}`);
+          console.log("Updated url");
+        }, 500);
       }
-      return next(action);
     }),
 });
 
