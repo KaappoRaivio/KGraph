@@ -38,8 +38,10 @@ const store = configureStore({
     }),
 });
 
-for (const input of store.getState().inputs) {
-  store.dispatch(functionInputChanged(input));
+for (let index = 0; index < store.getState().inputs.length; index++) {
+  const input = store.getState().inputs[index];
+  if (input.type !== "function") continue;
+  else store.dispatch(functionInputChanged({ index, ...input }));
 }
 
 window.addEventListener("resize", () => {

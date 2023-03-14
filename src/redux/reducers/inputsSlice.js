@@ -6,10 +6,17 @@ import randomcolor from "randomcolor";
 const inputsSlice = createSlice({
   name: "inputs",
   initialState: [
-    // { name: "f(x)", rawInput: "", glslSource: "", type: "function", key: uuid(), color: "#ff7faf" },
+    { name: "a", max: 1, min: 0, value: 0, step: 0.01, type: "slider", key: uuid(), color: randomcolor({ luminosity: "light" }) },
+    {
+      name: "f(x)",
+      rawInput: "e ^ (a*sin(x) + cos(y)) = sin(e ^ (x + a)) + a",
+      glslSource: "",
+      type: "function",
+      key: uuid(),
+      color: randomcolor({ luminosity: "dark" }),
+    },
     // { name: "g(x)", rawInput: "", glslSource: "", type: "function", key: uuid(), color: "#af7fff" },
-    { name: "a", max: 10, min: -10, value: 0, step: 0.01, type: "slider", key: uuid(), color: "#12f422" },
-    { name: "fractallol", type: "fractal", selected: "julia", details: { ci: "0", cr: "0" }, key: uuid(), color: "#000000" },
+    // { name: "fractallol", type: "fractal", selected: "julia", details: { ci: "0", cr: "0" }, key: uuid(), color: "#000000" },
   ],
   reducers: {
     inputSet: (state, action) => {
@@ -22,12 +29,13 @@ const inputsSlice = createSlice({
         name,
         rawInput: "",
         glslSource: "",
-        color: randomcolor({ luminosity: "light" }),
+        color: randomcolor({ luminosity: "dark" }),
         key: uuid(),
       });
     },
     functionRawInputChanged: (state, action) => {
       const { index, rawInput } = action.payload;
+      // console.log(action.payload.rawInput, "wut", index, rawInput);
       state[index].rawInput = rawInput;
     },
     sliderChanged: (state, action) => {
@@ -67,7 +75,7 @@ const inputsSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(functionInputChanged.fulfilled, (state, action) => {
       const { index, glslSource } = action.payload;
-      // console.log("InputChanged fulfilled", index, glslSource);
+      console.log("InputChanged fulfilled", index, glslSource);
       if (glslSource != null) state[index].glslSource = glslSource;
     });
   },
@@ -85,7 +93,9 @@ const {
 } = inputsSlice.actions;
 export { functionInputAdded, inputSet, sliderChanged, inputRemoved, sliderInputAdded, fractalInputAdded, fractalInputChanged };
 export const functionInputChanged = createAsyncThunk("inputs/functionInputChanged", async (input, { dispatch, getState }) => {
+  // console.log("Processing", input);
   dispatch(functionRawInputChanged(input));
+  // console.log("asd", input.rawInput);
 
   let glslSource;
   try {
@@ -94,6 +104,7 @@ export const functionInputChanged = createAsyncThunk("inputs/functionInputChange
     console.log("Caught");
     // glslSource = "";
   }
+  // console.log(glslSource);
   return {
     glslSource,
     index: input.index,
