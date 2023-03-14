@@ -69,6 +69,10 @@ export const toGLSL = input => {
   return toGLSLFriendly(reparsed);
 };
 
+export const expressionToGLSL = input => {
+  return toGLSLFriendly(mathjs.parse(input, { simplify: false }));
+};
+
 // // export default () => {
 // self.onmessage = message => {
 //   // console.timeEnd("Worker");

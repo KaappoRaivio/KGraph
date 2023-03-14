@@ -3,9 +3,10 @@ import styles from "./Sidebar.module.css";
 import { useResizable } from "react-resizable-layout-mobile";
 import { useDispatch, useSelector } from "react-redux";
 import FunctionEntry from "./sidebar/FunctionEntry";
-import { functionInputChanged, inputRemoved, sliderChanged } from "../redux/reducers/inputsSlice";
+import { fractalInputChanged, functionInputChanged, inputRemoved, sliderChanged } from "../redux/reducers/inputsSlice";
 import SliderEntry from "./sidebar/SliderEntry";
 import AddEntry from "./sidebar/AddEntry";
+import FractalEntry from "./sidebar/FractalEntry";
 
 const Sidebar = () => {
   const isMobile = useSelector(state => state.ui.isMobile);
@@ -30,6 +31,7 @@ const Sidebar = () => {
         <ol className={"no-bullets"}>
           {inputs.map((item, index) => {
             const { type, key, ...rest } = item;
+
             rest.onRemoval = () => dispatch(inputRemoved({ index }));
 
             switch (type) {
@@ -40,11 +42,12 @@ const Sidebar = () => {
                     {...rest}
                     index={index}
                     onChange={e => dispatch(functionInputChanged({ index, rawInput: e.target.value }))}
-                    onRemoval={() => dispatch(inputRemoved({ index }))}
                   />
                 );
               case "slider":
-                return <SliderEntry index={index} {...rest} onChange={stuff => dispatch(sliderChanged({ index, ...stuff }))} />;
+                return <SliderEntry key={key} index={index} {...rest} onChange={stuff => dispatch(sliderChanged({ index, ...stuff }))} />;
+              case "fractal":
+                return <FractalEntry key={key} {...rest} index={index} onChange={c => dispatch(fractalInputChanged(c))} />;
               default:
                 throw new Error("Unknown type " + item.type + "!");
             }

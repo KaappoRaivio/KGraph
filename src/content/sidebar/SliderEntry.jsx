@@ -2,9 +2,9 @@ import React from "react";
 import styles from "./SliderEntry.module.css";
 import InlineInput from "../../InlineInput";
 
-const SliderEntry = ({ name, index, value, min, max, step, onChange, onRemoval }) => {
+const SliderEntry = ({ name, index, color, value, min, max, step, onChange, onRemoval }) => {
   return (
-    <li className={styles.listItem}>
+    <li className={styles.listItem} style={{ background: `${color}3f` }}>
       <div className={styles.titleBar}>
         <span>{index + 1}. </span>
         <label htmlFor={name} className={styles.equationWrapper}>

@@ -6,6 +6,7 @@ export const createShader = (gl, src, type) => {
 
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
     console.error((type === gl.VERTEX_SHADER ? "VERTEX" : "FRAGMENT") + " SHADER:\n" + gl.getShaderInfoLog(shader));
+    console.error(src);
     // alert();
     return null;
   }
@@ -20,7 +21,7 @@ export const createProgram = (gl, vertex, fragment) => {
   const fs = createShader(gl, fragment, gl.FRAGMENT_SHADER);
 
   if (vs == null || fs == null) {
-    console.log("Returning null!");
+    // console.log("Returning null!");
     return null;
   }
 
@@ -31,9 +32,9 @@ export const createProgram = (gl, vertex, fragment) => {
   gl.deleteShader(fs);
 
   gl.linkProgram(program);
-  console.log("Linking");
+  // console.log("Linking");
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    console.log("Shader error!!");
+    // console.log("Shader error!!");
     console.error(
       "ERROR:\n" +
         "VALIDATE_STATUS: " +

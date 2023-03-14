@@ -15,7 +15,7 @@ const myReplaceState = throttle(state => {
 
   window.history.replaceState(null, "", `?${params.toString()}`);
   setTimeout(() => {
-    console.log("late update");
+    // console.log("late update");
     window.history.replaceState(null, "", `?${params.toString()}`);
   }, 400);
 }, 400);
