@@ -5,8 +5,10 @@ import useGlScaling from "../hooks/useGlScaling";
 import useUpdateShader from "../hooks/useUpdateShader";
 import useDimensions from "../hooks/useDimensions";
 import useUpdateShaderInputs from "../hooks/useUpdateShaderInputs";
+import { useSelector } from "react-redux";
 
-const GPUPlot = ({ input, sliders, camera, ...rest }) => {
+const GPUPlot = ({ sliders, input, ...rest }) => {
+  const camera = useSelector(state => state.camera.current);
   const graphRootRef = useRef(null);
 
   const { gl, isGlPresent } = useWebGl(graphRootRef);

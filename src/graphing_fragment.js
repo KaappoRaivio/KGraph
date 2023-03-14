@@ -1,4 +1,21 @@
-export default (implicitFunction, eliminateVertical, sliders) => {
+import { expressionToGLSL, toGLSLFriendly } from "./workers/glslConverter.worker";
+import { exp, im } from "mathjs";
+
+const hex2glsl = hex => {
+  const color = hex.slice(1);
+  const r = parseInt(color.slice(0, 2), 16);
+  const g = parseInt(color.slice(2, 4), 16);
+  const b = parseInt(color.slice(4, 6), 16);
+
+  console.log(`vec4(${(r / 255).toFixed(10)}, ${(g / 255).toFixed(10)}, ${(b / 255).toFixed(10)}, 1.)`);
+  return `vec4(${(r / 255).toFixed(10)}, ${(g / 255).toFixed(10)}, ${(b / 255).toFixed(10)}, 1.)`;
+};
+
+export default (input, eliminateVertical, sliders) => {
+  const implicitFunctions = input.filter(x => x.type === "function");
+
+  const fractals = input.filter(x => x.type === "fractal");
+  // console.log(implicitFunctions);
   return `#version 300 es
     precision highp float;
     
@@ -24,19 +41,15 @@ export default (implicitFunction, eliminateVertical, sliders) => {
       }
     }
     
-    // float round (float inp) {
-    //   return floor(inp + 0.5);
-    // }
-    
-    vec4 color(vec2 position) {
+    ${implicitFunctions
+      .map(
+        (implicitFunction, index) => `
+    vec4 color${index} (vec2 position) {
         float x = position.x;
         float y = position.y;
     
-        float value = ${implicitFunction.length > 0 ? implicitFunction : "1."};
-        // float value = x;
-    
-        // return vec4((value + 0.5), (value + 0.5), (value + 0.5), 1);
-    
+        float value = ${implicitFunction.glslSource.length > 0 ? implicitFunction.glslSource : "1."};
+        
         bool positive =  value > 0.;
     
         float red = positive ? 1. : 0.;
@@ -45,7 +58,34 @@ export default (implicitFunction, eliminateVertical, sliders) => {
     
         return vec4(red, green, blue, 1);
     }
+    `,
+      )
+      .join("\n")}
+
+    ${implicitFunctions
+      .map((implicitFunction, index) => {
+        // console.log(implicitFunction.color, hex2glsl(implicitFunction.color));
+        return `vec4 shade${index} (vec2 position) {
+          float step = 1. * C;
+
+          vec2 position1 = position + vec2(-step, -step);        
+          vec2 position1_h = position + vec2(step, step);  
+
+          vec4 diff1 = abs(color${index}(position1) - color${index}(position1_h));
+
+          vec2 position2 = position + vec2(step, -step);
+          vec2 position2_h = position + vec2(-step, step);
+
+          vec4 diff2 = abs(color${index}(position2) - color${index}(position2_h));
+
+          return max(diff1, diff2).z * ${hex2glsl(implicitFunction.color)};
+      }`;
+      })
+      .join("\n")}
+
     
+
+
     vec2 nextMandel (vec2 z, vec2 constant) {
         float zr = z.x * z.x - z.y * z.y;
         float zi = 2.0 * z.x * z.y;
@@ -68,7 +108,7 @@ export default (implicitFunction, eliminateVertical, sliders) => {
         float length = 0.;
         
         for (int iteration = 0; iteration < MAX_ITERATIONS; ++iteration) {
-            if (iteration < int(a)) {
+            
                 zn = nextMandel(zn, constant);
     
                 if (squared(zn) >= 4.0 && result == MAX_ITERATIONS) {
@@ -76,7 +116,7 @@ export default (implicitFunction, eliminateVertical, sliders) => {
                     length = sqrt(squared(zn));
                 }
                 // iteration++;
-            }
+            
         }
     
         // float length = sqrt(squared(zn));
@@ -153,30 +193,7 @@ export default (implicitFunction, eliminateVertical, sliders) => {
     vec2 getCamera (vec2 uv) {
       return (u_matrix * vec3(uv, 1.)).xy;
     }
-    
-    vec4 shade (vec2 position) {
-        float step = 1. * C;
-    
-        vec2 position1 = position + vec2(-step, -step);        
-        vec2 position1_h = position + vec2(step, step);  
-        
-        // vec2 position1 = position + vec2(-step, 0);        
-        // vec2 position1_h = position + vec2(step, 0);  
-    
-    
-        vec4 diff1 = 1. - abs(color(position1) - color(position1_h));
-    
-        vec2 position2 = position + vec2(step, -step);
-        vec2 position2_h = position + vec2(-step, step);
-        
-        // vec2 position2 = position + vec2(0, -step);
-        // vec2 position2_h = position + vec2(0, step);
-    
-        vec4 diff2 = 1. - abs(color(position2) - color(position2_h));
-        
-        return min(diff2, diff1);
-        // return color(position);
-    }
+
     
     out vec4 fragColor;
     void main( void ) {
@@ -187,19 +204,53 @@ export default (implicitFunction, eliminateVertical, sliders) => {
         float x = uv.x;
         float y = uv.y;
           
-        vec4 functionColor = shade(uv);
-        // vec4 functionColor = color(uv);
-        if (functionColor != vec4(1, 1, 1, 1)) {
-          fragColor = functionColor;
-          return;
+        
+        
+        
+        vec4 funcColor = (${
+          implicitFunctions.length > 0 ? implicitFunctions.map((_, index) => `shade${index}(uv)`).join(" + ") : "vec4(0, 0, 0, 0)"
+        });
+        
+        // fragColor = vec4(min(funcColor, 0.5).xyz, 1);
+        // return;
+        
+        if (funcColor.z != 0.) {
+            fragColor = funcColor;
+            return;
         }
         
-        return;
+        // fragColor = vec4(1, 0, 1, 1);
+        // return;
         
-        float iterations = mandel(uv, vec2(0.33, 0.05));
-        float a = iterations / float(MAX_ITERATIONS);
-        fragColor = vec4(a, a, a, 1);
-        return;
+        ${fractals.map(fractal => {
+          console.log(fractal);
+          switch (fractal.selected) {
+            case "mandelbrot":
+            default:
+              return `
+              float iterations = mandel(vec2(0., 0.), uv);
+              float a = iterations / float(MAX_ITERATIONS);
+              fragColor = vec4(1. - a, 1. - a, 1. - a, 1);
+              return;
+              `;
+            case "julia":
+              return `
+              float iterations = mandel(uv, vec2(${expressionToGLSL(fractal.details.cr)}, ${expressionToGLSL(fractal.details.ci)}));
+              float a = iterations / float(MAX_ITERATIONS);
+              fragColor = vec4(1. - a, 1. - a, 1. - a, 1);
+              return;
+              `;
+          }
+          // console.log(fractal);
+          //       return `
+          //   // float iterations = mandel(uv, ve
+          // `;
+        })}
+        // float iterations = mandel(vec2(0., 0.), uv);
+        // float iterations = mandel(uv, vec2(0.285, 0.01));
+        // float a = iterations / float(MAX_ITERATIONS);
+        // fragColor = vec4(1. - a, 1. - a, 1. - a, 1);
+        // return;
         
         
         // bool isCurve = logistic(uv);

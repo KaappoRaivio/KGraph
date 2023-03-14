@@ -1,0 +1,66 @@
+.listItem {
+    padding: 8px;
+    margin: 8px;
+    /*background: rgba(255, 255, 25, 50%);*/
+    box-shadow: 0 0 1px 1px lightgray;
+    border-radius: 5px;
+    position: relative;
+    color: gray;
+    transition: color 0.25s linear;
+
+}
+
+.listItem:hover {
+    color: black;
+}
+
+.listItem > button {
+    /*padding: 2px;*/
+    margin: 2px 2px 8px 0;
+}
+
+.buttonWrapper, .buttonWrapper:active, .buttonWrapper:focus, .buttonWrapper:hover {
+    display: block;
+    width: 100%;
+    height: 100%;
+    /*margin: 0;*/
+    padding: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
+    color: inherit;
+}
+
+
+
+.plusSign {
+    /*font-size: 500%;*/
+    text-align: center;
+    user-select: none;
+}
+
+.plusSign:hover {
+}
+
+.inputTypeGrid {
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(32px, 1fr) );
+    grid-gap: 8px;
+}
+
+.inputTypeButton {
+    padding: 4px;
+    transition: box-shadow 0.1s linear;
+    border-radius: 2px;
+    /*border: 1px solid gray;*/
+    box-shadow: 0 0 1px 1px lightgray;
+}
+
+.inputTypeButton:hover {
+    box-shadow: 0 0 1px 1.5px lightgray;
+}
+.inputTypeButton p {
+    text-align: center;
+    margin: 0;
+    color: black;
+}

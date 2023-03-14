@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "./Content.module.css";
 import { useCanvasScaling } from "../hooks/useGlScaling";
 import { getCameraMatrix } from "../cameraMath";
+import { useSelector } from "react-redux";
 
 const useDraw = (ref, callback, dependencies) => {
   const [ctx, setCtx] = useState(null);
@@ -72,6 +73,8 @@ const drawAxes = (ctx, c2p, p2c, thickness) => {
 const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
   const W = ctx.canvas.width;
   const H = ctx.canvas.height;
+  const percent = (window.devicePixelRatio * Math.min(W, H)) / 100;
+  // console.log(percent);
 
   const topLeft = p2c({ x: 0, y: 0 });
   const bottomRight = p2c({ x: W, y: H });
@@ -87,7 +90,7 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
   const xMin = Math.round(topLeft.x / tickPitch) * tickPitch;
   const xMax = Math.round(bottomRight.x / tickPitch) * tickPitch;
 
-  ctx.font = `${20 * window.devicePixelRatio}px Courier New`;
+  ctx.font = `${Math.floor(2 * percent)}px Courier New`;
 
   ctx.textAlign = "center";
   ctx.textBaseline = "bottom";
@@ -104,7 +107,7 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
 
     // console.log(H, textY);
 
-    if (xTick !== 0) ctx.fillText(xTick.toPrecision(2), c2p({ x: xTick, y: 0 }).x - thickness / 2, Math.min(Math.max(textY, 12), H * 0.9));
+    if (xTick !== 0) ctx.fillText(xTick, c2p({ x: xTick, y: 0 }).x - thickness / 2, Math.min(Math.max(textY, 12), H * 0.9));
   }
 
   const yMin = -Math.round(bottomRight.y / tickPitch) * tickPitch;
@@ -125,14 +128,14 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
       height / 2;
 
     // console.log(H, textHeight);
-    if (yTick !== 0)
-      ctx.fillText((-yTick).toPrecision(3), Math.min(Math.max(textX, height), W * 0.98 - height), c2p({ x: 0, y: yTick }).y - thickness / 2);
+    if (yTick !== 0) ctx.fillText(-yTick, Math.min(Math.max(textX, height), W * 0.98 - height), c2p({ x: 0, y: yTick }).y - thickness / 2);
   }
 };
 
-const CanvasOverlay = ({ camera }) => {
+const CanvasOverlay = () => {
+  const camera = useSelector(state => state.camera.current);
   const canvasRef = useRef(null);
-  useCanvasScaling(canvasRef);
+  const { width, height } = useCanvasScaling(canvasRef);
 
   useDraw(
     canvasRef,
@@ -162,7 +165,7 @@ const CanvasOverlay = ({ camera }) => {
       const b = c2p({ x: 1, y: 2 });
       // ctx.strokeRect(a.x, a.y, b.x - a.x, b.y - a.y);
     },
-    [camera.x, camera.y, camera.zoom],
+    [camera.x, camera.y, camera.zoom, width, height],
   );
   return <canvas id={styles.overlay} ref={canvasRef}></canvas>;
 };

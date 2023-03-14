@@ -9,8 +9,8 @@ module.exports = {
     chunkFilename: "[name]-[chunkhash].js",
   },
   resolve: {
-    extensions: [".js", ".jsx"],
-    modules: [path.join(__dirname, "src"), "node_modules"],
+    extensions: [".js", ".jsx", "ts", "tsx"],
+    modules: [path.join(__dirname, "src"), "node_modules", path.join(__dirname, "res")],
     alias: {
       react: path.join(__dirname, "node_modules", "react"),
     },
@@ -34,6 +34,10 @@ module.exports = {
             loader: "css-loader",
           },
         ],
+      },
+      {
+        test: /\.svg$/,
+        use: { loader: "svg-inline-loader" },
       },
     ],
   },

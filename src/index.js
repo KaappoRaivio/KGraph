@@ -6,7 +6,15 @@ import Main from "./Main";
 
 import "./index.css";
 
-render(<Main />, document.getElementById("root"));
+import store from "./redux/store";
+import { Provider } from "react-redux";
+
+render(
+  <Provider store={store}>
+    <Main />
+  </Provider>,
+  document.getElementById("root"),
+);
 // const root = createRoot(document.getElementById("root"));
 // root.render(<Main />);
 // render();

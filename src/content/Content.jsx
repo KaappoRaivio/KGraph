@@ -3,12 +3,15 @@ import GPUPlot from "./gpuPlot";
 
 import styles from "./Content.module.css";
 import CanvasOverlay from "./CanvasOverlay";
+import { useSelector } from "react-redux";
 
-const Content = ({ input, sliders, camera, ...rest }) => {
+const Content = ({ forwardRef, ...rest }) => {
+  const input = useSelector(state => state.inputs?.filter(input => input.type !== "slider"));
+  const sliders = useSelector(state => state.inputs.filter(input => input.type === "slider"));
   return (
-    <div {...rest} id={styles.contentWrapper}>
-      <GPUPlot input={input} sliders={sliders} camera={camera} />
-      <CanvasOverlay camera={camera} />
+    <div ref={forwardRef} {...rest} id={styles.contentWrapper}>
+      <GPUPlot input={input} sliders={sliders} />
+      <CanvasOverlay />
     </div>
   );
 };

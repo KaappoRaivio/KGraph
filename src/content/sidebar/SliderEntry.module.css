@@ -1,0 +1,36 @@
+.listItem {
+  padding: 8px;
+  margin: 8px;
+  background: rgba(255, 255, 25, 50%);
+  box-shadow: 0 0 1px 1px lightgray;
+  border-radius: 5px;
+}
+
+.sliderContainer {
+  margin-top: 16px;
+  display: flex;
+}
+
+.slider {
+  flex-grow: 1;
+  min-width: 0;
+  margin: 0 8px;
+}
+.delete {
+  display: inline-block;
+  height: 100%;
+  padding: 0 4px;
+  line-height: 1;
+  background: none;
+}
+.equationWrapper {
+  flex-grow: 1;
+}
+.titleBar {
+  /*align-items: start;*/
+  align-items: baseline;
+  display: flex;
+}
+.titleBar span {
+  margin-right: 1%;
+}

@@ -13,8 +13,6 @@ export default (gl, currentProgram, width, height, camera, sliders) => {
     const uZoomLocation = gl.getUniformLocation(currentProgram, "zoom");
     const fragLocation = gl.getFragDataLocation(currentProgram, "fragColor");
 
-    console.log(fragLocation, "as");
-
     gl.uniform2f(resolutionLocation, width, height);
     gl.uniformMatrix3fv(uCameraMatrixLocation, false, getCameraMatrix(camera));
     gl.uniform1f(uZoomLocation, camera.zoom);
