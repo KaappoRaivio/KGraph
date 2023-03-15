@@ -25,16 +25,12 @@ export const calculateTransform = (touches, startTouch, startAngle) => {
     const startVector = Vector.add(startTouch[1], Vector.negate(startTouch[0]));
     const currentVector = Vector.add(touches[1], Vector.negate(touches[0]));
 
-    // console.log(startVector, currentVector);
     const scale = Vector.length(currentVector) / Vector.length(startVector);
     let angle = Vector.angle(currentVector, startVector);
     if (Math.abs(angle) < 0.2) {
       // angle = 0;
     }
     const translation = rotatePoint(Vector.add(currentPosition, Vector.negate(startPosition)), -startAngle + angle);
-    // console.log(translation, angle);
-
-    // console.log(scale, angle, translation);
 
     return { scale, angle, translation };
   }

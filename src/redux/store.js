@@ -32,7 +32,6 @@ const store = configureStore({
           params.set("d", btoa(JSON.stringify(rest)));
 
           window.history.replaceState(null, "", `?${params.toString()}`);
-          console.log("Updated url");
         }, 500);
       }
     }),

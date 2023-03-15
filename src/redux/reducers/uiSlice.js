@@ -12,7 +12,6 @@ const uiSlice = createSlice({
       state.isMobile = action.payload.isMobile;
     },
     addInputPressed: (state, action) => {
-      // console.log("Pressed");
       const { pressed } = action.payload;
       state.addInputPressed = pressed;
     },

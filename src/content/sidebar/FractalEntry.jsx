@@ -3,7 +3,6 @@ import styles from "./FunctionEntry.module.css";
 import InlineInput from "../../InlineInput";
 
 const FractalEntry = ({ name, color, rawInput, selected, onChange, details, onRemoval, index }) => {
-  // console.log(details);
   return (
     <li className={styles.listItem} style={{ background: `${color}3f` }}>
       <div className={styles.titleBar}>
@@ -17,6 +16,7 @@ const FractalEntry = ({ name, color, rawInput, selected, onChange, details, onRe
       <select className={styles.functionInput} value={selected} onChange={e => onChange({ index, selected: e.target.value })}>
         <option value={"mandelbrot"}>Mandelbrot</option>
         <option value={"julia"}>Julia set</option>
+        <option value={"feigenbaum"}>Feigenbaum</option>
       </select>
       {selected === "julia" ? (
         <>

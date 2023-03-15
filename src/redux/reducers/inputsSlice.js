@@ -35,7 +35,7 @@ const inputsSlice = createSlice({
     },
     functionRawInputChanged: (state, action) => {
       const { index, rawInput } = action.payload;
-      // console.log(action.payload.rawInput, "wut", index, rawInput);
+
       state[index].rawInput = rawInput;
     },
     sliderChanged: (state, action) => {
@@ -46,7 +46,6 @@ const inputsSlice = createSlice({
       if (max != null) state[index].max = max;
       if (min != null) state[index].min = min;
       if (step != null) state[index].step = step;
-      // console.log("SliderChanged", index, value, name);
     },
     sliderInputAdded: (state, action) => {
       const { name } = action.payload;
@@ -62,11 +61,11 @@ const inputsSlice = createSlice({
         type: "fractal",
         details: { ci: "0", cr: "0" },
         color: "#000000",
+        key: uuid(),
       });
     },
     fractalInputChanged: (state, action) => {
       const { index, details, selected } = action.payload;
-      // console.log(index, details, selected);
 
       if (details != null) state[index].details = details;
       if (selected != null) state[index].selected = selected;
@@ -93,18 +92,15 @@ const {
 } = inputsSlice.actions;
 export { functionInputAdded, inputSet, sliderChanged, inputRemoved, sliderInputAdded, fractalInputAdded, fractalInputChanged };
 export const functionInputChanged = createAsyncThunk("inputs/functionInputChanged", async (input, { dispatch, getState }) => {
-  // console.log("Processing", input);
   dispatch(functionRawInputChanged(input));
-  // console.log("asd", input.rawInput);
 
   let glslSource;
   try {
     glslSource = await toGlsl(input.rawInput);
   } catch (e) {
-    console.log("Caught");
-    // glslSource = "";
+    glslSource = "";
   }
-  // console.log(glslSource);
+
   return {
     glslSource,
     index: input.index,

@@ -5,7 +5,6 @@ export default (gl, isGlPresent, graphRootRef) => {
   const { width, height } = useDimensions(graphRootRef);
   useEffect(() => {
     if (isGlPresent) {
-      // console.log(width, height);
       if (width < 1 || height < 1) return;
       const graphRoot = graphRootRef.current;
 
@@ -24,9 +23,8 @@ export default (gl, isGlPresent, graphRootRef) => {
 
 export const useCanvasScaling = canvasRef => {
   const { width, height } = useDimensions(canvasRef);
-  // console.log(canvasRef?.current?.getBoundingClientRect());
+
   useEffect(() => {
-    // console.log(width, height, window.devicePixelRatio);
     const graphRoot = canvasRef.current;
 
     if (width < 1 || height < 1) return;

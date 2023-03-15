@@ -14,10 +14,10 @@ const GPUPlot = ({ sliders, input, ...rest }) => {
   const { gl, isGlPresent } = useWebGl(graphRootRef);
   useGlScaling(gl, isGlPresent, graphRootRef);
 
-  const [currentProgram, setCurrentProgram] = useState(null);
-  useUpdateShader(gl, input, sliders, currentProgram, setCurrentProgram);
+  const [currentPrograms, setCurrentPrograms] = useState([]);
+  useUpdateShader(gl, input, sliders, currentPrograms, setCurrentPrograms);
   const { width, height } = useDimensions(graphRootRef);
-  useUpdateShaderInputs(gl, currentProgram, width, height, camera, sliders);
+  useUpdateShaderInputs(gl, currentPrograms, width, height, camera, sliders);
 
   return <canvas id={"graphRoot"} ref={graphRootRef} {...rest} />;
 };

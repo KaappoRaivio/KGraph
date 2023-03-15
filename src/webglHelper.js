@@ -19,22 +19,32 @@ export const createProgram = (gl, vertex, fragment) => {
 
   const vs = createShader(gl, vertex, gl.VERTEX_SHADER);
   const fs = createShader(gl, fragment, gl.FRAGMENT_SHADER);
+  const fs2 = createShader(
+    gl,
+    `#version 300 es
+    precision highp float;
+    
+    in vec4 position;
+    out vec4 fragColor;
+    void main(void) { fragColor = vec4(1, 0, 1, 1); }
+  `,
+    gl.FRAGMENT_SHADER,
+  );
 
   if (vs == null || fs == null) {
-    // console.log("Returning null!");
     return null;
   }
 
   gl.attachShader(program, vs);
   gl.attachShader(program, fs);
+  // gl.attachShader(program, fs2);
 
   gl.deleteShader(vs);
   gl.deleteShader(fs);
 
   gl.linkProgram(program);
-  // console.log("Linking");
+
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    // console.log("Shader error!!");
     console.error(
       "ERROR:\n" +
         "VALIDATE_STATUS: " +

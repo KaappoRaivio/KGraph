@@ -74,13 +74,11 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
   const W = ctx.canvas.width;
   const H = ctx.canvas.height;
   const percent = (window.devicePixelRatio * Math.min(W, H)) / 100;
-  // console.log(percent);
 
   const topLeft = p2c({ x: 0, y: 0 });
   const bottomRight = p2c({ x: W, y: H });
 
   const visibleClipSpace = { w: bottomRight.x - topLeft.x, h: topLeft.y - bottomRight.y };
-  // console.log(visibleClipSpace);
 
   const base = 2;
   const scale = Math.pow(base, Math.trunc(camera.zoom / Math.log2(base) - window.devicePixelRatio * 0.5));
@@ -105,8 +103,6 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
       }).y -
       height / 2;
 
-    // console.log(H, textY);
-
     if (xTick !== 0) ctx.fillText(xTick, c2p({ x: xTick, y: 0 }).x - thickness / 2, Math.min(Math.max(textY, 12), H * 0.9));
   }
 
@@ -117,7 +113,6 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
   ctx.textBaseline = "middle";
   // y axis
   for (let yTick = yMin; yTick < yMax; yTick += tickPitch) {
-    // console.log(yTick);
     ctx.fillRect(Math.min(Math.max(c2p({ x: 0, y: 0 }).x - height / 2, 0), W - height), c2p({ x: 0, y: yTick }).y - thickness / 2, height, thickness);
     ctx.fillRect(0, c2p({ x: 0, y: yTick }).y - gridThickness / 2, W, gridThickness);
     const textX =
@@ -127,7 +122,6 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
       }).x +
       height / 2;
 
-    // console.log(H, textHeight);
     if (yTick !== 0) ctx.fillText(-yTick, Math.min(Math.max(textX, height), W * 0.98 - height), c2p({ x: 0, y: yTick }).y - thickness / 2);
   }
 };
@@ -153,10 +147,8 @@ const CanvasOverlay = () => {
 
       // const visibleClipSpaceTopLeft = p2c({ x: 0, y: 0 });
       // const visibleClipSpaceBottomRight = p2c({ x: W, y: H });
-      // console.log(visibleClipSpaceTopLeft, visibleClipSpaceBottomRight);
 
       const cameraMatrix = getCameraMatrix({ x, y, zoom });
-      // console.log(cameraMatrix);
 
       ctx.strokeStyle = "blue";
       ctx.lineWidth = Math.pow(2, zoom) * 10;

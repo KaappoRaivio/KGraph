@@ -5,7 +5,6 @@ export default input => {
     try {
       resolve(toGLSL(input));
     } catch (err) {
-      console.log("asdasd");
       reject(err);
     }
   });
