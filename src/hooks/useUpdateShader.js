@@ -10,7 +10,7 @@ export default (gl, inputs, sliders, currentPrograms, setCurrentPrograms) => {
 
     const programs = [];
 
-    programs.filter(p => p != null).forEach(p => gl.deleteProgram(p));
+    currentPrograms.filter(p => p != null).forEach(p => gl.deleteProgram(p));
 
     for (const input of inputs) {
       try {
