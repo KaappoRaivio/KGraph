@@ -6,13 +6,12 @@ import randomcolor from "randomcolor";
 const inputsSlice = createSlice({
   name: "inputs",
   initialState: [
-    { name: "a", max: 1, min: 0, value: 0, step: 0.01, type: "slider", key: uuid(), color: randomcolor({ luminosity: "light" }) },
+    { name: "a", max: 1, min: 0, value: 0, step: 0.01, type: "slider", color: randomcolor({ luminosity: "light" }) },
     {
       name: "f(x)",
       rawInput: "e ^ (a*sin(x) + cos(y)) = sin(e ^ (x + a)) + a",
       glslSource: "",
       type: "function",
-      key: uuid(),
       color: randomcolor({ luminosity: "dark" }),
     },
     // { name: "g(x)", rawInput: "", glslSource: "", type: "function", key: uuid(), color: "#af7fff" },
@@ -30,7 +29,6 @@ const inputsSlice = createSlice({
         rawInput: "",
         glslSource: "",
         color: randomcolor({ luminosity: "dark" }),
-        key: uuid(),
       });
     },
     functionRawInputChanged: (state, action) => {
@@ -50,7 +48,7 @@ const inputsSlice = createSlice({
     sliderInputAdded: (state, action) => {
       const { name } = action.payload;
 
-      state.push({ name, max: 10, min: -10, value: 0, step: 0.01, type: "slider", key: uuid(), color: randomcolor({ luminosity: "light" }) });
+      state.push({ name, max: 10, min: -10, value: 0, step: 0.01, type: "slider", color: randomcolor({ luminosity: "light" }) });
     },
     inputRemoved: (state, action) => {
       const { index } = action.payload;
@@ -61,7 +59,6 @@ const inputsSlice = createSlice({
         type: "fractal",
         details: { ci: "0", cr: "0" },
         color: "#000000",
-        key: uuid(),
       });
     },
     fractalInputChanged: (state, action) => {

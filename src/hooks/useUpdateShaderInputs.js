@@ -4,7 +4,6 @@ import { getCameraMatrix } from "../cameraMath";
 export default (gl, currentPrograms, width, height, camera, sliders) => {
   useEffect(() => {
     if (!currentPrograms.length) return;
-    console.log(sliders);
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 

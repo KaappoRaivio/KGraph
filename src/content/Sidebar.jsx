@@ -36,18 +36,11 @@ const Sidebar = () => {
 
             switch (type) {
               case "function":
-                return (
-                  <FunctionEntry
-                    key={key}
-                    {...rest}
-                    index={index}
-                    onChange={e => dispatch(functionInputChanged({ index, rawInput: e.target.value }))}
-                  />
-                );
+                return <FunctionEntry {...rest} index={index} onChange={e => dispatch(functionInputChanged({ index, rawInput: e.target.value }))} />;
               case "slider":
-                return <SliderEntry key={key} index={index} {...rest} onChange={stuff => dispatch(sliderChanged({ index, ...stuff }))} />;
+                return <SliderEntry index={index} {...rest} onChange={stuff => dispatch(sliderChanged({ index, ...stuff }))} />;
               case "fractal":
-                return <FractalEntry key={key} {...rest} index={index} onChange={c => dispatch(fractalInputChanged(c))} />;
+                return <FractalEntry {...rest} index={index} onChange={c => dispatch(fractalInputChanged(c))} />;
               default:
                 throw new Error("Unknown type " + item.type + "!");
             }
