@@ -28,8 +28,8 @@ const inputsSlice = createSlice({
         name,
         rawInput: "",
         glslSource: "",
-        // color: randomcolor({ luminosity: "dark" }),
-        color: "#000000",
+        color: randomcolor({ luminosity: "dark" }),
+        // color: "#000000",
       });
     },
     functionRawInputChanged: (state, action) => {
