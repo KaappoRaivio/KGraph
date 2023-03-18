@@ -9,7 +9,7 @@ const inputsSlice = createSlice({
     { name: "a", max: 1, min: 0, value: 0, step: 0.01, type: "slider", color: randomcolor({ luminosity: "light" }) },
     {
       name: "f(x)",
-      rawInput: "e ^ (a*sin(x) + cos(y)) = sin(e ^ (x + a)) + a",
+      rawInput: "e ^ (sin(x) + cos(y)) = sin(e ^ (x + y)) + a",
       glslSource: "",
       type: "function",
       color: randomcolor({ luminosity: "dark" }),
@@ -28,7 +28,8 @@ const inputsSlice = createSlice({
         name,
         rawInput: "",
         glslSource: "",
-        color: randomcolor({ luminosity: "dark" }),
+        // color: randomcolor({ luminosity: "dark" }),
+        color: "#000000",
       });
     },
     functionRawInputChanged: (state, action) => {
