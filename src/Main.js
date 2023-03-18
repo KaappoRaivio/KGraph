@@ -7,12 +7,14 @@ import { cameraChanged } from "./redux/reducers/cameraSlice";
 import styles from "./main.module.css";
 import { useResizable } from "react-resizable-layout";
 import Sidebar from "./content/Sidebar";
+import PerformanceMonitor from "./content/PerformanceMonitor";
 
 // window.devicePixelRatio = 1;
 
 const Main = () => {
   const dispatch = useDispatch();
   const isMobile = useSelector(state => state.ui.isMobile);
+  const isDev = useSelector(state => state.ui.isDev);
 
   return (
     <div id={styles.topContainer} style={{ flexDirection: isMobile ? "column-reverse" : "row" }}>
@@ -22,6 +24,7 @@ const Main = () => {
           <Content />
         </PinchPanZoomListener>
       </main>
+      {isDev && <PerformanceMonitor />}
     </div>
   );
 
