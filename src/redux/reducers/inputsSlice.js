@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import toGlsl from "../../workers/toGlslPromise";
+import { implicitEquationToGlsl, solidEquationToGlsl } from "../../workers/toGlslPromise";
 import { v4 as uuid } from "uuid";
 import randomcolor from "randomcolor";
 
@@ -68,11 +68,32 @@ const inputsSlice = createSlice({
       if (details != null) state[index].details = details;
       if (selected != null) state[index].selected = selected;
     },
+
+    solidInputAdded: (state, action) => {
+      const { name } = action.payload;
+      state.push({
+        type: "solid",
+        name,
+        rawInput: "",
+        glslSource: "",
+        color: randomcolor({ luminosity: "dark" }),
+        // color: "#000000",
+      });
+    },
+    solidRawInputChanged: (state, action) => {
+      const { index, rawInput } = action.payload;
+
+      state[index].rawInput = rawInput;
+    },
   },
   extraReducers: builder => {
     builder.addCase(functionInputChanged.fulfilled, (state, action) => {
       const { index, glslSource } = action.payload;
-      // console.log("InputChanged fulfilled", index, glslSource);
+      if (glslSource != null) state[index].glslSource = glslSource;
+    });
+    builder.addCase(solidInputChanged.fulfilled, (state, action) => {
+      const { index, glslSource } = action.payload;
+      console.log("SolidInputChanged fulfilled", index, glslSource);
       if (glslSource != null) state[index].glslSource = glslSource;
     });
   },
@@ -87,14 +108,33 @@ const {
   sliderInputAdded,
   fractalInputAdded,
   fractalInputChanged,
+  solidInputAdded,
+  solidRawInputChanged,
 } = inputsSlice.actions;
-export { functionInputAdded, inputSet, sliderChanged, inputRemoved, sliderInputAdded, fractalInputAdded, fractalInputChanged };
+export { functionInputAdded, inputSet, sliderChanged, inputRemoved, sliderInputAdded, fractalInputAdded, fractalInputChanged, solidInputAdded };
 export const functionInputChanged = createAsyncThunk("inputs/functionInputChanged", async (input, { dispatch, getState }) => {
   dispatch(functionRawInputChanged(input));
 
   let glslSource;
   try {
-    glslSource = await toGlsl(input.rawInput);
+    glslSource = await implicitEquationToGlsl(input.rawInput);
+    // glslSource = "";
+  } catch (e) {
+    glslSource = "";
+  }
+
+  return {
+    glslSource,
+    index: input.index,
+  };
+});
+
+export const solidInputChanged = createAsyncThunk("inputs/solidInputChanged", async (input, { dispatch, getState }) => {
+  dispatch(solidRawInputChanged(input));
+  //
+  let glslSource;
+  try {
+    glslSource = await solidEquationToGlsl(input.rawInput);
     // glslSource = "";
   } catch (e) {
     glslSource = "";

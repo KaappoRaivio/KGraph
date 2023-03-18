@@ -3,10 +3,11 @@ import styles from "./Sidebar.module.css";
 import { useResizable } from "react-resizable-layout-mobile";
 import { useDispatch, useSelector } from "react-redux";
 import FunctionEntry from "./sidebar/FunctionEntry";
-import { fractalInputChanged, functionInputChanged, inputRemoved, sliderChanged } from "../redux/reducers/inputsSlice";
+import { fractalInputChanged, functionInputChanged, inputRemoved, sliderChanged, solidInputChanged } from "../redux/reducers/inputsSlice";
 import SliderEntry from "./sidebar/SliderEntry";
 import AddEntry from "./sidebar/AddEntry";
 import FractalEntry from "./sidebar/FractalEntry";
+import SolidEntry from "./sidebar/SolidEntry";
 
 const Sidebar = () => {
   const isMobile = useSelector(state => state.ui.isMobile);
@@ -37,6 +38,8 @@ const Sidebar = () => {
             switch (type) {
               case "function":
                 return <FunctionEntry {...rest} index={index} onChange={e => dispatch(functionInputChanged({ index, rawInput: e.target.value }))} />;
+              case "solid":
+                return <SolidEntry {...rest} index={index} onChange={e => dispatch(solidInputChanged({ index, rawInput: e.target.value }))} />;
               case "slider":
                 return <SliderEntry index={index} {...rest} onChange={stuff => dispatch(sliderChanged({ index, ...stuff }))} />;
               case "fractal":

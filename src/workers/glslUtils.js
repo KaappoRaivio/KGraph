@@ -41,7 +41,7 @@ const replaceWithFractions = input => {
   return input.replaceAll(/[\d]+\.\d*/g, x => `(${algebra.parse(String(x)).constants[0].toString()})`);
 };
 
-export const toGLSL = input => {
+export const implicitToGLSL = input => {
   if (input.length && !input.includes("=")) {
     if (input.includes("y")) throw Error("Y without equals sign!");
     // input = `y = ${input.toLowerCase()} + P`;
@@ -53,6 +53,24 @@ export const toGLSL = input => {
   input = replaceWithFractions(input);
 
   const equalToZero = algebrite.run(`roots(${input}, P)`);
+
+  const reparsed = mathjs.parse(equalToZero, { simplify: false });
+
+  return toGLSLFriendly(reparsed);
+};
+
+export const solidToGLSL = input => {
+  if (input.length && !input.includes("=")) {
+    if (input.includes("z")) throw Error("Z without equals sign!");
+    // input = `y = ${input.toLowerCase()} + P`;
+    input = `z = ${input.toLowerCase()}`;
+  } else {
+    input = `${input.toLowerCase()}`;
+  }
+
+  input = replaceWithFractions(input);
+
+  const equalToZero = algebrite.run(`roots(${input}, z)`);
 
   const reparsed = mathjs.parse(equalToZero, { simplify: false });
 

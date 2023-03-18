@@ -5,8 +5,9 @@ import { addInputPressed } from "../../redux/reducers/uiSlice";
 
 import graph from "../../../res/graph-min.svg";
 import sliders from "../../../res/sliders-min.svg";
+import colorplot from "../../../res/color_plot-min.svg";
 import fractal from "../../../res/fractal-min.svg";
-import { fractalInputAdded, functionInputAdded, sliderInputAdded } from "../../redux/reducers/inputsSlice";
+import { fractalInputAdded, functionInputAdded, sliderInputAdded, solidInputAdded } from "../../redux/reducers/inputsSlice";
 
 const InputTypeButton = ({ src, name, onClick }) => {
   return (
@@ -28,6 +29,7 @@ const AddEntry = () => {
           <button onClick={() => dispatch(addInputPressed({ pressed: false }))}>Cancel</button>
           <ul className={`${styles.inputTypeGrid} no-bullets`}>
             <InputTypeButton src={graph} name={"function"} onClick={() => dispatch(functionInputAdded({ name: "" }))} />
+            <InputTypeButton src={colorplot} name={"solidplot"} onClick={() => dispatch(solidInputAdded({ name: "" }))} />
             <InputTypeButton src={sliders} name={"constant"} onClick={() => dispatch(sliderInputAdded({ name: "" }))} />
             <InputTypeButton src={fractal} name={"fractal"} onClick={() => dispatch(fractalInputAdded({}))} />
           </ul>

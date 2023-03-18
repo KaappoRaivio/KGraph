@@ -3,6 +3,7 @@ import { createProgram } from "../webglHelper";
 import vertexShader from "../graphing_vertex";
 import fragmentShaderFunction from "../graphing_fragment_function";
 import fragmentShaderFractal from "../graphing_fragment_fractal";
+import fragmentShaderSolid from "../graphing_fragment_solid";
 
 export default (gl, inputs, sliders, currentPrograms, setCurrentPrograms) => {
   useEffect(() => {
@@ -19,6 +20,13 @@ export default (gl, inputs, sliders, currentPrograms, setCurrentPrograms) => {
           default:
           case "function":
             fragment = fragmentShaderFunction(
+              input,
+              false,
+              sliders.map(slider => slider.name).filter(x => x.length),
+            );
+            break;
+          case "solid":
+            fragment = fragmentShaderSolid(
               input,
               false,
               sliders.map(slider => slider.name).filter(x => x.length),

@@ -6,7 +6,12 @@ export const createShader = (gl, src, type) => {
 
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
     console.error((type === gl.VERTEX_SHADER ? "VERTEX" : "FRAGMENT") + " SHADER:\n" + gl.getShaderInfoLog(shader));
-    console.error(src);
+    console.error(
+      src
+        .split("\n")
+        .map((line, index) => `${index + 1}. ${line}`)
+        .join("\n"),
+    );
     // alert();
     return null;
   }
