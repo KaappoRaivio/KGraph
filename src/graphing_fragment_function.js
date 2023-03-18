@@ -41,36 +41,43 @@ export default (input, eliminateVertical, sliders) => {
     }
     
     
-    vec4 color (vec2 position) {
+    bool isPositive (vec2 position) {
         float x = position.x;
         float y = position.y;
     
         float value = ${input.glslSource.length > 0 ? input.glslSource : "1."};
-        
-        bool positive =  value > 0.;
-    
-        float red = positive ? 1. : 0.;
-        float green = positive ? 1. : 0.;
-        float blue = positive ? 1. : 0.;
-    
-        return vec4(red, green, blue, 1);
+        return value > 0.;
     }
     
+    bool isLine(vec2 position, float step) {
+        vec2 position1 = position + vec2(-step, -step);        
+        vec2 position1_h = position + vec2(step, step);  
 
+        int diff1 = abs(int(isPositive(position1)) - int(isPositive(position1_h)));
+
+        vec2 position2 = position + vec2(step, -step);
+        vec2 position2_h = position + vec2(-step, step);
+
+        int diff2 = abs(int(isPositive(position2)) - int(isPositive(position2_h)));
+        
+        return max(diff1, diff2) == 1;
+    }
+
+    #define ANTIALIAS 5
     vec4 shade (vec2 position) {
-          float step = 1. * C;
+          float result = 0.;
+    
+          for (int i = 0; i < ANTIALIAS; ++i) {
+            float scaler = ppow(2., float(-i));
+            float step = C * scaler;
 
-          vec2 position1 = position + vec2(-step, -step);        
-          vec2 position1_h = position + vec2(step, step);  
-
-          vec4 diff1 = abs(color(position1) - color(position1_h));
-
-          vec2 position2 = position + vec2(step, -step);
-          vec2 position2_h = position + vec2(-step, step);
-
-          vec4 diff2 = abs(color(position2) - color(position2_h));
-
-          return max(diff1, diff2).z * ${hex2glsl(input.color)};
+            bool line = isLine(position, step);
+            // result += float(line) / float(ANTIALIAS - i);            
+            result += float(line) / float(ANTIALIAS);            
+          }
+    
+          return result * ${hex2glsl(input.color)};
+          // return result * vec4(0.0, 0.0, 0.0, 1.);
       }
       
     vec2 getUV(vec2 fragCoord) {   
@@ -98,7 +105,7 @@ export default (input, eliminateVertical, sliders) => {
         float y = uv.y;
         
         vec4 funcColor = shade(uv);
-        if (funcColor.z != 0.) fragColor = funcColor;
+        if (funcColor.w != 0.) fragColor = funcColor;
         else fragColor = vec4(0, 0, 0, 0);
     }
     `;
