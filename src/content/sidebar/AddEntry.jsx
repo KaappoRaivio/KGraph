@@ -28,7 +28,7 @@ const AddEntry = () => {
           <button onClick={() => dispatch(addInputPressed({ pressed: false }))}>Cancel</button>
           <ul className={`${styles.inputTypeGrid} no-bullets`}>
             <InputTypeButton src={graph} name={"function"} onClick={() => dispatch(functionInputAdded({ name: "" }))} />
-            <InputTypeButton src={sliders} name={"slider"} onClick={() => dispatch(sliderInputAdded({ name: "" }))} />
+            <InputTypeButton src={sliders} name={"constant"} onClick={() => dispatch(sliderInputAdded({ name: "" }))} />
             <InputTypeButton src={fractal} name={"fractal"} onClick={() => dispatch(fractalInputAdded({}))} />
           </ul>
         </>
