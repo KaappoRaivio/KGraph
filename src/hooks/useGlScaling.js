@@ -6,6 +6,7 @@ export default (gl, isGlPresent, graphRootRef) => {
   useEffect(() => {
     if (isGlPresent) {
       if (width < 1 || height < 1) return;
+      console.log("scaling");
       const graphRoot = graphRootRef.current;
 
       // graphRoot.width = width;
@@ -18,7 +19,7 @@ export default (gl, isGlPresent, graphRootRef) => {
       // graphRoot.style.width = `${width * window.devicePixelRatio}px`;
       // graphRoot.style.height = `${height}px`;
     }
-  }, [gl, isGlPresent, width, height]);
+  }, [gl, isGlPresent, width, height, window.devicePixelRatio]);
 };
 
 export const useCanvasScaling = canvasRef => {
@@ -30,7 +31,7 @@ export const useCanvasScaling = canvasRef => {
     if (width < 1 || height < 1) return;
     graphRoot.width = width * window.devicePixelRatio;
     graphRoot.height = height * window.devicePixelRatio;
-  }, [width, height, canvasRef.current]);
+  }, [width, height, canvasRef.current, window.devicePixelRatio]);
 
   return { width, height };
 };
