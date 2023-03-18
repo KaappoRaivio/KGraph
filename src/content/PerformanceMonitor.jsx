@@ -7,7 +7,7 @@ const update = () => {
   const time = new Date().getTime();
   diff = time - prevTime;
   prevTime = time;
-  // console.log(diff);
+  // // console.log(diff);
   if (diff !== 0) fpss.push(1000 / diff);
   if (fpss.length > 60) {
     fpss.splice(0, 1);
@@ -19,7 +19,7 @@ const PerformanceMonitor = () => {
   const [fps, setFps] = useState(0);
   useEffect(() => {
     window.requestAnimationFrame(update);
-    const interval = setInterval(() => setFps(fpss.reduce((a, b) => a + b) / fpss.length), 1000);
+    const interval = setInterval(() => setFps(fpss.reduce((a, b) => a + b, 0) / fpss.length), 1000);
     return () => clearInterval(interval);
   }, []);
 

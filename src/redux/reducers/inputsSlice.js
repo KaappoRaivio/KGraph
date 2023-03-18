@@ -72,7 +72,7 @@ const inputsSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(functionInputChanged.fulfilled, (state, action) => {
       const { index, glslSource } = action.payload;
-      console.log("InputChanged fulfilled", index, glslSource);
+      // console.log("InputChanged fulfilled", index, glslSource);
       if (glslSource != null) state[index].glslSource = glslSource;
     });
   },
@@ -95,6 +95,7 @@ export const functionInputChanged = createAsyncThunk("inputs/functionInputChange
   let glslSource;
   try {
     glslSource = await toGlsl(input.rawInput);
+    // glslSource = "";
   } catch (e) {
     glslSource = "";
   }

@@ -13,7 +13,7 @@ export default ref => {
   //     // setSize([ref.current.clientWidth, ref.current.clientHeight]);
   //     setSize([r.right - r.left, r.bottom - r.top]);
   //   } else {
-  //     console.log("null!");
+  //     // console.log("null!");
   //   }
   // };
   //

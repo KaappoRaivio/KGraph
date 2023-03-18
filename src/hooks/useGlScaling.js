@@ -6,7 +6,7 @@ export default (gl, isGlPresent, graphRootRef) => {
   useEffect(() => {
     if (isGlPresent) {
       if (width < 1 || height < 1) return;
-      console.log("scaling");
+      // // console.log("scaling");
       const graphRoot = graphRootRef.current;
 
       // graphRoot.width = width;

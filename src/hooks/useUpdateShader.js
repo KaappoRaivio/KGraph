@@ -10,8 +10,8 @@ export default (gl, inputs, sliders, currentPrograms, setCurrentPrograms) => {
 
     const programs = [];
 
-    currentPrograms.filter(p => p != null).forEach(p => gl.deleteProgram(p));
-    console.log("Recompiling");
+    // currentPrograms.filter(p => p != null).forEach(p => gl.deleteProgram(p));
+    // console.log("Recompiling");
     for (const input of inputs) {
       try {
         let fragment;

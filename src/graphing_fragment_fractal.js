@@ -1,5 +1,4 @@
-import { expressionToGLSL, toGLSLFriendly } from "./workers/glslConverter.worker";
-import { exp, im } from "mathjs";
+import { expressionToGLSL } from "./workers/glslUtils";
 
 const hex2glsl = hex => {
   try {
@@ -8,7 +7,6 @@ const hex2glsl = hex => {
     const g = parseInt(color.slice(2, 4), 16);
     const b = parseInt(color.slice(4, 6), 16);
 
-    console.log(`vec4(${(r / 255).toFixed(10)}, ${(g / 255).toFixed(10)}, ${(b / 255).toFixed(10)}, 1.)`);
     return `vec4(${(r / 255).toFixed(10)}, ${(g / 255).toFixed(10)}, ${(b / 255).toFixed(10)}, 1.)`;
   } catch (error) {
     console.error("hex2glsl");

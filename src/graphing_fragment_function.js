@@ -1,18 +1,15 @@
-import { expressionToGLSL, toGLSLFriendly } from "./workers/glslConverter.worker";
-import { exp, im } from "mathjs";
-
 const hex2glsl = hex => {
   const color = hex.slice(1);
   const r = parseInt(color.slice(0, 2), 16);
   const g = parseInt(color.slice(2, 4), 16);
   const b = parseInt(color.slice(4, 6), 16);
 
-  console.log(`vec4(${(r / 255).toFixed(10)}, ${(g / 255).toFixed(10)}, ${(b / 255).toFixed(10)}, 1.)`);
+  // // console.log(`vec4(${(r / 255).toFixed(10)}, ${(g / 255).toFixed(10)}, ${(b / 255).toFixed(10)}, 1.)`);
   return `vec4(${(r / 255).toFixed(10)}, ${(g / 255).toFixed(10)}, ${(b / 255).toFixed(10)}, 1.)`;
 };
 
 export default (input, eliminateVertical, sliders) => {
-  console.log(input);
+  // // console.log(input);
   // const implicitFunctions = input.filter(x => x.type === "function");
 
   return `#version 300 es
@@ -32,44 +29,59 @@ export default (input, eliminateVertical, sliders) => {
     #define MAX_ITERATIONS 200
     
     float ppow( float x, float y )  {
-      if (y >= 0.) 
-        return x >= 0. ? pow(x, y) : (mod(y, 2.0) == 0. ? pow(-x, y) : -pow(-x, y));
+      // if (x < 0. || x == 0. && y <= 0.) {
+      //   return NaN;
+      // }
+      if (y >= 0.)
+        return pow(x, y); 
+        // return x >= 0. ? pow(x, y) : (mod(y, 2.0) == 0. ? pow(-x, y) : -pow(-x, y));
       else {
         float p = abs(y);
-        return 1. / (x >= 0. ? pow(x, p) : (mod(p, 2.0) == 0. ? pow(-x, p) : -pow(-x, p)));
+        return 1. / pow(2., p);
+        // return 1. / (x >= 0. ? pow(x, p) : (mod(p, 2.0) == 0. ? pow(-x, p) : -pow(-x, p)));
       }
     }
     
     
-    bool isPositive (vec2 position) {
+    float getValue (vec2 position) {
         float x = position.x;
         float y = position.y;
     
         float value = ${input.glslSource.length > 0 ? input.glslSource : "1."};
-        return value > 0.;
+        // if (isnan(value)) return true;
+        return value;
     }
     
     bool isLine(vec2 position, float step) {
         vec2 position1 = position + vec2(-step, -step);        
         vec2 position1_h = position + vec2(step, step);  
-
-        int diff1 = abs(int(isPositive(position1)) - int(isPositive(position1_h)));
+        
+        float val1 = getValue(position1);
+        float val1_h = getValue(position1_h);
+        if (isnan(val1) || isnan(val1_h)) return false;
+        
+        int diff1 = abs(int(val1 > 0.) - int(val1_h > 0.));
 
         vec2 position2 = position + vec2(step, -step);
         vec2 position2_h = position + vec2(-step, step);
+        
+        float val2 = getValue(position2);
+        float val2_h = getValue(position2_h);
+        if (isnan(val2) || isnan(val2_h)) return false;
 
-        int diff2 = abs(int(isPositive(position2)) - int(isPositive(position2_h)));
+        int diff2 = abs(int(val2 > 0.) - int(val2_h > 0.));
+        // int diff2 = abs(int(isPositive(position2)) - int(isPositive(position2_h)));
         
         return max(diff1, diff2) == 1;
     }
 
-    #define ANTIALIAS 5
+    #define ANTIALIAS 2
     vec4 shade (vec2 position) {
           float result = 0.;
     
           for (int i = 0; i < ANTIALIAS; ++i) {
             float scaler = ppow(2., float(-i));
-            float step = C * scaler;
+            float step = 1. * C * scaler;
 
             bool line = isLine(position, step);
             // result += float(line) / float(ANTIALIAS - i);            

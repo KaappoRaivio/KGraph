@@ -17,7 +17,7 @@ const GPUPlot = ({ sliders, input, ...rest }) => {
   const [currentPrograms, setCurrentPrograms] = useState([]);
   useUpdateShader(gl, input, sliders, currentPrograms, setCurrentPrograms);
   const { width, height } = useDimensions(graphRootRef);
-  useUpdateShaderInputs(gl, currentPrograms, width, height, camera, sliders);
+  useUpdateShaderInputs(gl, currentPrograms, width, height, camera, sliders, input);
 
   return <canvas id={"graphRoot"} ref={graphRootRef} {...rest} />;
 };
