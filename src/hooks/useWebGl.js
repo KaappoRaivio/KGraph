@@ -4,7 +4,7 @@ export default canvasRef => {
   const [gl, setGl] = useState(null);
   useEffect(() => {
     // const graphRoot = graphRootRef.current;
-    const gl = canvasRef.current.getContext("webgl2");
+    const gl = canvasRef.current.getContext("webgl2", { preserveDrawingBuffer: true });
 
     gl.enable(gl.BLEND);
     gl.blendEquation(gl.FUNC_ADD);
