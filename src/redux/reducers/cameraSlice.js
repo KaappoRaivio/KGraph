@@ -2,11 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const cameraSlice = createSlice({
   name: "camera",
-  initialState: { current: { x: 0, y: 0, zoom: -4 }, dragInProgress: false },
+  initialState: { current: { x: 0, y: 0, zoom: -4 } },
   reducers: {
     cameraChanged: (state, action) => {
       state.current = action.payload;
-      state.dragInProgress = false;
     },
 
     // cameraDragged: (state, action) => {

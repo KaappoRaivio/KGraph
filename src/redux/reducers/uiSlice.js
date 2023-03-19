@@ -6,7 +6,7 @@ const uiSlice = createSlice({
     sidebarOpen: false,
     isMobile: window.innerWidth < 600,
     isDev: !process.env.NODE_ENV || process.env.NODE_ENV === "development",
-    helpPressed: true,
+    helpPressed: false,
     addInputPressed: false,
   },
   reducers: {

@@ -1,8 +1,12 @@
+import rison from "rison";
+
 const getStateFromURL = () => {
   const params = new URLSearchParams(window.location.search);
+  console.log(window.location.search);
   // console.log(window.location);
   try {
-    return JSON.parse(atob(params.get("d")));
+    // return JSON.parse(atob(params.get("d")));
+    return rison.decode_object(params.get("d"));
   } catch (error) {
     return undefined;
   }

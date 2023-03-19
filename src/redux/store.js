@@ -7,7 +7,8 @@ import cameraReducer, { cameraChanged } from "./reducers/cameraSlice";
 import slidersReducer from "./reducers/slidersSlice";
 import throttle from "lodash.throttle";
 import getStateFromURL from "./persist";
-
+import { compress } from "compress-json";
+import rison from "rison";
 let timeout;
 
 const store = configureStore({
@@ -28,10 +29,23 @@ const store = configureStore({
         timeout = setTimeout(() => {
           const { ui, ...rest } = state;
 
+          const { inputs, ...rest2 } = rest;
+          const toSerialization = {
+            ...rest2,
+            inputs: inputs.map(({ type, glslSource, ...rest }) => (type === "function" ? { type, glslSource: "", ...rest } : { type, ...rest })),
+          };
+
           const params = new URLSearchParams();
-          params.set("d", btoa(JSON.stringify(rest)));
+          // params.set("d", btoa(JSON.stringify(toSerialization)));
+          params.set("d", rison.encode_object(toSerialization));
+          console.log(JSON.stringify(toSerialization, null, 4));
+          // console.log(btoa(JSON.stringify(rest)).length, btoa(JSON.stringify(toSerialization)).length);
+          console.log(btoa(JSON.stringify(rest)).length, btoa(rison.encode_object(toSerialization)).length);
+          // params.set("d", btoa(JSON.stringify(rest)));
+          // console.log(rest);
 
           window.history.replaceState(null, "", `?${params.toString()}`);
+          // window.history.replaceState(null, "", `?d=${rison.encode_object(toSerialization)}`);
         }, 500);
       }
     }),
