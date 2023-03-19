@@ -3,12 +3,16 @@
   flex: 0 1 20%;
   border-right: 2px lightgray solid;
   min-width: 240px;
+  overflow: scroll;
+  /*overflow: visible;*/
 }
 
 #handle {
   padding-top: 4px;
 
   /*border: 100px solid yellow;*/
+  position: relative;
+  overflow: visible;
   display: flex;
   justify-content: center;
   user-select: none;
@@ -29,4 +33,44 @@
   }
 }
 
+#help {
+  width: 32px;
+  color: inherit;
+  height: 32px;
+  padding: 0 12px;
+  background: white;
+  /*align-self: flex-end;*/
+}
 
+#topBar {
+  z-index: 2;
+  position: absolute;
+  bottom: 32px;
+  right: 16px;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+@media screen and (max-width: 600px) {
+  #sidebar {
+    border-right: none;
+    border-top: 2px lightgray solid;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  #topBar {
+    text-orientation: upright;
+    bottom: unset;
+    right: unset;
+    left: 32px;
+    top: 16px;
+  }
+
+  #help {
+    width: 24px;
+    height: 24px;
+    font-size: 66%;
+    padding: 0 8px;
+  }
+}

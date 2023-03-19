@@ -53,7 +53,6 @@ export const implicitToGLSL = input => {
   input = replaceWithFractions(input);
 
   const equalToZero = algebrite.run(`roots(${input}, P)`);
-
   const reparsed = mathjs.parse(equalToZero, { simplify: false });
 
   return toGLSLFriendly(reparsed);
@@ -71,6 +70,7 @@ export const solidToGLSL = input => {
   input = replaceWithFractions(input);
 
   const equalToZero = algebrite.run(`roots(${input}, z)`);
+  if (equalToZero.includes("Stop")) throw new Error(equalToZero);
 
   const reparsed = mathjs.parse(equalToZero, { simplify: false });
 

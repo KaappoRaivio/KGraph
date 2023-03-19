@@ -8,6 +8,7 @@ import SliderEntry from "./sidebar/SliderEntry";
 import AddEntry from "./sidebar/AddEntry";
 import FractalEntry from "./sidebar/FractalEntry";
 import SolidEntry from "./sidebar/SolidEntry";
+import { helpOpened } from "../redux/reducers/uiSlice";
 
 const Sidebar = () => {
   const isMobile = useSelector(state => state.ui.isMobile);
@@ -24,11 +25,12 @@ const Sidebar = () => {
   });
 
   // const style = isMobile ? { display: sidebarOpen ? "block" : "none" } : { flexBasis: position };
-  const style = { flexBasis: position, overflow: "scroll" };
+  const style = { flexBasis: position };
 
   return (
     <>
       <aside ref={sidebarRef} id={styles.sidebar} style={style}>
+        {/*<hr />*/}
         <ol className={"no-bullets"}>
           {inputs.map((item, index) => {
             const { type, key, ...rest } = item;
@@ -53,6 +55,12 @@ const Sidebar = () => {
       </aside>
       <div id={styles.handle} className={isMobile ? "" : styles.vertical} {...separatorProps}>
         ...
+        <div id={styles.topBar}>
+          <button id={styles.help} onClick={() => dispatch(helpOpened())}>
+            {" "}
+            ?{" "}
+          </button>
+        </div>
       </div>
     </>
   );

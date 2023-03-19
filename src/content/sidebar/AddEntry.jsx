@@ -27,7 +27,7 @@ const AddEntry = () => {
     <li className={styles.listItem}>
       {showAddOptions ? (
         <>
-          <button onClick={() => dispatch(addInputPressed({ pressed: false }))}>Cancel</button>
+          <button onClick={() => dispatch(addInputPressed({ pressed: false }))}>Close</button>
           <ul className={`${styles.inputTypeGrid} no-bullets`}>
             <InputTypeButton src={graph} name={"function"} onClick={() => dispatch(functionInputAdded({ name: "" }))} />
             <InputTypeButton src={colorplot} name={"solidplot"} disabled={solidInUse} onClick={() => dispatch(solidInputAdded({ name: "" }))} />

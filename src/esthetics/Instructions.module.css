@@ -1,0 +1,36 @@
+#container {
+  padding: 8px;
+  font-family: sans-serif;
+}
+
+code {
+  background: #eee;
+  border-radius: 2px;
+  padding: 2px 4px;
+  margin: 0 2px;
+  font-size: 120%;
+}
+
+code:first-child {
+  margin-left: 0;
+}
+
+code:last-child {
+  margin-right: 0;
+}
+
+#close {
+  right: 8px;
+  top: 8px;
+  position: absolute;
+  /*width: 32px;*/
+  color: inherit;
+  height: 32px;
+  padding: 0 12px;
+  background: white;
+  /*align-self: flex-end;*/
+}
+
+li {
+  margin-bottom: 8px;
+}

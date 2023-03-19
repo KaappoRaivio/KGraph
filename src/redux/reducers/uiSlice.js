@@ -6,6 +6,7 @@ const uiSlice = createSlice({
     sidebarOpen: false,
     isMobile: window.innerWidth < 600,
     isDev: !process.env.NODE_ENV || process.env.NODE_ENV === "development",
+    helpPressed: true,
     addInputPressed: false,
   },
   reducers: {
@@ -20,8 +21,14 @@ const uiSlice = createSlice({
       const { pressed } = action.payload;
       state.addInputPressed = pressed;
     },
+    helpOpened: (state, action) => {
+      state.helpPressed = true;
+    },
+    helpClosed: (state, action) => {
+      state.helpPressed = false;
+    },
   },
 });
 
-export const { sidebarToggled, mobileStatusChanged, addInputPressed } = uiSlice.actions;
+export const { sidebarToggled, mobileStatusChanged, addInputPressed, helpClosed, helpOpened } = uiSlice.actions;
 export default uiSlice.reducer;
