@@ -88,8 +88,18 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
   const xMin = Math.round(topLeft.x / tickPitch) * tickPitch;
   const xMax = Math.round(bottomRight.x / tickPitch) * tickPitch;
 
-  const fontSize = Math.floor(2 * percent);
+  let longestNumberLength = 0;
+  for (let xTick = xMin; xTick <= xMax; xTick += tickPitch) {
+    longestNumberLength = Math.max(longestNumberLength, `${xTick}`.length);
+  }
+  const roomForText = c2p({ x: xMin + 2 * tickPitch }).x - c2p({ x: xMin + tickPitch }).x;
+  console.log("Room:", roomForText);
+
+  // const fontSize = Math.floor((2 * percent));
+  const fontSize = Math.floor(roomForText / longestNumberLength);
   ctx.font = `${fontSize}px Courier New`;
+
+  console.log(longestNumberLength);
 
   ctx.textAlign = "center";
   ctx.textBaseline = "bottom";
