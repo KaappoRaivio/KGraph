@@ -1,14 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import ReduxQuerySync from "redux-query-sync";
 
 import uiReducer, { mobileStatusChanged } from "./reducers/uiSlice";
-import inputsReducer, { functionInputChanged, inputSet, solidInputChanged } from "./reducers/inputsSlice";
-import cameraReducer, { cameraChanged } from "./reducers/cameraSlice";
-import slidersReducer from "./reducers/slidersSlice";
-import throttle from "lodash.throttle";
+import inputsReducer, { functionInputChanged, solidInputChanged } from "./reducers/inputsSlice";
+import cameraReducer from "./reducers/cameraSlice";
 import getStateFromURL from "./persist";
-import { compress } from "compress-json";
 import rison from "rison";
+
 let timeout;
 
 const store = configureStore({
