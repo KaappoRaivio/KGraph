@@ -88,13 +88,16 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
   const xMin = Math.round(topLeft.x / tickPitch) * tickPitch;
   const xMax = Math.round(bottomRight.x / tickPitch) * tickPitch;
 
-  ctx.font = `${Math.floor(2 * percent)}px Courier New`;
+  const fontSize = Math.floor(2 * percent);
+  ctx.font = `${fontSize}px Courier New`;
 
   ctx.textAlign = "center";
   ctx.textBaseline = "bottom";
   // x axis
   for (let xTick = xMin; xTick <= xMax; xTick += tickPitch) {
-    ctx.fillRect(c2p({ x: xTick, y: 0 }).x - thickness / 2, Math.min(Math.max(c2p({ x: 0, y: 0 }).y - height / 2, 12), H * 0.9), thickness, height);
+    let y = Math.min(Math.max(c2p({ x: 0, y: 0 }).y - height / 2, fontSize), H - height);
+    ctx.fillRect(c2p({ x: xTick, y: 0 }).x - thickness / 2, y, thickness, height);
+
     ctx.fillRect(c2p({ x: xTick, y: 0 }).x - gridThickness / 2, 0, gridThickness, H);
     const textY =
       c2p({
@@ -103,7 +106,7 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
       }).y -
       height / 2;
 
-    if (xTick !== 0) ctx.fillText(xTick, c2p({ x: xTick, y: 0 }).x - thickness / 2, Math.min(Math.max(textY, 12), H * 0.9));
+    if (xTick !== 0) ctx.fillText(xTick, c2p({ x: xTick, y: 0 }).x - thickness / 2, Math.min(Math.max(textY, fontSize), H - height));
   }
 
   const yMin = -Math.round(bottomRight.y / tickPitch) * tickPitch;
