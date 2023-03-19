@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import ReduxQuerySync from "redux-query-sync";
 
 import uiReducer, { mobileStatusChanged } from "./reducers/uiSlice";
-import inputsReducer, { functionInputChanged, inputSet } from "./reducers/inputsSlice";
+import inputsReducer, { functionInputChanged, inputSet, solidInputChanged } from "./reducers/inputsSlice";
 import cameraReducer, { cameraChanged } from "./reducers/cameraSlice";
 import slidersReducer from "./reducers/slidersSlice";
 import throttle from "lodash.throttle";
@@ -39,8 +39,13 @@ const store = configureStore({
 
 for (let index = 0; index < store.getState().inputs.length; index++) {
   const input = store.getState().inputs[index];
-  if (input.type !== "function") continue;
-  else store.dispatch(functionInputChanged({ index, ...input }));
+  if (input.type === "function") {
+    store.dispatch(functionInputChanged({ index, ...input }));
+  } else if (input.type === "solid") {
+    store.dispatch(solidInputChanged({ index, ...input }));
+  } else {
+    continue;
+  }
 }
 
 window.addEventListener("resize", () => {

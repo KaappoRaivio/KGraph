@@ -142,8 +142,8 @@ export default (input, eliminateVertical, sliders) => {
             case "feigenbaum":
               return `
               bool isCurve = logistic(uv);
-              float a = 1. - float(isCurve) * 1.;
-              fragColor = vec4(a, a, a, a);
+              float a = float(isCurve) * 1.;
+              fragColor = vec4(0, 0, 0, a);
               return;
               `;
           }

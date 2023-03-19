@@ -1,11 +1,11 @@
 .listItem {
+  font-size: 150%;
   padding: 8px;
   margin: 8px;
   /*background: rgba(255, 255, 25, 50%);*/
   box-shadow: 0 0 1px 1px lightgray;
   border-radius: 5px;
   position: relative;
-  /*display: ;*/
 }
 
 .inputWrapper {
@@ -28,6 +28,7 @@
 .titleBar {
   margin-top: 0;
   display: flex;
+  margin-bottom: 8px;
 }
 
 .titleBar p {
@@ -35,14 +36,51 @@
   margin-top: 0;
 }
 
+.colorSelect {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin: 0 8px 0 0;
+  border: none;
+  box-shadow: 0 0 1px 1px lightgray;
+}
+
 .delete {
-  display: inline-block;
-  height: 100%;
-  padding: 0 4px;
-  line-height: 1;
-  background: none;
+  flex-basis: 32px;
+  color: inherit;
+  height: 32px;
 }
 
 .listItem:not(:last-child) {
   /*margin-bottom: 2%;*/
+}
+
+.scale {
+  display: flex;
+  align-items: center;
+}
+
+.gradient {
+  border-radius: 2px;
+  border: 1px solid gray;
+  height: 20px;
+  background: linear-gradient(to right, red, yellow);
+  margin: 8px;
+  flex-grow: 1;
+}
+
+@media screen and (min-width: 600px) {
+  .listItem {
+    font-size: 100%;
+  }
+
+  .delete {
+    flex-basis: 24px;
+    height: 24px;
+  }
+
+  .colorSelect {
+    width: 24px;
+    height: 24px;
+  }
 }

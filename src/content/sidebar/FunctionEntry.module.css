@@ -1,6 +1,8 @@
 .listItem {
+  font-size: 150%;
   padding: 8px;
   margin: 8px;
+  /*padding: 8px*/
   /*background: rgba(255, 255, 25, 50%);*/
   box-shadow: 0 0 1px 1px lightgray;
   border-radius: 5px;
@@ -9,26 +11,52 @@
 
 .functionInput {
   width: 100%;
+  font-size: inherit;
+  /*color: inherit;*/
+  /*border-color: inherit;*/
 }
 
 .titleBar {
+  /*height: 1em;*/
   margin-top: 0;
+  margin-bottom: 8px;
   display: flex;
+  position: relative;
 }
 
 .titleBar p {
   flex-grow: 1;
   margin-top: 0;
+  /*height: 30px;*/
+}
+
+.colorSelect {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin: 0 8px 0 0;
+  border: none;
+  box-shadow: 0 0 1px 1px lightgray;
 }
 
 .delete {
-  display: inline-block;
-  height: 100%;
-  padding: 0 4px;
-  line-height: 1;
-  background: none;
+  flex-basis: 32px;
+  color: inherit;
+  height: 32px;
 }
 
-.listItem:not(:last-child) {
-  /*margin-bottom: 2%;*/
+@media screen and (min-width: 600px) {
+  .listItem {
+    font-size: 100%;
+  }
+
+  .delete {
+    flex-basis: 24px;
+    height: 24px;
+  }
+
+  .colorSelect {
+    width: 24px;
+    height: 24px;
+  }
 }

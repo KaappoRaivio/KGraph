@@ -1,17 +1,15 @@
+import { expressionToGLSL } from "./workers/glslUtils";
+
 const hex2glsl = hex => {
   const color = hex.slice(1);
   const r = parseInt(color.slice(0, 2), 16);
   const g = parseInt(color.slice(2, 4), 16);
   const b = parseInt(color.slice(4, 6), 16);
 
-  // // console.log(`vec4(${(r / 255).toFixed(10)}, ${(g / 255).toFixed(10)}, ${(b / 255).toFixed(10)}, 1.)`);
   return `vec4(${(r / 255).toFixed(10)}, ${(g / 255).toFixed(10)}, ${(b / 255).toFixed(10)}, 1.)`;
 };
 
 export default (input, eliminateVertical, sliders) => {
-  // // console.log(input);
-  // const implicitFunctions = input.filter(x => x.type === "function");
-
   return `#version 300 es
     precision highp float;
     
@@ -40,6 +38,10 @@ export default (input, eliminateVertical, sliders) => {
         return 1. / pow(2., p);
         // return 1. / (x >= 0. ? pow(x, p) : (mod(p, 2.0) == 0. ? pow(-x, p) : -pow(-x, p)));
       }
+    }
+    
+    float map(float value, float min1, float max1, float min2, float max2) {
+      return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
     }
       
     vec2 getUV(vec2 fragCoord) {   
@@ -77,7 +79,9 @@ export default (input, eliminateVertical, sliders) => {
         
         // float gamma = 1. / 2.4;
         
-        float z = clamp(${input.glslSource.length > 0 ? input.glslSource : "0"}, 0., 1.);
+        float z = clamp(map(${input.glslSource.length > 0 ? input.glslSource : "0"}, ${expressionToGLSL(input.min)}, ${expressionToGLSL(
+    input.max,
+  )}, 0., 1.), 0., 1.);
         
         vec3 color = ${hex2glsl(input.color)}.xyz;
         vec3 color_gamma = toLinear(color) * z;

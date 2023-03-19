@@ -1,7 +1,7 @@
 import { implicitToGLSL } from "./glslUtils";
 
-const worker = new Worker(new URL("./glslConverter.worker.js", import.meta.url));
 export const implicitEquationToGlsl = input => {
+  const worker = new Worker(new URL("./glslConverter.worker.js", import.meta.url));
   return new Promise((resolve, reject) => {
     worker.onmessage = message => {
       if (message.data) {
@@ -12,6 +12,7 @@ export const implicitEquationToGlsl = input => {
         } else {
           reject();
         }
+        worker.terminate();
       }
     };
 
@@ -20,6 +21,7 @@ export const implicitEquationToGlsl = input => {
 };
 
 export const solidEquationToGlsl = input => {
+  const worker = new Worker(new URL("./glslConverter.worker.js", import.meta.url));
   return new Promise((resolve, reject) => {
     worker.onmessage = message => {
       if (message.data) {
@@ -30,6 +32,7 @@ export const solidEquationToGlsl = input => {
         } else {
           reject();
         }
+        worker.terminate();
       }
     };
 

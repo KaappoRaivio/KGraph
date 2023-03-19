@@ -4,7 +4,7 @@ import InlineInput from "../../InlineInput";
 
 const FractalEntry = ({ name, color, rawInput, selected, onChange, details, onRemoval, index }) => {
   return (
-    <li className={styles.listItem} style={{ background: `${color}3f` }}>
+    <li className={styles.listItem} style={{ color }}>
       <div className={styles.titleBar}>
         <p>
           {index + 1}. {name}

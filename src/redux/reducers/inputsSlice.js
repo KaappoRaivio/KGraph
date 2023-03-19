@@ -1,21 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { implicitEquationToGlsl, solidEquationToGlsl } from "../../workers/toGlslPromise";
 import { v4 as uuid } from "uuid";
-import randomcolor from "randomcolor";
+import getColor from "esthetics/color";
 
 const inputsSlice = createSlice({
   name: "inputs",
   initialState: [
-    { name: "a", max: 1, min: 0, value: 0, step: 0.01, type: "slider", color: randomcolor({ luminosity: "light" }) },
+    { name: "a", max: 1, min: 0, value: 0, step: 0.01, type: "slider", color: "#ffffff" },
     {
       name: "f(x)",
-      rawInput: "e ^ (sin(x / y) + cos(y * x)) - sin(e ^ (x + y)) - a",
+      rawInput: "e ^ (sin(x / y) + cos(y * x)) = sin(e ^ (x + y)) + a",
       glslSource: "",
       type: "function",
-      color: randomcolor({ luminosity: "dark" }),
+      color: getColor(-1),
     },
-    // { name: "g(x)", rawInput: "", glslSource: "", type: "function", key: uuid(), color: "#af7fff" },
-    // { name: "fractallol", type: "fractal", selected: "julia", details: { ci: "0", cr: "0" }, key: uuid(), color: "#000000" },
   ],
   reducers: {
     inputSet: (state, action) => {
@@ -28,14 +26,14 @@ const inputsSlice = createSlice({
         name,
         rawInput: "",
         glslSource: "",
-        color: randomcolor({ luminosity: "dark" }),
-        // color: "#000000",
+        color: getColor(state.length),
       });
     },
     functionRawInputChanged: (state, action) => {
-      const { index, rawInput } = action.payload;
+      const { index, rawInput, color } = action.payload;
 
-      state[index].rawInput = rawInput;
+      if (rawInput != null) state[index].rawInput = rawInput;
+      if (color != null) state[index].color = color;
     },
     sliderChanged: (state, action) => {
       const { index, value, name, max, min, step } = action.payload;
@@ -49,7 +47,7 @@ const inputsSlice = createSlice({
     sliderInputAdded: (state, action) => {
       const { name } = action.payload;
 
-      state.push({ name, max: 10, min: -10, value: 0, step: 0.01, type: "slider", color: randomcolor({ luminosity: "light" }) });
+      state.push({ name, max: 10, min: -10, value: 0, step: 0.01, type: "slider", color: getColor(state.length) });
     },
     inputRemoved: (state, action) => {
       const { index } = action.payload;
@@ -76,14 +74,19 @@ const inputsSlice = createSlice({
         name,
         rawInput: "",
         glslSource: "",
-        color: randomcolor({ luminosity: "dark" }),
+        color: getColor(state.length),
+        min: "0",
+        max: "1",
         // color: "#000000",
       });
     },
     solidRawInputChanged: (state, action) => {
-      const { index, rawInput } = action.payload;
+      const { index, rawInput, min, max, color } = action.payload;
 
-      state[index].rawInput = rawInput;
+      if (rawInput != null) state[index].rawInput = rawInput;
+      if (min != null) state[index].min = min;
+      if (max != null) state[index].max = max;
+      if (color != null) state[index].color = color;
     },
   },
   extraReducers: builder => {
@@ -122,6 +125,7 @@ export const functionInputChanged = createAsyncThunk("inputs/functionInputChange
   } catch (e) {
     glslSource = "";
   }
+  // console.log("Got result");
 
   return {
     glslSource,

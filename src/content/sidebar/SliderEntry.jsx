@@ -4,7 +4,7 @@ import InlineInput from "../../InlineInput";
 
 const SliderEntry = ({ name, index, color, value, min, max, step, onChange, onRemoval }) => {
   return (
-    <li className={styles.listItem} style={{ background: `${color}3f` }}>
+    <li className={styles.listItem}>
       <div className={styles.titleBar}>
         <span>{index + 1}. </span>
         <label htmlFor={name} className={styles.equationWrapper}>

@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 const webpack = require("webpack");
 
 module.exports = {
@@ -42,6 +43,17 @@ module.exports = {
     ],
   },
   optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          sourceMap: true,
+          compress: {
+            drop_console: true,
+          },
+        },
+      }),
+    ],
     splitChunks: {
       chunks: "all",
       name: "shared",
