@@ -86,6 +86,7 @@ export default (input, eliminateVertical, sliders) => {
         
         vec3 blend = toGamma(color_gamma + background_gamma);  
         fragColor = vec4(blend, 1.);
+        // fragColor = vec4(${hex2glsl(input.color)}.xyz, pow(z, 2.4));
         
         
         // vec4 funcColor = shade(uv);

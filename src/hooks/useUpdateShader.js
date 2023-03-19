@@ -41,18 +41,25 @@ export default (gl, inputs, sliders, currentPrograms, setCurrentPrograms) => {
         }
 
         const program = createProgram(gl, vertexShader, fragment);
-        programs.push(program);
+        programs.push({ program, input });
       } catch (error) {
         console.error("Error templating shader", error);
       }
     }
 
     programs.sort((a, b) => {
-      const valA = a?.type === "function" ? 1 : 0;
-      const valB = b?.type === "function" ? 1 : 0;
+      const values = {
+        function: 1,
+        fractal: 0,
+        solid: -1,
+      };
+
+      const valA = values[a?.input.type];
+      const valB = values[b?.input.type];
       return valA < valB ? -1 : valA > valB ? 1 : 0;
     });
+    console.log(programs, inputs);
 
-    setCurrentPrograms(programs);
+    setCurrentPrograms(programs.map(({ program, input }) => program));
   }, [gl, JSON.stringify(inputs), JSON.stringify(sliders.map(slider => slider.name)), window.devicePixelRatio]);
 };

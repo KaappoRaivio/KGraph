@@ -9,9 +9,9 @@ import colorplot from "../../../res/color_plot-min.svg";
 import fractal from "../../../res/fractal-min.svg";
 import { fractalInputAdded, functionInputAdded, sliderInputAdded, solidInputAdded } from "../../redux/reducers/inputsSlice";
 
-const InputTypeButton = ({ src, name, onClick }) => {
+const InputTypeButton = ({ src, name, disabled, onClick }) => {
   return (
-    <li className={styles.inputTypeButton} onClick={onClick}>
+    <li className={`${styles.inputTypeButton} ${disabled ? styles.disabled : ""}`} onClick={onClick}>
       <img src={`data:image/svg+xml;base64,${btoa(src)}`} alt={name} />
       <p>{name}</p>
     </li>
@@ -21,6 +21,7 @@ const InputTypeButton = ({ src, name, onClick }) => {
 const AddEntry = () => {
   const dispatch = useDispatch();
   const showAddOptions = useSelector(state => state.ui.addInputPressed);
+  const solidInUse = useSelector(state => state.inputs.filter(input => input.type === "solid").length > 0);
 
   return (
     <li className={styles.listItem}>
@@ -29,7 +30,7 @@ const AddEntry = () => {
           <button onClick={() => dispatch(addInputPressed({ pressed: false }))}>Cancel</button>
           <ul className={`${styles.inputTypeGrid} no-bullets`}>
             <InputTypeButton src={graph} name={"function"} onClick={() => dispatch(functionInputAdded({ name: "" }))} />
-            <InputTypeButton src={colorplot} name={"solidplot"} onClick={() => dispatch(solidInputAdded({ name: "" }))} />
+            <InputTypeButton src={colorplot} name={"solidplot"} disabled={solidInUse} onClick={() => dispatch(solidInputAdded({ name: "" }))} />
             <InputTypeButton src={sliders} name={"constant"} onClick={() => dispatch(sliderInputAdded({ name: "" }))} />
             <InputTypeButton src={fractal} name={"fractal"} onClick={() => dispatch(fractalInputAdded({}))} />
           </ul>
