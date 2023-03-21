@@ -31,12 +31,19 @@ export default (input, eliminateVertical, sliders) => {
       //   return NaN;
       // }
       if (y >= 0.)
-        return pow(x, y); 
-        // return x >= 0. ? pow(x, y) : (mod(y, 2.0) == 0. ? pow(-x, y) : -pow(-x, y));
+        // return pow(x, y); 
+        return x >= 0. ? pow(x, y) : (mod(y, 2.0) == 0. ? pow(-x, y) : -pow(-x, y));
       else {
         float p = abs(y);
-        return 1. / pow(2., p);
-        // return 1. / (x >= 0. ? pow(x, p) : (mod(p, 2.0) == 0. ? pow(-x, p) : -pow(-x, p)));
+        // return 1. / pow(x, p);
+        float divisor = x >= 0. ? 
+                      pow(x, p) : 
+                      (mod(p, 2.0) == 0. ? 
+                              pow(-x, p) : 
+                              -pow(-x, p)
+                       );
+        
+        return 1. / divisor;
       }
     }
     
