@@ -5,9 +5,13 @@ const webpack = require("webpack");
 
 module.exports = {
   output: {
+    publicPath: "/",
     path: path.resolve(__dirname, "build"),
     filename: "[name]-[chunkhash].bundle.js",
     chunkFilename: "[name]-[chunkhash].js",
+  },
+  devServer: {
+    historyApiFallback: true,
   },
   resolve: {
     extensions: [".js", ".jsx", "ts", "tsx"],
@@ -39,6 +43,10 @@ module.exports = {
       {
         test: /\.svg$/,
         use: { loader: "svg-inline-loader" },
+      },
+      {
+        test: /\.(mkv|webm)/,
+        use: { loader: "file-loader" },
       },
     ],
   },

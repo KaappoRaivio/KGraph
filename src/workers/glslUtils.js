@@ -59,6 +59,7 @@ export const implicitToGLSL = input => {
 };
 
 export const solidToGLSL = input => {
+  // input = input.toLowerCase();
   if (input.length && !input.includes("=")) {
     if (input.includes("z")) throw Error("Z without equals sign!");
     // input = `y = ${input.toLowerCase()} + P`;
@@ -69,7 +70,10 @@ export const solidToGLSL = input => {
 
   input = replaceWithFractions(input);
 
+  console.log("Input", input);
   const equalToZero = algebrite.run(`roots(${input}, z)`);
+  // const equalToZero = input;
+  console.log("Solved:", equalToZero);
   if (equalToZero.includes("Stop")) throw new Error(equalToZero);
 
   const reparsed = mathjs.parse(equalToZero, { simplify: false });

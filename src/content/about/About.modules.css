@@ -1,0 +1,38 @@
+#header {
+  width: 100%;
+  height: 25vh;
+  overflow: hidden;
+  font-size: 4vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+#header h1 {
+  position: absolute;
+  color: white;
+  filter: drop-shadow(0 0 2px black);
+  /*top: 0;*/
+}
+
+#mainWrapper {
+  padding-top: 32px;
+  width: 100%;
+  /*text-align: center;*/
+  display: flex;
+  justify-content: center;
+}
+
+#main {
+  width: 100%;
+  max-width: 800px;
+  /*border: 1px solid orange;*/
+  font-family: sans-serif;
+}
+
+.twoSideBySide {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 10px;
+}
