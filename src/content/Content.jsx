@@ -11,7 +11,7 @@ const Content = ({ forwardRef, ...rest }) => {
   return (
     <div ref={forwardRef} {...rest} id={styles.contentWrapper}>
       <GPUPlot input={input} sliders={sliders} />
-      {/*<CanvasOverlay />*/}
+      <CanvasOverlay />
     </div>
   );
 };
