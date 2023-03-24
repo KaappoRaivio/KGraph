@@ -9,8 +9,10 @@ import "./index.css";
 import store from "./redux/store";
 import { Provider } from "react-redux";
 import About from "./content/about/About";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, redirect, RouterProvider } from "react-router-dom";
 import { MathJaxContext } from "better-react-mathjax";
+
+const isDev = store.getState().ui.isDev;
 
 const router = createBrowserRouter([
   {
@@ -21,6 +23,7 @@ const router = createBrowserRouter([
       </MathJaxContext>
     ),
   },
+
   {
     path: "/",
     element: (

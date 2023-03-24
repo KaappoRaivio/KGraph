@@ -135,7 +135,7 @@ const About = () => {
             Desmos or Geogebra.
           </p>
           <h2>Try it!</h2>
-          <a href={"https://kaapporaivio.fi/graph"}>Click here to try it!</a>
+          <a href={"https://kaapporaivio.fi/graph?demo=1"}>Click here to try it!</a>
         </main>
       </div>
     </div>

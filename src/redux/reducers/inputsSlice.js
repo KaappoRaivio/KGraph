@@ -6,14 +6,14 @@ import getColor from "esthetics/color";
 const inputsSlice = createSlice({
   name: "inputs",
   initialState: [
-    { name: "a", max: 1, min: 0, value: 0, step: 0.01, type: "slider", color: "#ffffff" },
-    {
-      name: "f(x)",
-      rawInput: "e ^ (sin(x / y) + cos(y * x)) = sin(e ^ (x + y)) + a",
-      glslSource: "",
-      type: "function",
-      color: getColor(-1),
-    },
+    // { name: "a", max: 1, min: 0, value: 0, step: 0.01, type: "slider", color: "#ffffff" },
+    // {
+    //   name: "f(x)",
+    //   rawInput: "e ^ (sin(x / y) + cos(y * x)) = sin(e ^ (x + y)) + a",
+    //   glslSource: "",
+    //   type: "function",
+    //   color: getColor(-1),
+    // },
   ],
   reducers: {
     inputSet: (state, action) => {
