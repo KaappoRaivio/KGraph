@@ -7,6 +7,10 @@ const cameraSlice = createSlice({
     cameraChanged: (state, action) => {
       state.current = action.payload;
     },
+    zoomChanged: (state, action) => {
+      state.current.zoom += action.payload;
+      // console.log("zoom", state.zoom);
+    },
 
     // cameraDragged: (state, action) => {
     //   state.dragInProgress = true;
@@ -15,5 +19,5 @@ const cameraSlice = createSlice({
   },
 });
 
-export const { cameraChanged, cameraDragged } = cameraSlice.actions;
+export const { cameraChanged, zoomChanged } = cameraSlice.actions;
 export default cameraSlice.reducer;

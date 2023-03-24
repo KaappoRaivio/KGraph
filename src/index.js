@@ -10,11 +10,16 @@ import store from "./redux/store";
 import { Provider } from "react-redux";
 import About from "./content/about/About";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { MathJaxContext } from "better-react-mathjax";
 
 const router = createBrowserRouter([
   {
     path: "/about",
-    element: <About />,
+    element: (
+      <MathJaxContext>
+        <About />
+      </MathJaxContext>
+    ),
   },
   {
     path: "/",

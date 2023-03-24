@@ -45,7 +45,7 @@ module.exports = {
         use: { loader: "svg-inline-loader" },
       },
       {
-        test: /\.(mkv|webm)/,
+        test: /\.(mkv|webm|webp|png)/,
         use: { loader: "file-loader" },
       },
     ],

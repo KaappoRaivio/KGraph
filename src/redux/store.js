@@ -19,7 +19,7 @@ const store = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware().concat(store => next => action => {
       next(action);
-      if (!action.type.endsWith("pending")) {
+      if (!action.type.endsWith("pending") && !window.location.pathname.endsWith("about/")) {
         // setTimeout(() => {
         if (timeout !== 0) clearTimeout(timeout);
         const state = store.getState();
