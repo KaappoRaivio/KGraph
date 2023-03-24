@@ -41,8 +41,8 @@ const store = configureStore({
           // params.set("d", btoa(JSON.stringify(rest)));
           // console.log(rest);
 
-          // window.history.replaceState(null, "", `?${params.toString()}`);
-          window.history.replaceState(null, "", `?d=${rison.encode_object(toSerialization)}`);
+          window.history.replaceState(null, "", `?${params.toString()}`);
+          // window.history.replaceState(null, "", `?d=${rison.encode_object(toSerialization)}`);
         }, 500);
       }
     }),
