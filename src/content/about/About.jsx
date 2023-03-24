@@ -6,7 +6,7 @@ import vid_desmos from "../../../res/demo/1_desmos_new.webm";
 import vid_geogebra from "../../../res/demo/1_geogebra_new.webm";
 import vid_kgraph from "../../../res/demo/1_kgraph_new.webm";
 import img_header from "../../../res/demo/header.webp";
-import text_texture from "../../../res/demo/text_texture.png";
+// import text_texture from "../../../res/demo/text_texture.png";
 
 import show_2 from "../../../res/demo/pictures/2.webp";
 import show_3 from "../../../res/demo/pictures/3.webm";
@@ -54,8 +54,8 @@ const About = () => {
   return (
     <div id={styles.container}>
       <header id={styles.header}>
-        <img src={img_header} width={"100%"} alt={""} />
-        <h1 style={{ backgroundImage: `url(${text_texture})` }}>KGraph</h1>
+        <img id={styles.headerImage} src={img_header} alt={""} />
+        <h1>KGraph</h1>
       </header>
       <div id={styles.mainWrapper}>
         <main id={styles.main}>
