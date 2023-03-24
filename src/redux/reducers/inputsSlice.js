@@ -1,7 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { implicitEquationToGlsl, solidEquationToGlsl } from "../../workers/toGlslPromise";
+import { GLSLConversionManager, implicitEquationToGlsl, solidEquationToGlsl } from "../../workers/toGlslPromise";
 import { v4 as uuid } from "uuid";
 import getColor from "esthetics/color";
+
+const conversionManager = new GLSLConversionManager();
 
 const inputsSlice = createSlice({
   name: "inputs",
@@ -120,7 +122,9 @@ export const functionInputChanged = createAsyncThunk("inputs/functionInputChange
 
   let glslSource;
   try {
-    glslSource = await implicitEquationToGlsl(input.rawInput);
+    // glslSource = await implicitEquationToGlsl(input.rawInput);
+    glslSource = await conversionManager.implicitEquationToGlsl(input.rawInput);
+    console.log("GlslSource", glslSource);
     // glslSource = "";
   } catch (e) {
     glslSource = "";
@@ -138,7 +142,7 @@ export const solidInputChanged = createAsyncThunk("inputs/solidInputChanged", as
   //
   let glslSource;
   try {
-    glslSource = await solidEquationToGlsl(input.rawInput);
+    glslSource = await conversionManager.solidEquationToGlsl(input.rawInput);
     // glslSource = "";
   } catch (e) {
     glslSource = "";
