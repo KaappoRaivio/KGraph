@@ -14,25 +14,28 @@ import { MathJaxContext } from "better-react-mathjax";
 
 const isDev = store.getState().ui.isDev;
 
-const router = createBrowserRouter([
-  {
-    path: "/about",
-    element: (
-      <MathJaxContext>
-        <About />
-      </MathJaxContext>
-    ),
-  },
+const router = createBrowserRouter(
+  [
+    {
+      path: "/about",
+      element: (
+        <MathJaxContext>
+          <About />
+        </MathJaxContext>
+      ),
+    },
 
-  {
-    path: "/",
-    element: (
-      <Provider store={store}>
-        <Main />
-      </Provider>
-    ),
-  },
-]);
+    {
+      path: "/",
+      element: (
+        <Provider store={store}>
+          <Main />
+        </Provider>
+      ),
+    },
+  ],
+  { basename: isDev ? "/" : "/graph" },
+);
 
 render(
   <React.StrictMode>
