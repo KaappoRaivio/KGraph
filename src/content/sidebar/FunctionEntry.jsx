@@ -9,7 +9,15 @@ const FunctionEntry = ({ name, color, rawInput, onChange, onRemoval, index }) =>
         <p>
           {index + 1}. {name}
         </p>
-        <input type="color" className={styles.colorSelect} value={color} onChange={e => onChange({ color: e.target.value })} />
+        <input
+          type="color"
+          className={styles.colorSelect}
+          value={color}
+          onChange={e => {
+            // console.log("Changed", e.target.value);
+            onChange({ color: e.target.value });
+          }}
+        />
         <button className={styles.delete} onClick={onRemoval}>
           ×
         </button>
