@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import styles from "./About.modules.css";
 
@@ -6,6 +6,7 @@ import vid_desmos from "../../../res/demo/1_desmos_new.webm";
 import vid_geogebra from "../../../res/demo/1_geogebra_new.webm";
 import vid_kgraph from "../../../res/demo/1_kgraph_new.webm";
 import img_header from "../../../res/demo/header.webp";
+import img_header_mobile from "../../../res/demo/header_mobile.webp";
 // import text_texture from "../../../res/demo/text_texture.png";
 
 import show_2 from "../../../res/demo/pictures/2.webp";
@@ -51,10 +52,23 @@ const About = () => {
   const video2Ref = useRef(null);
   const video3Ref = useRef(null);
   // console.log(KGraph1);
+  // const isMobile = useMemo(() => window.innerWidth < 600, [window.innerWidth]);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
+  useEffect(() => {
+    const listener = () => {
+      const newState = window.innerWidth < 600;
+
+      setIsMobile(newState);
+    };
+    window.addEventListener("resize", listener);
+    return () => window.removeEventListener("resize", listener);
+  }, []);
+
+  console.log("Re-render:", isMobile);
   return (
     <div id={styles.container}>
       <header id={styles.header}>
-        <img id={styles.headerImage} src={img_header} alt={""} />
+        <img id={styles.headerImage} src={isMobile ? img_header_mobile : img_header} alt={""} />
         <h1>KGraph</h1>
       </header>
       <div id={styles.mainWrapper}>
