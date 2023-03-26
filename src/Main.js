@@ -18,6 +18,8 @@ const Main = () => {
   const isMobile = useSelector(state => state.ui.isMobile);
   const isDev = useSelector(state => state.ui.isDev);
   const isHelpOpen = useSelector(state => state.ui.helpPressed);
+  const isWebgl2Supported = useSelector(state => state.ui.webgl2Supported);
+  const initialCamera = useSelector(state => state.camera.current);
 
   return (
     <div id={styles.topContainer} style={{ flexDirection: isMobile ? "column-reverse" : "row" }}>
@@ -25,11 +27,15 @@ const Main = () => {
         <Instructions />
       </Modal>
       <Sidebar />
-      <main id={styles.content}>
-        <PinchPanZoomListener onChange={camera => dispatch(cameraChanged(camera))} initialCamera={useSelector(state => state.camera.current)}>
-          <Content />
-        </PinchPanZoomListener>
-      </main>
+      {isWebgl2Supported ? (
+        <main id={styles.content}>
+          <PinchPanZoomListener onChange={camera => dispatch(cameraChanged(camera))} initialCamera={initialCamera}>
+            <Content />
+          </PinchPanZoomListener>
+        </main>
+      ) : (
+        <p>Your browser doesn't support webgl2</p>
+      )}
       {isDev && <PerformanceMonitor />}
     </div>
   );

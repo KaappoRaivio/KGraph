@@ -8,17 +8,9 @@ export const toGLSLFriendly = parsed => {
   while (true) {
     let transformed = mathjs.parse(result.toString()).transform((node, path, parent) => {
       if (node.type === "OperatorNode") {
-        // if (node.op === "*") {
-        //
-        //   return new mathjs.OperatorNode("*", "multiply", node.args, false);
-        // }
         if (node.op === "^") {
           return new mathjs.FunctionNode("ppow", node.args);
-          // return new mathjs.SymbolNode(`pow(${node.args[0]}, ${node.args[1]})`);
         }
-      } else if (node.type === "ConstantNode") {
-        // return new mathjs.ConstantNode();
-        // return new mathjs.SymbolNode(`${node.value}.`);
       }
 
       return node;
@@ -26,13 +18,13 @@ export const toGLSLFriendly = parsed => {
 
     if (transformed.toString() === result.toString()) break;
     else {
-      // previous = transformed;
       result = transformed;
     }
   }
 
-  let transformed = result.toString({ implicit: "show", simplify: "false" });
-  let addedPoints = transformed.replaceAll(/(?<![\d.])([0-9]+)(?![\d.])/g, "$1.");
+  const transformed = result.toString({ implicit: "show", simplify: "false" });
+  const addedPoints = transformed.replaceAll(/([+-]?([0-9]*[.])?[0-9]+(e[+-]?[0-9]+)?)/g, "float($1)");
+  console.log("Transformed:", transformed, "addedPoints:", addedPoints);
 
   return addedPoints;
 };

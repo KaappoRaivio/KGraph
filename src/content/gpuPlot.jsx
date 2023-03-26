@@ -1,18 +1,24 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import useWebGl from "../hooks/useWebGl";
 import useGlScaling from "../hooks/useGlScaling";
 import useUpdateShader from "../hooks/useUpdateShader";
 import useDimensions from "../hooks/useDimensions";
 import useUpdateShaderInputs from "../hooks/useUpdateShaderInputs";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { webglSupportDetected } from "../redux/reducers/uiSlice";
 
 const GPUPlot = ({ sliders, input, ...rest }) => {
+  const dispatch = useDispatch();
   const camera = useSelector(state => state.camera.current);
   const graphRootRef = useRef(null);
 
-  const { gl, isGlPresent } = useWebGl(graphRootRef);
-  useGlScaling(gl, isGlPresent, graphRootRef);
+  const { gl, isPresent, isSupported } = useWebGl(graphRootRef);
+  useEffect(() => {
+    dispatch(webglSupportDetected(isSupported));
+  }, [isSupported]);
+
+  useGlScaling(gl, isPresent, graphRootRef);
 
   const [currentPrograms, setCurrentPrograms] = useState([]);
   useUpdateShader(gl, input, sliders, currentPrograms, setCurrentPrograms);

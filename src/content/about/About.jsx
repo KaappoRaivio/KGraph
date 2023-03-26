@@ -47,6 +47,31 @@ const features = {
   ],
 };
 
+const MyVideo = ({ forwardRef, src, className, autoPlay, loop }) => {
+  const isSafari =
+    /constructor/i.test(window.HTMLElement) ||
+    (function (p) {
+      return p.toString() === "[object SafariRemoteNotification]";
+    })(!window["safari"] || (typeof safari !== "undefined" && window["safari"].pushNotification));
+
+  return isSafari ? (
+    <i className={className} style={{ border: "1px dashed black", padding: "8px" }}>
+      Your browser doesn't support videos
+    </i>
+  ) : (
+    <video
+      ref={forwardRef}
+      className={className}
+      src={src}
+      autoPlay={autoPlay || false}
+      loop={loop || false}
+      muted={true}
+      width={"100%"}
+      playsInline={true}
+      type={"video/webm"}></video>
+  );
+};
+
 const About = () => {
   const video1Ref = useRef(null);
   const video2Ref = useRef(null);
@@ -97,9 +122,9 @@ const About = () => {
             Play!
           </button>
           <div className={styles.threeSideBySide}>
-            <video ref={video1Ref} src={vid_kgraph} autoPlay={false} muted={true} width={"100%"} controls={false} />
-            <video ref={video2Ref} src={vid_desmos} autoPlay={false} muted={true} width={"100%"} controls={false} />
-            <video ref={video3Ref} src={vid_geogebra} autoPlay={false} muted={true} width={"100%"} controls={false} />
+            <MyVideo forwardRef={video1Ref} src={vid_kgraph} />
+            <MyVideo forwardRef={video2Ref} src={vid_desmos} />
+            <MyVideo forwardRef={video3Ref} src={vid_geogebra} />
           </div>
           <h2>Features</h2>
           <div className={styles.twoSideBySide}>
@@ -116,7 +141,7 @@ const About = () => {
                   {feature.type === "img" ? (
                     <img className={styles.inlineMedia} src={feature.src} alt={""} />
                   ) : (
-                    <video className={styles.inlineMedia} src={feature.src} autoPlay={true} loop={true} muted={true}></video>
+                    <MyVideo className={styles.inlineMedia} src={feature.src} autoPlay={true} loop={true}></MyVideo>
                   )}
                 </div>
               ))}
@@ -134,7 +159,7 @@ const About = () => {
                   {feature.type === "img" ? (
                     <img className={styles.inlineMedia} src={feature.src} alt={""} />
                   ) : (
-                    <video className={styles.inlineMedia} src={feature.src} autoPlay={true} loop={true} muted={true}></video>
+                    <MyVideo className={styles.inlineMedia} src={feature.src} autoPlay={true} loop={true}></MyVideo>
                   )}
                 </div>
               ))}

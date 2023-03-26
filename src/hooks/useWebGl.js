@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 
 export default canvasRef => {
   const [gl, setGl] = useState(null);
+  const [isSupported, setIsSupported] = useState(true);
   useEffect(() => {
     // const graphRoot = graphRootRef.current;
     const gl = canvasRef.current.getContext("webgl2", { preserveDrawingBuffer: true });
+    if (gl == null) return setIsSupported(false);
 
     gl.enable(gl.BLEND);
     gl.blendEquation(gl.FUNC_ADD);
@@ -18,5 +20,5 @@ export default canvasRef => {
     setGl(gl);
   }, []);
 
-  return { gl, isGlPresent: gl != null };
+  return { gl, isPresent: gl != null, isSupported };
 };

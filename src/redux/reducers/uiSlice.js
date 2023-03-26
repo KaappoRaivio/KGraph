@@ -8,6 +8,7 @@ const uiSlice = createSlice({
     isDev: !process.env.NODE_ENV || process.env.NODE_ENV === "development",
     helpPressed: false,
     addInputPressed: false,
+    webgl2Supported: true,
   },
   reducers: {
     sidebarToggled: (state, action) => {
@@ -27,8 +28,11 @@ const uiSlice = createSlice({
     helpClosed: (state, action) => {
       state.helpPressed = false;
     },
+    webglSupportDetected: (state, action) => {
+      state.webgl2Supported = action.payload;
+    },
   },
 });
 
-export const { sidebarToggled, mobileStatusChanged, addInputPressed, helpClosed, helpOpened } = uiSlice.actions;
+export const { sidebarToggled, mobileStatusChanged, addInputPressed, helpClosed, helpOpened, webglSupportDetected } = uiSlice.actions;
 export default uiSlice.reducer;
