@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import styles from "./About.modules.css";
 
-import vid_desmos from "../../../res/demo/1_desmos_new.webm";
+import vid_desmos from "../../../res/demo/1_desmos_new_base_web.m4v";
 import vid_geogebra from "../../../res/demo/1_geogebra_new.webm";
 import vid_kgraph from "../../../res/demo/1_kgraph_new.webm";
 import img_header from "../../../res/demo/header.webp";
@@ -11,8 +11,9 @@ import img_header_mobile from "../../../res/demo/header_mobile.webp";
 
 import show_2 from "../../../res/demo/pictures/2.webp";
 import show_3 from "../../../res/demo/pictures/3.webm";
+import show_3_fallback from "../../../res/demo/pictures/3.mkv";
 import show_4 from "../../../res/demo/pictures/4.webp";
-import show_5 from "../../../res/demo/pictures/5.webm";
+import show_5_fallback from "../../../res/demo/pictures/5.mkv";
 
 import { MathJax } from "better-react-mathjax";
 
@@ -26,7 +27,8 @@ const features = {
     },
     {
       type: "video",
-      src: show_5,
+      src: show_5_fallback,
+      src_fallback: show_5_fallback,
       caption: "Renders fractals",
       link: "https://kaapporaivio.fi/graph/?d=camera%3A%28current%3A%28x%3A0.11459662756203731%2Cy%3A0.3762703086399076%2Czoom%3A-1.2999999999999992%29%29%2Cinputs%3A%21%28%28color%3A%23000000%2Cdetails%3A%28ci%3A%271%2Fsqrt%282%29*cos%28a%29%27%2Ccr%3A%271%2Fsqrt%282%29*sin%28a%29%27%29%2Cselected%3Ajulia%2Ctype%3Afractal%29%2C%28color%3A%23cfcf00%2Cmax%3A%276.28%27%2Cmin%3A%270%27%2Cname%3Aa%2Cstep%3A0.01%2Ctype%3Aslider%2Cvalue%3A%273.63%27%29%29",
     },
@@ -34,7 +36,8 @@ const features = {
   right: [
     {
       type: "video",
-      src: show_3,
+      src: show_3_fallback,
+      src_fallback: show_3_fallback,
       caption: "Supports named constants",
       link: "https://kaapporaivio.fi/graph/?d=camera%3A%28current%3A%28x%3A-2.8539860875173497%2Cy%3A-5.673043985476103%2Czoom%3A-5.499999999999995%29%29%2Cinputs%3A%21%28%28color%3A%23ffffff%2Cmax%3A%2710%27%2Cmin%3A0%2Cname%3Aa%2Cstep%3A0.01%2Ctype%3Aslider%2Cvalue%3A%270.06%27%29%2C%28color%3A%23070db0%2CglslSource%3A%27%27%2Cname%3A%27f%28x%29%27%2CrawInput%3A%27e+%5E+%28sin%28x+%2F+y%29+%2B+cos%28y+*+x%29%29+%3D+sin%28e+%5E+%28x+%2B+y%29%29+%2B+a%27%2Ctype%3Afunction%29%29",
     },
@@ -54,7 +57,7 @@ const MyVideo = ({ forwardRef, src, className, autoPlay, loop }) => {
       return p.toString() === "[object SafariRemoteNotification]";
     })(!window["safari"] || (typeof safari !== "undefined" && window["safari"].pushNotification));
 
-  return isSafari ? (
+  return false ? (
     <i className={className} style={{ border: "1px dashed black", padding: "8px" }}>
       Your browser doesn't support videos
     </i>
@@ -68,7 +71,7 @@ const MyVideo = ({ forwardRef, src, className, autoPlay, loop }) => {
       muted={true}
       width={"100%"}
       playsInline={true}
-      type={"video/webm"}></video>
+      type={"video/m4v"}></video>
   );
 };
 

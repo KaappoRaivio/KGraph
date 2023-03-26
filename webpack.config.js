@@ -48,7 +48,7 @@ module.exports = (env, argv) => {
           use: { loader: "svg-inline-loader" },
         },
         {
-          test: /\.(mkv|webm|webp|png)/,
+          test: /\.(mkv|webm|webp|png|mp4|m4v)/,
           use: { loader: "file-loader" },
         },
       ],
