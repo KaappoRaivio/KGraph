@@ -144,7 +144,7 @@ const About = () => {
                   <p>
                     {feature.caption}{" "}
                     <a href={feature.link} target={"_blank"} rel={"noopener noreferrer"}>
-                      (try it)
+                      <strong>(→ see for yourself)</strong>
                     </a>
                   </p>
                   {feature.type === "img" ? (
@@ -162,7 +162,7 @@ const About = () => {
                   <p>
                     {feature.caption}{" "}
                     <a href={feature.link} target={"_blank"} rel={"noopener noreferrer"}>
-                      (try it)
+                      <strong>(→ see for yourself)</strong>
                     </a>
                   </p>
                   {feature.type === "img" ? (

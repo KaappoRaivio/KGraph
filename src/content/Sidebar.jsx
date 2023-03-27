@@ -19,7 +19,7 @@ const Sidebar = () => {
   const { position, separatorProps } = useResizable({
     axis: isMobile ? "y" : "x",
     reverse: isMobile,
-    initial: 300,
+    initial: 200,
     containerRef: sidebarRef,
     min: 0,
   });
