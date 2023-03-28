@@ -69,6 +69,7 @@ const MyVideo = ({ forwardRef, src, className, autoPlay, loop }) => {
       autoPlay={autoPlay || false}
       loop={loop || false}
       muted={true}
+      height={"100%"}
       width={"100%"}
       playsInline={true}
       type={"video/m4v"}></video>

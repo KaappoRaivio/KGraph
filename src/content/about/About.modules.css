@@ -72,6 +72,11 @@
   grid-gap: 10px;
 }
 
+.threeSideBySide video {
+  width: 100%;
+  height: 100%;
+}
+
 .twoSideBySide {
   width: 100%;
   margin-top: 8px;
