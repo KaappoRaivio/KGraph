@@ -5,6 +5,7 @@ body {
   overflow: hidden;
   margin: 0;
   font-family: monospace;
+  touch-action: none;
 }
 * {
   box-sizing: border-box;
