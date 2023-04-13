@@ -14,7 +14,7 @@ More information available __[here](https://kaapporaivio.fi/graph/about)__
 
 ## Contributing
 
-All pull requests welcome!
+All pull requests and issues are welcome!
 
 
 ## Disclaimer
