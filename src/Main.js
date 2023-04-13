@@ -11,8 +11,6 @@ import PerformanceMonitor from "./content/PerformanceMonitor";
 import Modal from "react-modal";
 import Instructions from "./esthetics/Instructions";
 
-// window.devicePixelRatio = 1;
-
 const Main = () => {
   const dispatch = useDispatch();
   const isMobile = useSelector(state => state.ui.isMobile);
@@ -39,15 +37,6 @@ const Main = () => {
       {isDev && <PerformanceMonitor />}
     </div>
   );
-
-  // return (
-  //   <>
-  //     <Sliders />
-  //     <div id={"inputContainer"}>
-  //       <input autoCorrect={"off"} value={inputValue} onChange={e => dispatch(inputChanged({ index: 0, rawInput: e.target.value }))} />
-  //     </div>
-  //   </>
-  // );
 };
 
 export default Main;

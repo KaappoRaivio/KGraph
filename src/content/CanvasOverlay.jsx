@@ -27,13 +27,6 @@ const clipSpace2PxSpace =
 
     const scale = Math.min(resolution.x, resolution.y);
 
-    // const overlapW = Math.max(0, (resolution.x - resolution.y) / (2 * resolution.y));
-    // const overlapH = Math.max(0, (resolution.y - resolution.x) / (2 * resolution.x));
-    // const uv = { x: x * scale - (0.5 + Math.max(overlapW)), y: y * scale - (0.5 + Math.max(overlapH, 0.5)) };
-    // const clipVec = vec3.fromValues(x, y, 0);
-
-    // const res = vec3.transformMat3([], clipVec, mat3.transpose([], cameraMatrix));
-    // return { x: res[0], y: res[1] };
     return {
       x: (x - camera.x) * scale * Math.pow(2, camera.zoom) + resolution.x / 2,
       y: (y + camera.y) * scale * Math.pow(2, camera.zoom) + resolution.y / 2,
@@ -47,13 +40,6 @@ const pxSpaceToClipSpace =
 
     const scale = Math.min(resolution.x, resolution.y);
 
-    // const overlapW = Math.max(0, (resolution.x - resolution.y) / (2 * resolution.y));
-    // const overlapH = Math.max(0, (resolution.y - resolution.x) / (2 * resolution.x));
-    // const uv = { x: x * scale - (0.5 + Math.max(overlapW)), y: y * scale - (0.5 + Math.max(overlapH, 0.5)) };
-    // const clipVec = vec3.fromValues(x, y, 0);
-
-    // const res = vec3.transformMat3([], clipVec, mat3.transpose([], cameraMatrix));
-    // return { x: res[0], y: res[1] };
     return {
       x: (Math.pow(2, -camera.zoom) * (x - resolution.x / 2)) / scale + camera.x,
       y: (Math.pow(2, -camera.zoom) * (y - resolution.y / 2)) / scale + camera.y,
@@ -95,7 +81,6 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
   const roomForText = c2p({ x: xMin + 2 * tickPitch }).x - c2p({ x: xMin + tickPitch }).x;
   console.log("Room:", roomForText);
 
-  // const fontSize = Math.floor((2 * percent));
   const fontSize = Math.floor(roomForText / longestNumberLength);
   ctx.font = `${fontSize}px Courier New`;
 
@@ -158,9 +143,6 @@ const CanvasOverlay = () => {
       drawAxes(ctx, c2p, p2c, 5);
       drawTicks(ctx, { x, y, zoom }, c2p, p2c, 4, 20, 0.5);
 
-      // const visibleClipSpaceTopLeft = p2c({ x: 0, y: 0 });
-      // const visibleClipSpaceBottomRight = p2c({ x: W, y: H });
-
       const cameraMatrix = getCameraMatrix({ x, y, zoom });
 
       ctx.strokeStyle = "blue";
@@ -168,7 +150,6 @@ const CanvasOverlay = () => {
 
       const a = c2p({ x: 3, y: 3 });
       const b = c2p({ x: 1, y: 2 });
-      // ctx.strokeRect(a.x, a.y, b.x - a.x, b.y - a.y);
     },
     [camera.x, camera.y, camera.zoom, width, height],
   );

@@ -7,7 +7,7 @@ const update = () => {
   const time = new Date().getTime();
   diff = time - prevTime;
   prevTime = time;
-  // // console.log(diff);
+
   if (diff !== 0) fpss.push(1000 / diff);
   if (fpss.length > 60) {
     fpss.splice(0, 1);

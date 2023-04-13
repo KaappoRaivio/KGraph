@@ -12,7 +12,6 @@ const store = configureStore({
   preloadedState: getStateFromURL(),
   reducer: {
     ui: uiReducer,
-    // sliders: slidersReducer,
     inputs: inputsReducer,
     camera: cameraReducer,
   },
@@ -20,7 +19,6 @@ const store = configureStore({
     getDefaultMiddleware().concat(store => next => action => {
       next(action);
       if (!action.type.endsWith("pending") && !window.location.pathname.endsWith("about/")) {
-        // setTimeout(() => {
         if (timeout !== 0) clearTimeout(timeout);
         const state = store.getState();
         timeout = setTimeout(() => {
@@ -33,16 +31,11 @@ const store = configureStore({
           };
 
           const params = new URLSearchParams();
-          // params.set("d", btoa(JSON.stringify(toSerialization)));
           params.set("d", rison.encode_object(toSerialization));
           console.log(JSON.stringify(toSerialization, null, 4));
-          // console.log(btoa(JSON.stringify(rest)).length, btoa(JSON.stringify(toSerialization)).length);
           console.log(btoa(JSON.stringify(rest)).length, btoa(rison.encode_object(toSerialization)).length);
-          // params.set("d", btoa(JSON.stringify(rest)));
-          // console.log(rest);
 
           window.history.replaceState(null, "", `?${params.toString()}`);
-          // window.history.replaceState(null, "", `?d=${rison.encode_object(toSerialization)}`);
         }, 500);
       }
     }),

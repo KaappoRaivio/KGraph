@@ -14,7 +14,6 @@ const FunctionEntry = ({ name, color, rawInput, onChange, onRemoval, index }) =>
           className={styles.colorSelect}
           value={color}
           onChange={e => {
-            // console.log("Changed", e.target.value);
             onChange({ color: e.target.value });
           }}
         />

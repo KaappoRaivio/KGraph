@@ -15,7 +15,6 @@ const uiSlice = createSlice({
       state.sidebarOpen = !state.sidebarOpen;
     },
     mobileStatusChanged: (state, action) => {
-      // console.log("IS MOBILE", action.payload.isMobile);
       state.isMobile = action.payload.isMobile;
     },
     addInputPressed: (state, action) => {

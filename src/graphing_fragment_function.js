@@ -4,14 +4,10 @@ const hex2glsl = hex => {
   const g = parseInt(color.slice(2, 4), 16);
   const b = parseInt(color.slice(4, 6), 16);
 
-  // // console.log(`vec4(${(r / 255).toFixed(10)}, ${(g / 255).toFixed(10)}, ${(b / 255).toFixed(10)}, 1.)`);
   return `vec4(${(r / 255).toFixed(10)}, ${(g / 255).toFixed(10)}, ${(b / 255).toFixed(10)}, 1.)`;
 };
 
 export default (input, eliminateVertical, sliders) => {
-  // // console.log(input);
-  // const implicitFunctions = input.filter(x => x.type === "function");
-
   return `#version 300 es
     precision highp float;
     
@@ -29,15 +25,10 @@ export default (input, eliminateVertical, sliders) => {
     #define MAX_ITERATIONS 200
     
     float ppow( float x, float y )  {
-      // if (x < 0. || x == 0. && y <= 0.) {
-      //   return NaN;
-      // }
-      if (y >= 0.)
-        // return pow(x, y); 
+      if (y >= 0.) 
         return x >= 0. ? pow(x, y) : (mod(y, 2.0) == 0. ? pow(-x, y) : -pow(-x, y));
       else {
         float p = abs(y);
-        // return 1. / pow(x, p);
         float divisor = x >= 0. ? 
                       pow(x, p) : 
                       (mod(p, 2.0) == 0. ? 
@@ -55,7 +46,6 @@ export default (input, eliminateVertical, sliders) => {
         float y = position.y;
     
         float value = ${input.glslSource.length > 0 ? input.glslSource : "1."};
-        // if (isnan(value)) return true;
         return value;
     }
     
@@ -77,7 +67,6 @@ export default (input, eliminateVertical, sliders) => {
         if (isnan(val2) || isnan(val2_h)) return false;
 
         int diff2 = abs(int(val2 > 0.) - int(val2_h > 0.));
-        // int diff2 = abs(int(isPositive(position2)) - int(isPositive(position2_h)));
         
         return max(diff1, diff2) == 1;
     }
@@ -90,13 +79,11 @@ export default (input, eliminateVertical, sliders) => {
             float scaler = ppow(2., float(-i));
             float step = 1. * C * scaler;
 
-            bool line = isLine(position, step);
-            // result += float(line) / float(ANTIALIAS - i);            
+            bool line = isLine(position, step);            
             result += float(line) / float(ANTIALIAS);            
           }
     
           return result * ${hex2glsl(input.color)};
-          // return result * vec4(0.0, 0.0, 0.0, 1.);
       }
       
     vec2 getUV(vec2 fragCoord) {   
@@ -107,8 +94,6 @@ export default (input, eliminateVertical, sliders) => {
         
         
         vec2 uv = (((fragCoord / scale) - vec2(0.5 + max(overlapW, 0.), 0.5 + max(overlapH, 0.))) * 1.);
-        
-        // + vec2(0.5 + max(overlapW, 0.), 0.5 + max(overlapH, 0.));
         return (u_matrix * vec3(uv, 1.)).xy;
     }
     

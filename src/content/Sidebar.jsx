@@ -24,7 +24,6 @@ const Sidebar = () => {
     min: 0,
   });
 
-  // const style = isMobile ? { display: sidebarOpen ? "block" : "none" } : { flexBasis: position };
   const style = { flexBasis: position };
 
   return (

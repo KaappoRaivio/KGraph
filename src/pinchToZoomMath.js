@@ -27,9 +27,7 @@ export const calculateTransform = (touches, startTouch, startAngle) => {
 
     const scale = Vector.length(currentVector) / Vector.length(startVector);
     let angle = Vector.angle(currentVector, startVector);
-    if (Math.abs(angle) < 0.2) {
-      // angle = 0;
-    }
+
     const translation = rotatePoint(Vector.add(currentPosition, Vector.negate(startPosition)), -startAngle + angle);
 
     return { scale, angle, translation };
@@ -37,12 +35,6 @@ export const calculateTransform = (touches, startTouch, startAngle) => {
 };
 
 export const rotatePoint = ({ x, y }, theta) => {
-  // const rotationMatrix = [
-  //   [Math.cos(theta), -Math.sin(theta)],
-  //   [Math.sin(theta), Math.cos(theta)]
-  // ];
-  //
-  //
   const cos = Math.cos(theta);
   const sin = Math.sin(theta);
   return { x: x * cos - y * sin, y: x * sin + y * cos };

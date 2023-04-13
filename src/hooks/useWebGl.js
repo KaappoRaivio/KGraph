@@ -4,7 +4,6 @@ export default canvasRef => {
   const [gl, setGl] = useState(null);
   const [isSupported, setIsSupported] = useState(true);
   useEffect(() => {
-    // const graphRoot = graphRootRef.current;
     const gl = canvasRef.current.getContext("webgl2", { preserveDrawingBuffer: true });
     if (gl == null) return setIsSupported(false);
 

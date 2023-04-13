@@ -11,8 +11,6 @@ export default (gl, inputs, sliders, currentPrograms, setCurrentPrograms) => {
 
     const programs = [];
 
-    // currentPrograms.filter(p => p != null).forEach(p => gl.deleteProgram(p));
-    // console.log("Recompiling");
     for (const input of inputs) {
       try {
         let fragment;
@@ -58,7 +56,6 @@ export default (gl, inputs, sliders, currentPrograms, setCurrentPrograms) => {
       const valB = values[b?.input.type];
       return valA < valB ? -1 : valA > valB ? 1 : 0;
     });
-    // console.log("Setting:", programs, inputs);
 
     setCurrentPrograms(programs.map(({ program, input }) => program));
   }, [gl, JSON.stringify(inputs.map(({ rawInput, ...rest }) => rest)), JSON.stringify(sliders.map(slider => slider.name)), window.devicePixelRatio]);

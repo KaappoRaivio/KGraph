@@ -18,29 +18,17 @@ const demoInputs = [
 
 const getStateFromURL = () => {
   const params = new URLSearchParams(window.location.search);
-  // console.log(window.location.search);
+
   if (params.has("demo") && params.get("demo") === "1") {
-    // params.set("d", demoState);
     return { inputs: demoInputs };
   }
   console.log(params.get("d"));
-  // console.log(window.location);
+
   try {
-    // return JSON.parse(atob(params.get("d")));
     return rison.decode_object(params.get("d"));
   } catch (error) {
     return undefined;
   }
-  // if (params.has("d")) {
-  //   // console.log(params.get("d"));
-  //   try {
-  //   } catch (error) {
-  //     console.error(error);
-  //     return null;
-  //   }
-  // } else {
-  //   return null;
-  // }
 };
 
 export default getStateFromURL;

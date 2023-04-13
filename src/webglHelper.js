@@ -12,7 +12,6 @@ export const createShader = (gl, src, type) => {
         .map((line, index) => `${index + 1}. ${line}`)
         .join("\n"),
     );
-    // alert();
     return null;
   }
 
@@ -42,7 +41,6 @@ export const createProgram = (gl, vertex, fragment) => {
 
   gl.attachShader(program, vs);
   gl.attachShader(program, fs);
-  // gl.attachShader(program, fs2);
 
   gl.deleteShader(vs);
   gl.deleteShader(fs);

@@ -9,13 +9,7 @@ const cameraSlice = createSlice({
     },
     zoomChanged: (state, action) => {
       state.current.zoom += action.payload;
-      // console.log("zoom", state.zoom);
     },
-
-    // cameraDragged: (state, action) => {
-    //   state.dragInProgress = true;
-    //   state.drag = action.payload;
-    // },
   },
 });
 

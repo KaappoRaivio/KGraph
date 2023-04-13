@@ -2,7 +2,6 @@ import { useEffect, useMemo } from "react";
 import { getCameraMatrix } from "../cameraMath";
 
 export default (gl, currentPrograms, width, height, camera, sliders, inputs) => {
-  // console.log(inputs);
   useEffect(() => {
     if (currentPrograms == null || gl == null) return;
 
@@ -28,10 +27,7 @@ export default (gl, currentPrograms, width, height, camera, sliders, inputs) => 
           gl.uniform1f(location, slider.value);
         });
 
-      // console.log("Drawing");
       gl.drawArrays(gl.TRIANGLES, 0, 6);
     }
-
-    // const timeLocation = gl.getUniformLocation(currentProgram, "time");
   }, [currentPrograms, width, height, camera, JSON.stringify(sliders), JSON.stringify(inputs)]);
 };

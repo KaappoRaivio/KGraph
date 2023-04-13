@@ -15,10 +15,6 @@ const hex2glsl = hex => {
 };
 
 export default (input, eliminateVertical, sliders) => {
-  // const implicitFunctions = input.filter(x => x.type === "function");
-
-  // const fractals = input.filter(x => x.type === "fractal");
-
   return `#version 300 es
     precision highp float;
     
@@ -62,20 +58,17 @@ export default (input, eliminateVertical, sliders) => {
         float length = 0.;
         
         for (int iteration = 0; iteration < MAX_ITERATIONS; ++iteration) {
-            
-                zn = nextMandel(zn, constant);
-    
-                if (squared(zn) >= 4.0 && result == MAX_ITERATIONS) {
-                    result = iteration;
-                    length = sqrt(squared(zn));
-                }
-                // iteration++;
-            
+        
+            zn = nextMandel(zn, constant);
+
+            if (squared(zn) >= 4.0 && result == MAX_ITERATIONS) {
+                result = iteration;
+                length = sqrt(squared(zn));
+            }            
         }
 
         float smoothed = float(result) - log2(max(1.0, log2(length)));
         return smoothed;
-        // return float(result);
     }
     
     
@@ -104,7 +97,6 @@ export default (input, eliminateVertical, sliders) => {
         
         vec2 uv = (((fragCoord / scale) - vec2(0.5 + max(overlapW, 0.), 0.5 + max(overlapH, 0.))) * 1.);
         
-        // + vec2(0.5 + max(overlapW, 0.), 0.5 + max(overlapH, 0.));
         return (u_matrix * vec3(uv, 1.)).xy;
     }
     

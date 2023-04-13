@@ -7,16 +7,7 @@ const conversionManager = new GLSLConversionManager();
 
 const inputsSlice = createSlice({
   name: "inputs",
-  initialState: [
-    // { name: "a", max: 1, min: 0, value: 0, step: 0.01, type: "slider", color: "#ffffff" },
-    // {
-    //   name: "f(x)",
-    //   rawInput: "e ^ (sin(x / y) + cos(y * x)) = sin(e ^ (x + y)) + a",
-    //   glslSource: "",
-    //   type: "function",
-    //   color: getColor(-1),
-    // },
-  ],
+  initialState: [],
   reducers: {
     inputSet: (state, action) => {
       state = action.payload;
@@ -79,7 +70,6 @@ const inputsSlice = createSlice({
         color: getColor(state.length),
         min: "0",
         max: "1",
-        // color: "#000000",
       });
     },
     solidRawInputChanged: (state, action) => {
@@ -122,14 +112,11 @@ export const functionInputChanged = createAsyncThunk("inputs/functionInputChange
 
   let glslSource;
   try {
-    // glslSource = await implicitEquationToGlsl(input.rawInput);
     glslSource = await conversionManager.implicitEquationToGlsl(input.rawInput);
     console.log("GlslSource", glslSource);
-    // glslSource = "";
   } catch (e) {
     glslSource = "";
   }
-  // console.log("Got result");
 
   return {
     glslSource,
@@ -139,11 +126,10 @@ export const functionInputChanged = createAsyncThunk("inputs/functionInputChange
 
 export const solidInputChanged = createAsyncThunk("inputs/solidInputChanged", async (input, { dispatch, getState }) => {
   dispatch(solidRawInputChanged(input));
-  //
+
   let glslSource;
   try {
     glslSource = await conversionManager.solidEquationToGlsl(input.rawInput);
-    // glslSource = "";
   } catch (e) {
     glslSource = "";
   }

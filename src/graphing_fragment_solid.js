@@ -27,15 +27,10 @@ export default (input, eliminateVertical, sliders) => {
     #define MAX_ITERATIONS 200
     
     float ppow( float x, float y )  {
-      // if (x < 0. || x == 0. && y <= 0.) {
-      //   return NaN;
-      // }
       if (y >= 0.)
-        // return pow(x, y); 
         return x >= 0. ? pow(x, y) : (mod(y, 2.0) == 0. ? pow(-x, y) : -pow(-x, y));
       else {
         float p = abs(y);
-        // return 1. / pow(x, p);
         float divisor = x >= 0. ? 
                       pow(x, p) : 
                       (mod(p, 2.0) == 0. ? 
@@ -60,7 +55,6 @@ export default (input, eliminateVertical, sliders) => {
         
         vec2 uv = (((fragCoord / scale) - vec2(0.5 + max(overlapW, 0.), 0.5 + max(overlapH, 0.))) * 1.);
         
-        // + vec2(0.5 + max(overlapW, 0.), 0.5 + max(overlapH, 0.));
         return (u_matrix * vec3(uv, 1.)).xy;
     }
     
@@ -84,8 +78,6 @@ export default (input, eliminateVertical, sliders) => {
         float x = uv.x;
         float y = uv.y;
         
-        // float gamma = 1. / 2.4;
-        
         float z = clamp(map(${input.glslSource.length > 0 ? input.glslSource : "0"}, ${expressionToGLSL(input.min)}, ${expressionToGLSL(
     input.max,
   )}, 0., 1.), 0., 1.);
@@ -97,12 +89,6 @@ export default (input, eliminateVertical, sliders) => {
         
         vec3 blend = toGamma(color_gamma + background_gamma);  
         fragColor = vec4(blend, 1.);
-        // fragColor = vec4(${hex2glsl(input.color)}.xyz, pow(z, 2.4));
-        
-        
-        // vec4 funcColor = shade(uv);
-        // if (funcColor.w != 0.) fragColor = funcColor;
-        // else fragColor = vec4(0, 0, 0, 0);
     }
     `;
 };
