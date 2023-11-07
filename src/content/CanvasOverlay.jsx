@@ -56,7 +56,7 @@ const drawAxes = (ctx, c2p, p2c, thickness) => {
   ctx.fillRect(c2p({ x: 0, y: 0 }).x - thickness / 2, 0, thickness, H);
 };
 
-const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
+const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness, drawOnlyGrid = false) => {
   const W = ctx.canvas.width;
   const H = ctx.canvas.height;
   const percent = (window.devicePixelRatio * Math.min(W, H)) / 100;
@@ -91,7 +91,10 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
   // x axis
   for (let xTick = xMin; xTick <= xMax; xTick += tickPitch) {
     let y = Math.min(Math.max(c2p({ x: 0, y: 0 }).y - height / 2, fontSize), H - height);
-    ctx.fillRect(c2p({ x: xTick, y: 0 }).x - thickness / 2, y, thickness, height);
+    if (!drawOnlyGrid) {
+      ctx.fillRect(c2p({ x: xTick, y: 0 }).x - thickness / 2, y, thickness, height);
+      if (xTick !== 0) ctx.fillText(xTick, c2p({ x: xTick, y: 0 }).x - thickness / 2, Math.min(Math.max(textY, fontSize), H - height));
+    }
 
     ctx.fillRect(c2p({ x: xTick, y: 0 }).x - gridThickness / 2, 0, gridThickness, H);
     const textY =
@@ -100,8 +103,6 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
         y: 0,
       }).y -
       height / 2;
-
-    if (xTick !== 0) ctx.fillText(xTick, c2p({ x: xTick, y: 0 }).x - thickness / 2, Math.min(Math.max(textY, fontSize), H - height));
   }
 
   const yMin = -Math.round(bottomRight.y / tickPitch) * tickPitch;
@@ -111,7 +112,15 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
   ctx.textBaseline = "middle";
   // y axis
   for (let yTick = yMin; yTick < yMax; yTick += tickPitch) {
-    ctx.fillRect(Math.min(Math.max(c2p({ x: 0, y: 0 }).x - height / 2, 0), W - height), c2p({ x: 0, y: yTick }).y - thickness / 2, height, thickness);
+    if (!drawOnlyGrid) {
+      ctx.fillRect(
+        Math.min(Math.max(c2p({ x: 0, y: 0 }).x - height / 2, 0), W - height),
+        c2p({ x: 0, y: yTick }).y - thickness / 2,
+        height,
+        thickness,
+      );
+      if (yTick !== 0) ctx.fillText(-yTick, Math.min(Math.max(textX, height), W * 0.98 - height), c2p({ x: 0, y: yTick }).y - thickness / 2);
+    }
     ctx.fillRect(0, c2p({ x: 0, y: yTick }).y - gridThickness / 2, W, gridThickness);
     const textX =
       c2p({
@@ -119,8 +128,6 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness) => {
         y: 0,
       }).x +
       height / 2;
-
-    if (yTick !== 0) ctx.fillText(-yTick, Math.min(Math.max(textX, height), W * 0.98 - height), c2p({ x: 0, y: yTick }).y - thickness / 2);
   }
 };
 
@@ -142,6 +149,7 @@ const CanvasOverlay = () => {
 
       drawAxes(ctx, c2p, p2c, 5);
       drawTicks(ctx, { x, y, zoom }, c2p, p2c, 4, 20, 0.5);
+      drawTicks(ctx, { x, y, zoom: zoom + 3 }, c2p, p2c, 4, 20, 0.125, true);
 
       const cameraMatrix = getCameraMatrix({ x, y, zoom });
 
