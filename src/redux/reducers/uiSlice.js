@@ -7,7 +7,7 @@ const uiSlice = createSlice({
     isMobile: window.innerWidth < 600,
     isDev: !process.env.NODE_ENV || process.env.NODE_ENV === "development",
     helpPressed: false,
-    addInputPressed: false,
+    addInputPressed: true,
     webgl2Supported: true,
   },
   reducers: {

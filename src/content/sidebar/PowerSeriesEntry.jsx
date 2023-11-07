@@ -2,7 +2,7 @@ import React from "react";
 
 import styles from "./PowerSeriesEntry.module.css";
 import InlineInput from "../../InlineInput";
-const PowerSeriesEntry = ({ name, color, rawInput, onChange, onRemoval, index }) => {
+const PowerSeriesEntry = ({ name, color, rawInput, rawInputMidpoint, onChange, onRemoval, index }) => {
   return (
     <li className={styles.listItem} style={{ color: "#ffffff", background: color }}>
       <div className={styles.titleBar}>
@@ -21,14 +21,11 @@ const PowerSeriesEntry = ({ name, color, rawInput, onChange, onRemoval, index })
           ×
         </button>
       </div>
-      <input
-        type={"text"}
-        autoCorrect={"off"}
-        autoCapitalize={"none"}
-        className={styles.functionInput}
-        value={rawInput}
-        onChange={e => onChange({ rawInput: e.target.value })}
-      />
+      <span>
+        Σ
+        <InlineInput value={rawInput} onChange={e => onChange({ rawInput: e.target.value })} />
+        (x - <InlineInput value={rawInputMidpoint} onChange={e => onChange({ rawInputMidpoint: e.target.value })} />) ^ n
+      </span>
     </li>
   );
 };

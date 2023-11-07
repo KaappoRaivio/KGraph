@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { GLSLConversionManager, implicitEquationToGlsl, solidEquationToGlsl } from "../../workers/toGlslPromise";
 import { v4 as uuid } from "uuid";
 import getColor from "esthetics/color";
+import { expressionToGLSL } from "../../workers/glslUtils";
 
 const conversionManager = new GLSLConversionManager();
 
@@ -29,8 +30,9 @@ const inputsSlice = createSlice({
       if (color != null) state[index].color = color;
     },
     powerSeriesRawInputChanged: (state, action) => {
-      const { index, rawInput, color } = action.payload;
+      const { index, rawInput, rawInputMidpoint, color } = action.payload;
 
+      if (rawInputMidpoint != null) state[index].rawInputMidpoint = rawInputMidpoint;
       if (rawInput != null) state[index].rawInput = rawInput;
       if (color != null) state[index].color = color;
     },
@@ -78,6 +80,19 @@ const inputsSlice = createSlice({
         max: "1",
       });
     },
+    powerSeriesInputAdded: (state, action) => {
+      const { name } = action.payload;
+      state.push({
+        type: "powerSeries",
+        name,
+        rawInput: "",
+        rawInputMidpoint: "",
+        glslSource: "",
+        glslSourceMidpoint: "",
+        color: getColor(state.length),
+      });
+    },
+
     solidRawInputChanged: (state, action) => {
       const { index, rawInput, min, max, color } = action.payload;
 
@@ -94,8 +109,14 @@ const inputsSlice = createSlice({
     });
     builder.addCase(solidInputChanged.fulfilled, (state, action) => {
       const { index, glslSource } = action.payload;
-      console.log("SolidInputChanged fulfilled", index, glslSource);
+
       if (glslSource != null) state[index].glslSource = glslSource;
+    });
+    builder.addCase(powerSeriesInputChanged.fulfilled, (state, action) => {
+      const { index, glslSource, glslSourceMidpoint } = action.payload;
+
+      if (glslSource != null) state[index].glslSource = glslSource;
+      if (glslSourceMidpoint != null) state[index].glslSourceMidpoint = glslSourceMidpoint;
     });
   },
 });
@@ -112,15 +133,25 @@ const {
   solidInputAdded,
   solidRawInputChanged,
   powerSeriesRawInputChanged,
+  powerSeriesInputAdded,
 } = inputsSlice.actions;
-export { functionInputAdded, inputSet, sliderChanged, inputRemoved, sliderInputAdded, fractalInputAdded, fractalInputChanged, solidInputAdded };
+export {
+  functionInputAdded,
+  inputSet,
+  sliderChanged,
+  inputRemoved,
+  sliderInputAdded,
+  fractalInputAdded,
+  fractalInputChanged,
+  solidInputAdded,
+  powerSeriesInputAdded,
+};
 export const functionInputChanged = createAsyncThunk("inputs/functionInputChanged", async (input, { dispatch, getState }) => {
   dispatch(functionRawInputChanged(input));
 
   let glslSource;
   try {
     glslSource = await conversionManager.implicitEquationToGlsl(input.rawInput);
-    console.log("GlslSource", glslSource);
   } catch (e) {
     glslSource = "";
   }
@@ -150,14 +181,28 @@ export const solidInputChanged = createAsyncThunk("inputs/solidInputChanged", as
 export const powerSeriesInputChanged = createAsyncThunk("inputs/powerSeriesInputChanged", async (input, { dispatch, getState }) => {
   dispatch(powerSeriesRawInputChanged(input));
 
-  let glslSource;
-  try {
-    glslSource = await conversionManager.solidEquationToGlsl(input.rawInput);
-  } catch (e) {
-    glslSource = "";
+  if (input.rawInput != null) {
+    let glslSource;
+    try {
+      glslSource = expressionToGLSL(input.rawInput);
+    } catch (e) {
+      glslSource = "";
+    }
 
     return {
       glslSource,
+      index: input.index,
+    };
+  } else if (input.rawInputMidpoint != null) {
+    let glslSourceMidpoint;
+    try {
+      glslSourceMidpoint = expressionToGLSL(input.rawInputMidpoint);
+    } catch (e) {
+      glslSourceMidpoint = "";
+    }
+
+    return {
+      glslSourceMidpoint,
       index: input.index,
     };
   }

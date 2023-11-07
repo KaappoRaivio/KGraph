@@ -22,7 +22,6 @@ const getStateFromURL = () => {
   if (params.has("demo") && params.get("demo") === "1") {
     return { inputs: demoInputs };
   }
-  console.log(params.get("d"));
 
   try {
     return rison.decode_object(params.get("d"));

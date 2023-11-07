@@ -4,6 +4,7 @@ import vertexShader from "../graphing_vertex";
 import fragmentShaderFunction from "../graphing_fragment_function";
 import fragmentShaderFractal from "../graphing_fragment_fractal";
 import fragmentShaderSolid from "../graphing_fragment_solid";
+import fragmentShaderPowerSeries from "../graphing_fragment_powerseries";
 
 export default (gl, inputs, sliders, currentPrograms, setCurrentPrograms) => {
   useEffect(() => {
@@ -32,6 +33,12 @@ export default (gl, inputs, sliders, currentPrograms, setCurrentPrograms) => {
             break;
           case "fractal":
             fragment = fragmentShaderFractal(
+              input,
+              false,
+              sliders.map(slider => slider.name).filter(x => x.length),
+            );
+          case "powerSeries":
+            fragment = fragmentShaderPowerSeries(
               input,
               false,
               sliders.map(slider => slider.name).filter(x => x.length),

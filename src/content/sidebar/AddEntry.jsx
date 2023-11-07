@@ -7,7 +7,7 @@ import graph from "../../../res/graph-min.svg";
 import sliders from "../../../res/sliders-min.svg";
 import colorplot from "../../../res/color_plot-min.svg";
 import fractal from "../../../res/fractal-min.svg";
-import { fractalInputAdded, functionInputAdded, sliderInputAdded, solidInputAdded } from "../../redux/reducers/inputsSlice";
+import { fractalInputAdded, functionInputAdded, powerSeriesInputAdded, sliderInputAdded, solidInputAdded } from "../../redux/reducers/inputsSlice";
 
 const InputTypeButton = ({ src, name, disabled, onClick }) => {
   return (
@@ -33,6 +33,7 @@ const AddEntry = () => {
             <InputTypeButton src={colorplot} name={"solidplot"} disabled={solidInUse} onClick={() => dispatch(solidInputAdded({ name: "" }))} />
             <InputTypeButton src={sliders} name={"constant"} onClick={() => dispatch(sliderInputAdded({ name: "" }))} />
             <InputTypeButton src={fractal} name={"fractal"} onClick={() => dispatch(fractalInputAdded({}))} />
+            <InputTypeButton src={fractal} name={"power series"} onClick={() => dispatch(powerSeriesInputAdded({ name: "" }))} />
           </ul>
         </>
       ) : (

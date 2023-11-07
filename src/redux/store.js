@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import uiReducer, { mobileStatusChanged } from "./reducers/uiSlice";
-import inputsReducer, { functionInputChanged, solidInputChanged } from "./reducers/inputsSlice";
+import inputsReducer, { functionInputChanged, powerSeriesInputChanged, solidInputChanged } from "./reducers/inputsSlice";
 import cameraReducer from "./reducers/cameraSlice";
 import getStateFromURL from "./persist";
 import rison from "rison";
@@ -32,8 +32,6 @@ const store = configureStore({
 
           const params = new URLSearchParams();
           params.set("d", rison.encode_object(toSerialization));
-          console.log(JSON.stringify(toSerialization, null, 4));
-          console.log(btoa(JSON.stringify(rest)).length, btoa(rison.encode_object(toSerialization)).length);
 
           window.history.replaceState(null, "", `?${params.toString()}`);
         }, 500);
@@ -47,6 +45,8 @@ for (let index = 0; index < store.getState().inputs.length; index++) {
     store.dispatch(functionInputChanged({ index, ...input }));
   } else if (input.type === "solid") {
     store.dispatch(solidInputChanged({ index, ...input }));
+  } else if (input.type === "powerSeries") {
+    store.dispatch(powerSeriesInputChanged({ index, ...input }));
   } else {
     continue;
   }

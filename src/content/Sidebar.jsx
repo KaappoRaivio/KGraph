@@ -53,7 +53,7 @@ const Sidebar = () => {
                 return <SliderEntry index={index} {...rest} onChange={stuff => dispatch(sliderChanged({ index, ...stuff }))} />;
               case "fractal":
                 return <FractalEntry {...rest} index={index} onChange={c => dispatch(fractalInputChanged(c))} />;
-              case "powerseries":
+              case "powerSeries":
                 return <PowerSeriesEntry {...rest} index={index} onChange={stuff => dispatch(powerSeriesInputChanged({ index, ...stuff }))} />;
               default:
                 throw new Error("Unknown type " + item.type + "!");

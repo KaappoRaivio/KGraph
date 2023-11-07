@@ -84,7 +84,6 @@ const About = () => {
 
   const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
 
-  console.log("Re-render:", isMobile);
   return (
     <div id={styles.container}>
       <header id={styles.header}>

@@ -24,7 +24,6 @@ export const toGLSLFriendly = parsed => {
 
   const transformed = result.toString({ implicit: "show", simplify: "false" });
   const addedPoints = transformed.replaceAll(/([+-]?([0-9]*[.])?[0-9]+(e[+-]?[0-9]+)?)/g, "float($1)");
-  console.log("Transformed:", transformed, "addedPoints:", addedPoints);
 
   return addedPoints;
 };
@@ -60,10 +59,8 @@ export const solidToGLSL = input => {
 
   input = replaceWithFractions(input);
 
-  console.log("Input", input);
   const equalToZero = algebrite.run(`roots(${input}, z)`);
 
-  console.log("Solved:", equalToZero);
   if (equalToZero.includes("Stop")) throw new Error(equalToZero);
 
   const reparsed = mathjs.parse(equalToZero, { simplify: false });
@@ -76,6 +73,5 @@ export const expressionToGLSL = input => {
 };
 
 export const powerSeriesToGLSL = input => {
-  console.log(input);
   return "1.";
 };

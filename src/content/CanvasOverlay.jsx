@@ -79,12 +79,9 @@ const drawTicks = (ctx, camera, c2p, p2c, thickness, height, gridThickness, draw
     longestNumberLength = Math.max(longestNumberLength, `${xTick}`.length);
   }
   const roomForText = c2p({ x: xMin + 2 * tickPitch }).x - c2p({ x: xMin + tickPitch }).x;
-  console.log("Room:", roomForText);
 
   const fontSize = Math.floor(roomForText / longestNumberLength);
   ctx.font = `${fontSize}px Courier New`;
-
-  console.log(longestNumberLength);
 
   ctx.textAlign = "center";
   ctx.textBaseline = "bottom";
