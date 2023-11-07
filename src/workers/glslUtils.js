@@ -74,3 +74,8 @@ export const solidToGLSL = input => {
 export const expressionToGLSL = input => {
   return toGLSLFriendly(mathjs.parse(input, { simplify: false }));
 };
+
+export const powerSeriesToGLSL = input => {
+  console.log(input);
+  return "1.";
+};

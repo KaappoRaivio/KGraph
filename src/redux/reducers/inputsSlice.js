@@ -28,6 +28,12 @@ const inputsSlice = createSlice({
       if (rawInput != null) state[index].rawInput = rawInput;
       if (color != null) state[index].color = color;
     },
+    powerSeriesRawInputChanged: (state, action) => {
+      const { index, rawInput, color } = action.payload;
+
+      if (rawInput != null) state[index].rawInput = rawInput;
+      if (color != null) state[index].color = color;
+    },
     sliderChanged: (state, action) => {
       const { index, value, name, max, min, step } = action.payload;
 
@@ -105,6 +111,7 @@ const {
   fractalInputChanged,
   solidInputAdded,
   solidRawInputChanged,
+  powerSeriesRawInputChanged,
 } = inputsSlice.actions;
 export { functionInputAdded, inputSet, sliderChanged, inputRemoved, sliderInputAdded, fractalInputAdded, fractalInputChanged, solidInputAdded };
 export const functionInputChanged = createAsyncThunk("inputs/functionInputChanged", async (input, { dispatch, getState }) => {
@@ -138,6 +145,22 @@ export const solidInputChanged = createAsyncThunk("inputs/solidInputChanged", as
     glslSource,
     index: input.index,
   };
+});
+
+export const powerSeriesInputChanged = createAsyncThunk("inputs/powerSeriesInputChanged", async (input, { dispatch, getState }) => {
+  dispatch(powerSeriesRawInputChanged(input));
+
+  let glslSource;
+  try {
+    glslSource = await conversionManager.solidEquationToGlsl(input.rawInput);
+  } catch (e) {
+    glslSource = "";
+
+    return {
+      glslSource,
+      index: input.index,
+    };
+  }
 });
 
 export default inputsSlice.reducer;

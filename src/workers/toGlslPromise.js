@@ -32,4 +32,11 @@ export class GLSLConversionManager {
     this.worker.postMessage({ input, type: "solid" });
     return this.pendingPromises[input].promise;
   }
+
+  powerSeriesEquationToGlsl(input) {
+    console.log(this.worker)
+    this.pendingPromises[input] ) pDefer();
+    this.worker.postMessage({input, type: "powerSeries"});
+    return this.pendingPromises[input].promise
+  }
 }

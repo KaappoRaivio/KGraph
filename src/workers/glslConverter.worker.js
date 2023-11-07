@@ -1,4 +1,4 @@
-import { implicitToGLSL, solidToGLSL } from "./glslUtils";
+import { implicitToGLSL, solidToGLSL, powerSeriesToGLSL } from "./glslUtils";
 
 self.onmessage = message => {
   console.log("Worker got message", message.data);
@@ -18,6 +18,12 @@ self.onmessage = message => {
   } else if (type === "solid") {
     try {
       postMessage({ output: solidToGLSL(input), input });
+    } catch (err) {
+      console.error(err.message);
+    }
+  } else if (type === "powerSeries") {
+    try {
+      postMessage({ output: powerSeriesToGLSL(input), input });
     } catch (err) {
       console.error(err.message);
     }
