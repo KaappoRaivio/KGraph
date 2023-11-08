@@ -46,11 +46,12 @@ export default (input, eliminateVertical, sliders) => {
     float factorial ( float x ) {
       float res = 1.;
       
-      for (int i = 0; i < MAX_ITERATIONS; ++i) {
+      for (int i = 1; i < MAX_ITERATIONS; ++i) {
         res = res * (float(i) < x ? float(i) : 1.);
       }
       
       return res;
+      // return 1.;
     }
     
     
@@ -59,7 +60,7 @@ export default (input, eliminateVertical, sliders) => {
         float y = position.y;
         
         float value = 0.;
-        for (int i = 1; i < MAX_ITERATIONS; ++i) {
+        for (int i = 0; i < MAX_ITERATIONS; ++i) {
             float n = float(i);
             value += (${glslSource.length > 0 ? glslSource : "0."}) * ppow(x - (${
     glslSourceMidpoint.length > 0 ? glslSourceMidpoint : "0."
